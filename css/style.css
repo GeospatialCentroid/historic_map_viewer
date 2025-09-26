@@ -1053,7 +1053,7 @@ a[aria-disabled="true"] {
     padding: 5px;
 }
 .slider-range{
-    margin-bottom:15px;
+    margin-bottom:55px;
     width:70% !important;
 }
 .org_text{
@@ -1065,13 +1065,9 @@ a[aria-disabled="true"] {
     padding-right: 10px;
 }
 .legend_symbol{
-display:inline-block;
-margin-bottom:-5px;
+    display:inline-block;
+    margin-bottom:-5px;
 }
-
-
-
-
 
 /* specific styles */
 #layer_list_wrapper{
@@ -1177,4 +1173,7 @@ li a {
 .ui-menu-item .ui-menu-item-wrapper.ui-state-active {
     background: #ccc;
 
+}
+.rounded-pill {
+    height: 23px;
 }

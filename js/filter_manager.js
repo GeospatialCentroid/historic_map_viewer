@@ -375,8 +375,11 @@ class Filter_Manager {
                if (this.catalog[a].length>0 && $.inArray(a,$this.omit_filter_item)==-1){
                 if( $.isNumeric(this.catalog[a][this.catalog[a].length-1])){
                     //create a range slider for numbers - https://jqueryui.com/slider/#range
+                     this.catalog[a] = this.catalog[a].filter(item => item !== null);
                      var min = Math.min.apply(Math, this.catalog[a]);
                      var max = Math.max.apply(Math, this.catalog[a]);
+                      console.log("date slider ",a,min,max)
+                    console.log(this.catalog[a])
                      $("#filters").append(this.get_range_slider(a,min,max))
                      //to allow  fine-tuning - add min and max values
                      var ext="_slider"
@@ -455,55 +458,8 @@ class Filter_Manager {
         var html=""
         html+="<label class='form-label' for='"+_id+"'>"+id+"</label>"
         html+="<div id='"+_id+"_slider' class='slider-range'><div id='"+_id+"_slider_handle0' class='ui-slider-handle'>"+min+"</div><div id='"+_id+"_slider_handle1' class='ui-slider-handle'>"+max+"</div>"
-          html+='<button class="btn btn-outline-secondary slider_toggle " onclick="filter_manager.slider_toggle(this)" type="button" ><i class="bi bi-play-fill"></i></button>'
-          html+="</div>"
+        html+="</div>"
         return html
-    }
-    //------- animate slider
-
-    slider_toggle(_this) {
-        console.log(_this)
-        var $this=this
-        var icon=$(_this).children("i")
-        if(icon.hasClass("bi-pause-fill")){
-            $this.slider_pause(icon)
-            return
-        }
-        icon.removeClass("bi-play-fill")
-        icon.addClass("bi-pause-fill")
-
-        var slider=$(_this).parent(".slider-range")
-
-        //if we are at the end. start at the beginning
-        if(slider.slider("option", "max")==slider.slider("values")[1]){
-            slider.slider('values',1,slider.slider("option", "min"))
-        }
-        $this.slider_step(slider,icon)
-    }
-   slider_step(_slider,_icon) {
-        var $this=this
-        var curr_position=_slider.slider("values")[1]
-        var next_position=curr_position+5
-        if(next_position>_slider.slider("option", "max")){
-            next_position=_slider.slider("option", "max")
-        }
-       _slider.slider('values',1,next_position).trigger('change');
-        //if we are at the end. start at the beginning
-        if(_slider.slider("option", "max")==curr_position){
-              $this.slider_pause(_icon)
-              return
-        }
-
-        $this.slider_timeout=setTimeout(function(){
-        $this.slider_step(_slider,_icon)
-        },300)
-    }
-    slider_pause(_icon) {
-        console.log("slider_pause",_icon)
-        //stop the timer
-       _icon.removeClass("bi-pause-fill")
-       _icon.addClass("bi-play-fill")
-        clearTimeout(this.slider_timeout);
     }
 
     //-----------
@@ -549,6 +505,7 @@ class Filter_Manager {
 
         var items_showing=$this.section_manager.json_data[parent_id].items_showing
         var data = $this.section_manager.get_match('section_id_'+parent_id)
+        console.log("The filter column is:::::::",$this.section_manager.json_data[parent_id].filter_cols)
         $this.generate_filters(data,$this.section_manager.json_data[parent_id].filter_cols)
         $this.add_filter_watcher();
         var title_col=$this.section_manager.json_data[parent_id]["title_col"]
@@ -661,7 +618,7 @@ class Filter_Manager {
 //                    if(this.get_match(id).usable_links[0][1].name=='CSV'){
 //                        but_text="<i class='bi bi-table'></i>"
 //                    }
-                    html+="<button type='button' id='"+but_id+"' class='btn btn-primary "+but_id+"' onclick='layer_manager.add_layer_toggle(this)'>"+but_text+"</button>"
+                    html+="<button type='button' id='"+but_id+"' class='btn btn-primary "+but_id+"' onclick='layer_manager.add_layer_toggle("+parent_id+","+sorted_data[i]._id+")'>"+but_text+"</button>"
                  //}
 
              }else{
@@ -697,11 +654,11 @@ class Filter_Manager {
          }
 
     }
-    select_item(_id,item_id){
+    select_item(parent_id,item_id){
      //analytics_manager.track_event("side_bar","show_details","layer_id",_resource_id)
         // use the id of the csv
-         var item= this.get_item(_id,item_id)
-         var section=section_manager.get_section_details(String(_id))
+         var item= this.get_item(parent_id,item_id)
+         var section=section_manager.get_section_details(parent_id)
 //        this.show_match(match)
 //        //for reference track the selected page
 //        this.page_id=id
@@ -718,21 +675,21 @@ class Filter_Manager {
         // @param match: a json object with details (including a page path to load 'path_col')
         console.log(match)
         //create html details to show
-        var html="";;
-        var _id = match.parent_id;
+        var html="";
+        var parent_id = match.parent_id;
         var item_id=match._id;
-        var id = "item_"+_id+"_"+item_id;
+        var id = "item_"+parent_id+"_"+item_id;
         var thumb_url=section.base_url+match["CONTENTdm number"]+"/thumbnail"
         var text = LANG.RESULT.ADD
         // check if the layer has been added
-        if(layer_manager.is_on_map(_id+"_"+item_id)){
+        if(layer_manager.is_on_map(parent_id+"_"+item_id)){
             text = LANG.RESULT.REMOVE
         }
-        html +="<button type='button' id='"+id+"_toggle' class='btn btn-primary "+id+"_toggle' onclick='layer_manager.add_layer_toggle(this)'>"+text+"</button>"+"<br/>";
+        html +="<button type='button' id='"+id+"_toggle' class='btn btn-primary "+id+"_toggle' onclick='layer_manager.add_layer_toggle("+parent_id+","+item_id+")'>"+text+"</button>"+"<br/>";
         html+='<span class="fw-bold">Title:</span> '+match[section.title_col]+"<br/>";// add the title column
         html+='<img src="'+thumb_url+'">'+"<br/>";
 
-        var id =match._id
+       // var id =match._id
 //         if(match.usable_links.length>0){
 //            html+="<button type='button' id='"+id+"' class='btn btn-primary "+id+"_toggle' onclick='layer_manager.toggle_layer(\""+id+"\",this)'>"+LANG.RESULT.ADD+"</button><br/>"
 //         }

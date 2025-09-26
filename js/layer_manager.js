@@ -85,22 +85,16 @@ class Layer_Manager {
     this.set_layers_list()
 
   }
-  add_layer_toggle(_this){
+  add_layer_toggle(parent_id,item_id){
   // called from the add/remove button
+    var id = "item_"+parent_id+"_"+item_id;
 
-    var ext ="_toggle";// just needed for character count
-    var id = $(_this).attr('id')
-    //remove extension and split by "_"
-    var id_parts = id.substring(0,id.length-ext.length).replaceAll("item_","")
-    id_parts=id_parts.split("_")
-    var _id =id_parts[0]
-    var item_id =id_parts[1]
 
-    if($(_this).html()==LANG.RESULT.REMOVE){
-        this.remove_feature_layer(_id+"_"+item_id)
+    if($("#"+id+"_toggle").html()==LANG.RESULT.REMOVE){
+        this.remove_feature_layer(parent_id+"_"+item_id)
     }else{
-        $(_this).addClass("progress-bar-striped progress-bar-animated")
-        layer_manager.toggle_layer(_id,item_id)//,match.type,false,match.URL)
+        $("#"+id+"_toggle").addClass("progress-bar-striped progress-bar-animated")
+        layer_manager.toggle_layer(parent_id,item_id)//,match.type,false,match.URL)
 
     }
 
@@ -196,9 +190,10 @@ class Layer_Manager {
       map_manager.map
     )
     // we need to make sure a layer exist first before side to side control can function
-    if(!side_by_side_control){
-        side_by_side_control = L.control.sideBySide(layer, []).addTo(map_manager.map);
-    }
+    //todo add side by side option
+//    if(!side_by_side_control){
+//        side_by_side_control = L.control.sideBySide(layer, []).addTo(map_manager.map);
+//    }
 //    // todo we need to be able to know whether an item is visible or not
 //
 //    if($this.is_on_map(_resource_id) && !item_ids){
@@ -223,11 +218,11 @@ console.log("Add to the map tab")
       var resource = filter_manager.get_item(_id,item_id)
       map_manager.map_zoom_event( resource.resource_obj.getBounds())
   }
-  add_to_map_tab(_id,item_id,_z){
+  add_to_map_tab(parent_id,item_id,_z){
         var $this = this;
         // use this.layers[] for reference since filter_manager can change with filter response.
         //var layer = this.get_layer_obj(_resource_id)
-        var resource = filter_manager.get_item(_id,item_id);
+        var resource = filter_manager.get_item(parent_id,item_id);
         console.log(resource)
 //        if (!layer){
 //            console_log("No layer to show")
@@ -238,8 +233,8 @@ console.log("Add to the map tab")
 
         //var o = layer.layer_obj.options
         // reference using the parent and child id joined by an "_"
-        var id = "item_"+_id+"_"+item_id
-        var section=section_manager.get_section_details(_id)
+        var id = "item_"+parent_id+"_"+item_id
+        var section=section_manager.get_section_details(parent_id)
         var title = resource[section["title_col"]]
         var title_limit=25
         if(title.length>title_limit){
@@ -256,13 +251,13 @@ console.log("Add to the map tab")
 
          html += this.get_slider_html(id);// to control opacity
 
-        html +="<br/><button type='button' id='"+id+"_toggle' class='btn btn-primary "+id+"_toggle' onclick='layer_manager.add_layer_toggle(this)'>"+LANG.RESULT.REMOVE+"</button>"
+        html +="<br/><button type='button' id='"+id+"_toggle' class='btn btn-primary "+id+"_toggle' onclick='layer_manager.add_layer_toggle(\""+parent_id+"\",\""+item_id+"\")'>"+LANG.RESULT.REMOVE+"</button>"
         //
-        html +="<button type='button' class='btn btn-primary' onclick='layer_manager.zoom_layer(\""+_id+"\",\""+item_id+"\")'>"+LANG.RESULT.ZOOM+"</button>"
+        html +="<button type='button' class='btn btn-primary' onclick='layer_manager.zoom_layer(\""+parent_id+"\",\""+item_id+"\")'>"+LANG.RESULT.ZOOM+"</button>"
         if(download_link){
               html +=download_link;
          }
-        html +="<button type='button' class='btn btn-primary' onclick='filter_manager.select_item(\""+_id+"\",\""+item_id+"\")'>"+LANG.RESULT.DETAILS+"</button>"
+        html +="<button type='button' class='btn btn-primary' onclick='filter_manager.select_item(\""+parent_id+"\",\""+item_id+"\")'>"+LANG.RESULT.DETAILS+"</button>"
 
 //        console_log("the type is ",layer.type)
 //        if ($.inArray(layer.type,$this.table_types)>-1){

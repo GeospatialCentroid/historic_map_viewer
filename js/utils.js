@@ -239,3 +239,11 @@ L.Polygon.include({
   setLatLng: function() {} // Dummy method.
 });
 
+function getValidNumber(value) {
+  const numberValue = parseFloat(value); // Attempt to convert the value to a number
+  if (Number.isNaN(numberValue)) {
+    return null;
+  }
+
+  return numberValue; // Return the valid number
+}

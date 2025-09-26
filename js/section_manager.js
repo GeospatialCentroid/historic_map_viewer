@@ -234,6 +234,7 @@ class Section_Manager {
     }
 
     join_data(section){
+    console.log("join_data")
         // lets start by storing the first loaded data file in the top spot
         section.all_data= $.csv.toObjects(section.data[0].data)//todo if the first loaded data is geojson, we'll want to convert it to a flat json structure for searching
         //takes one or more data files and joins them on a key
@@ -276,10 +277,12 @@ class Section_Manager {
                        filter_cols.push("has_data")
 
                       }
-                    var separated_cols=section.separated_cols.split(",").map(function(item) {
+                    var separated_cols=section.separated_cols.split(";").map(function(item) {
                           return item.trim();
                         });
+                        console.log("separated_cols",separated_cols)
                     section.filter_cols=filter_cols
+                    this.update_geojson_properties(section.all_data,section.show_cols,separated_cols,section?.image_col,section?.color_col)
                      filter_manager.create_filter_values(section,section.all_data,filter_cols,section?.year_start_col,section?.year_end_col);
                 //console.log("second data",section.data[j].data,section.data[j][1])
 
@@ -377,17 +380,14 @@ class Section_Manager {
         }
     }
     update_geojson_properties(all_data,show_cols,separated_cols,image_col,color_col){
-        // we really need the details stored in the properties
+        // updated to remove update the data directly
         for (var i=0;i<all_data.length;i++){
             var properties={}
-
             for (var j=0;j<show_cols.length;j++){
-                 // inject all the properties form the geojson
-                 properties[show_cols[j]]=  all_data[i][show_cols[j]]
                  for (var k=0;k<separated_cols.length;k++){
                     if(show_cols[j]==separated_cols[k]){
-                        properties[show_cols[j]] = properties[show_cols[j]].split(";").map(function(item) {
-                          return item.trim();
+                        all_data[i][show_cols[j]] =  all_data[i][show_cols[j]].split(";").map(function(item) {
+                          return getValidNumber(item.trim());
                         });
                     }
                  }
@@ -488,7 +488,7 @@ class Section_Manager {
         return this.json_data[_id].all_data
     }
      get_section_details(_id){
-        _id=_id.replaceAll('section_id_', '')
+        _id=String(_id).replaceAll('section_id_', '')
         return this.json_data[_id]
     }
    slide_position(panel_name){
