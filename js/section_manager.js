@@ -282,9 +282,16 @@ class Section_Manager {
                         });
                         console.log("separated_cols",separated_cols)
                     section.filter_cols=filter_cols
-                    this.update_geojson_properties(section.all_data,section.show_cols,separated_cols,section?.image_col,section?.color_col)
+                    this.update_data(section.all_data,section.show_cols,separated_cols,section?.image_col,section?.color_col)
                      filter_manager.create_filter_values(section,section.all_data,filter_cols,section?.year_start_col,section?.year_end_col);
-                //console.log("second data",section.data[j].data,section.data[j][1])
+
+                     if(section?.year_start_col){
+                         console.log(section?.year_start_col, "is the start col", "Get all the dates")
+
+
+                        filter_manager.show_date_search(section?.year_start_col,section.all_data)
+                     }
+                    //console.log("second data",section.data[j].data,section.data[j][1])
 
             }
           }
@@ -379,20 +386,20 @@ class Section_Manager {
 
         }
     }
-    update_geojson_properties(all_data,show_cols,separated_cols,image_col,color_col){
-        // updated to remove update the data directly
+    update_data(all_data,show_cols,separated_cols,image_col,color_col){
+        // update the data directly
         for (var i=0;i<all_data.length;i++){
             var properties={}
-            for (var j=0;j<show_cols.length;j++){
+//            for (var j=0;j<show_cols.length;j++){
                  for (var k=0;k<separated_cols.length;k++){
-                    if(show_cols[j]==separated_cols[k]){
-                        all_data[i][show_cols[j]] =  all_data[i][show_cols[j]].split(";").map(function(item) {
+//                    if(show_cols[j]==separated_cols[k]){
+                        all_data[i][separated_cols[k]] =  all_data[i][separated_cols[k]].split(";").map(function(item) {
                           return getValidNumber(item.trim());
                         });
-                    }
+//                    }
                  }
 
-            }
+//            }
             // and if there is an image col
             if(image_col){
                 //first split on ;
@@ -424,23 +431,6 @@ class Section_Manager {
                if(this.json_data[0]?.legend){
                     layer_manager.create_legend(JSON.parse(this.json_data[0]?.legend),"section_id_0")
                }
-
-//            layer_manager.create_legend({"layers":[
-//            {
-//                "layerId": 0,
-//                "layerName": "",
-//                "layerType": "Feature Layer",
-//                "legend": [
-//                    {
-//                        "label": "Overprint footprint",
-//                        "color": "#0000FF",
-//                        "height": 20,
-//                        "width": 20
-//                    },
-//
-//                ]
-//            }
-        //    ]},"section_id_1")
 
                $("#section_id_0").trigger("click");
                $("#arrow_0").trigger("click");

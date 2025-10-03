@@ -68,7 +68,85 @@ class Filter_Manager {
               })
             }
         })
+        //
 
+        $('#filter_bounds_checkbox').change(
+        function(){
+             filter_manager.update_bounds_search($(this))
+        }
+    );
+
+    }
+    show_date_search(col,all_data){
+         //date search
+         var dates=[]
+        for (var i=0;i<all_data.length;i++){
+            if(all_data[i][col][0] != null){
+               dates = dates.concat(all_data[i][col])
+            }
+
+        }
+        dates= dates.sort();
+
+        $('#filter_date_checkbox').change(
+            function(){
+              filter_manager.delay_date_change(col);
+            }
+        );
+
+
+        $("#filter_start_date").change( function() {
+            filter_manager.delay_date_change(col)
+
+        });
+        $("#filter_end_date").change( function() {
+          filter_manager.delay_date_change(col)
+        });
+        // create the range slider
+        var values = [dates[0],dates[dates.length-1]]
+         $("#filter_start_date").val(values[0])
+         $("#filter_end_date").val(values[1])
+        $("#filter_date .filter_slider_box").slider({
+            range: true,
+            min: values[0],
+            max: values[1],
+            values:values,
+            slide: function( event, ui ) {
+
+               $("#filter_start_date").val(ui.values[0])
+               $("#filter_end_date").val(ui.values[1])
+               filter_manager.delay_date_change(col)
+
+         }
+        })
+
+    }
+    delay_date_change(col){
+        var $this=this
+        // prevent multiple calls when editing filter parameters
+        if(this.timeout){
+            clearTimeout(this.timeout);
+        }
+        this.timeout=setTimeout(function(){
+              $this.update_date_filter(col)
+              $this.timeout=false
+
+        },500)
+     }
+     //todo add date filtering
+    update_date_filter(col){
+          //Add date filter
+         if ($('#filter_date_checkbox').is(':checked')){
+            var start =$("#filter_start_date").val()
+            var end = $("#filter_end_date").val()
+
+            this.add_filter(col, [start,end])
+            this.filter();
+
+         }else{
+           this.remove_filter(col)
+           this.filter();
+        }
     }
      show_place_bounds(b){
         var sw = L.latLng(Number(b[0]), Number(b[2])),
@@ -192,7 +270,7 @@ class Filter_Manager {
     //                        meets_criteria=false
     //                    }
                         // convert to string for search
-                        var obj_str = JSON.stringify(obj).toLowerCase();
+                        var obj_str = JSON.stringify(omitKeys(obj, ['resource_obj','Reference URL'])).toLowerCase();
                         if(obj_str.indexOf(this.filters[a][0].toLowerCase() )==-1){
                             meets_criteria=false
                         }
@@ -673,13 +751,13 @@ class Filter_Manager {
     }
     show_details(match,section){
         // @param match: a json object with details (including a page path to load 'path_col')
-        console.log(match)
         //create html details to show
         var html="";
         var parent_id = match.parent_id;
         var item_id=match._id;
         var id = "item_"+parent_id+"_"+item_id;
         var thumb_url=section.base_url+match["CONTENTdm number"]+"/thumbnail"
+        var iiif_url = match["IIIF"];
         var text = LANG.RESULT.ADD
         // check if the layer has been added
         if(layer_manager.is_on_map(parent_id+"_"+item_id)){
@@ -688,6 +766,7 @@ class Filter_Manager {
         html +="<button type='button' id='"+id+"_toggle' class='btn btn-primary "+id+"_toggle' onclick='layer_manager.add_layer_toggle("+parent_id+","+item_id+")'>"+text+"</button>"+"<br/>";
         html+='<span class="fw-bold">Title:</span> '+match[section.title_col]+"<br/>";// add the title column
         html+='<img src="'+thumb_url+'">'+"<br/>";
+         html+='<a href="javascript:void(0);" onclick="image_manager.show_image(\''+iiif_url+'\',\''+match[section.title_col]+'\',\''+match["Reference URL"]+'\');">'+LANG.DETAILS.IMAGE_VIEW+'</a>'+"<br/>";
 
        // var id =match._id
 //         if(match.usable_links.length>0){
@@ -695,12 +774,15 @@ class Filter_Manager {
 //         }
 
         for (var i in match){
-            if ($.inArray(i,this.omit_result_item)==-1){
+            if ($.inArray(i,section.show_cols)!=-1){
                 var link = match[i]
                 if ((typeof link === 'string' || link instanceof String) && link.indexOf("http")==0){
                    link="<a href='"+link+"' target='_blank'>"+link+"</a>"
                 }
-                html+="<span class='fw-bold'>"+i+":</span> "+link+"<br/>"
+                // only show if not blank
+                if(link!=""){
+                    html+="<span class='fw-bold'>"+i+":</span> "+link+"<br/>"
+                }
             }
         }
         // generate a table from the table_data_cols

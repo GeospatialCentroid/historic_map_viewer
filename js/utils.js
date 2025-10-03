@@ -247,3 +247,72 @@ function getValidNumber(value) {
 
   return numberValue; // Return the valid number
 }
+
+/**
+ * Get the dominant color from the *source IIIF image* of an Allmaps.WarpedMapLayer.
+ * Works even when the map itself is rendered with WebGL.
+ *
+ * @param {Allmaps.WarpedMapLayer} layer
+ * @param {Object} [options]
+ * @param {number} [options.thumbWidth=100]   IIIF thumbnail width to request
+ * @param {number} [options.sampleSize=50]    Size (px) of offscreen canvas for color analysis
+ * @returns {Promise<{r:number,g:number,b:number} | null>} Dominant RGB color
+ */
+async function getDominantColorFromWarpedLayer(imageUrl) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';   // needed if the server allows CORS
+        img.src = imageUrl;
+
+        img.onload = () => {
+            // Use the image’s natural size so we capture every pixel
+            const width  = img.naturalWidth;
+            const height = img.naturalHeight;
+
+            const canvas = document.createElement('canvas');
+            canvas.width  = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+
+            ctx.drawImage(img, 0, 0);
+
+            const data = ctx.getImageData(0, 0, width, height).data;
+
+            const colorCount = {};
+            let maxCount = 0;
+            let dominant = null;
+
+            for (let i = 0; i < data.length; i += 4) {
+                const r = data[i];
+                const g = data[i + 1];
+                const b = data[i + 2];
+                const a = data[i + 3];
+                if (a === 0) continue; // ignore fully transparent pixels
+
+                const key = `${r},${g},${b}`;
+                colorCount[key] = (colorCount[key] || 0) + 1;
+
+                if (colorCount[key] > maxCount) {
+                    maxCount = colorCount[key];
+                    dominant = rgbToHex(r, g, b)//{ r, g, b };
+                }
+            }
+
+            resolve(dominant);
+        };
+
+        img.onerror = err => reject(err);
+    });
+}
+
+// Ref: https://stackoverflow.com/questions/4910567/hide-certain-values-in-output-from-json-stringify
+function omitKeys(obj, keys)
+{
+    var dup = {};
+    for (var key in obj) {
+        if (keys.indexOf(key) == -1) {
+            dup[key] = obj[key];
+        }
+    }
+    return dup;
+}

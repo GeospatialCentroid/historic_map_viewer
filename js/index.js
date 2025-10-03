@@ -61,7 +61,7 @@ function initialize_interface() {
     if(!$.isEmptyObject(usp) && usp.get("sort")){
         sort_str=usp.get("sort")
     }
-
+    $("#filter_date_label").text(LANG.SEARCH.DATE_LABEL)
     $("[for='filter_bounds_checkbox']").text(LANG.SEARCH.LIMIT)
     $("#filter_date_to").text(LANG.SEARCH.TO)
     $("[for='filter_date_checkbox']").text(LANG.SEARCH.LIMIT_DATE)

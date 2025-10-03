@@ -26,7 +26,9 @@ class Layer_Manager {
     //keep reference to the basemap
     this.basemap_layer;
     //Todo this will be handled in index
-    //this.side_by_side= L.control.sideBySide().addTo(this.map);
+
+    this.side_by_side= L.control.sideBySide([], []).addTo(map_manager.map);
+
     this.split_left_layers=[];
     this.split_right_layers=[];
 
@@ -74,9 +76,9 @@ class Layer_Manager {
         var id = $(children[i]).attr('id')
         if(typeof(id)!="undefined"){
             var _id = id.substring(0,id.length-ext.length);
-            console.log("update_layer_order",_id)
+
             this.map.getPane(_id).style.zIndex = i+100;
-            layers.push(this.get_layer_obj(_id))
+            layers.push(this.get_layer_obj(_id.replace("item_","")))
         }
 
     }
@@ -129,22 +131,21 @@ class Layer_Manager {
     this.toggle_split_control();
   }
   get_layer_obj(_resource_id){
-        console.log("get_layer_obj",_resource_id)
+     //param _resource_id: parent_id+"_"+child_id
       for(var i =0;i<this.layers.length;i++){
-            var temp_layer = this.layers[i]
 
             //console.log(temp_layer,"VS",_resource_id)
-            if (temp_layer.id==_resource_id){
-                return temp_layer
-
+            if ( this.layers[i].id==_resource_id){
+                return  this.layers[i]
             }
       }
       // if no layer was returned - maybe we are controls
      if(_resource_id =="basemap"){
-        return {"layer_obj":this.basemap_layer,"type":"basemap"}
+        this.basemap_layer.type="basemap"
+        return this.basemap_layer
 
      }
-        return false
+     return false
   }
   is_on_map(_resource_id){
    //param _resource_id: parent_id+"_"+child_id
@@ -156,24 +157,29 @@ class Layer_Manager {
     }
   }
 
-  toggle_layer(_id,item_id,type,drawing_info,url,z,item_ids){
-    console.log(_id,item_id)
-    var but_id = "item_"+_id+"_"+item_id+"_toggle";
+  toggle_layer(parent_id,item_id,type,drawing_info,url,z,item_ids){
+    var but_id = "item_"+parent_id+"_"+item_id+"_toggle";
+    var pane="item_"+parent_id+"_"+item_id
     var $this = layer_manager;
 
     // either add or hide a layer
-    var resource = filter_manager.get_item(_id,item_id)
-    console.log(resource)
-    console.log(section_manager.get_section_details(_id))
+    var resource = filter_manager.get_item(parent_id,item_id)
+
     //get the annotation column 'annotation_col' and add it to the map
-    var layer = new Allmaps.WarpedMapLayer(resource[section_manager.get_section_details(_id).annotation_col],{pane: 'left'})
+    map_manager.map.createPane(pane)
+    var layer = new Allmaps.WarpedMapLayer(resource[section_manager.get_section_details(parent_id).annotation_col],{pane: "item_"+parent_id+"_"+item_id})
 
      // if loading the annotation from a relative path
      //var map_layer =new Allmaps.WarpedMapLayer(window.location.origin+"/"+window.location.pathname+"/"+resource[section_manager.json_data[_id].annotation_col],{pane: 'left'})
 
+    getDominantColorFromWarpedLayer(section_manager.get_section_details(parent_id).base_url+resource["CONTENTdm number"]+"/thumbnail")
+    .then(dominant => {
+       layer.dominant_color=dominant
+    });
+
     // keep a reference to the object
     resource.resource_obj=layer
-    layer.id=_id+"_"+item_id
+    layer.id=parent_id+"_"+item_id
     layer.type='iiif'
     this.layers.push(layer); //for easy reference
     //
@@ -185,7 +191,9 @@ class Layer_Manager {
 
          $("."+but_id).removeClass("progress-bar-striped progress-bar-animated")
          layer_manager.layer_load_complete($("."+but_id));
-         $("."+but_id).html(LANG.RESULT.REMOVE)
+         $("."+but_id).html(LANG.RESULT.REMOVE);
+
+
       },
       map_manager.map
     )
@@ -210,7 +218,7 @@ class Layer_Manager {
 //     $this.add_layer(_resource_id,type,drawing_info,url,z,item_ids)
 console.log("Add to the map tab")
      //if(type!="csv_geojson"){
-        $this.add_to_map_tab(_id,item_id,z);
+        $this.add_to_map_tab(parent_id,item_id,z);
      //}
 
   }
@@ -243,13 +251,14 @@ console.log("Add to the map tab")
         var download_link = false//filter_manager.get_download_link(resource)
         //var dcat_bbox = resource.dcat_bbox
 
-        var html = "<li class='ui-state-default drag_li' id='"+id+"_drag'>"
+        var html = "<li class='ui-state-default drag_li basemap_layer' id='"+id+"_drag'>"
+        html+="<div class='left-div-map'>"
         html+="<div class='grip'><i class='bi bi-grip-vertical'></i></div>"
         //html +="<button type='button' id='"+id+"_toggle' class='btn btn-primary "+id+"_toggle' onclick='layer_manager.add_layer_toggle(this)'>"+add_txt+"</button>"
 
-        html +="<div class='item_title font-weight-bold inline'>"+title+"</span></div>"
+        html +="<div class='item_title font-weight-bold'>"+title+"</span></div>"
 
-         html += this.get_slider_html(id);// to control opacity
+
 
         html +="<br/><button type='button' id='"+id+"_toggle' class='btn btn-primary "+id+"_toggle' onclick='layer_manager.add_layer_toggle(\""+parent_id+"\",\""+item_id+"\")'>"+LANG.RESULT.REMOVE+"</button>"
         //
@@ -258,7 +267,7 @@ console.log("Add to the map tab")
               html +=download_link;
          }
         html +="<button type='button' class='btn btn-primary' onclick='filter_manager.select_item(\""+parent_id+"\",\""+item_id+"\")'>"+LANG.RESULT.DETAILS+"</button>"
-
+         html+='</div>'
 //        console_log("the type is ",layer.type)
 //        if ($.inArray(layer.type,$this.table_types)>-1){
 //            html +="<button type='button' class='btn btn-primary' onclick='layer_manager.show_table_data(\""+id+"\")'><i class='bi bi-table'></i></button>"
@@ -272,9 +281,14 @@ console.log("Add to the map tab")
 //         html += "<div class='color_box'><input type='text' id='"+id+"_fill_color' value='"+o.fillColor+"'/><br/><label for='"+id+"_fill_color' >"+LANG.MAP.Fill_COLOR+"</label></div>"
 //        }
 //        if ($.inArray(layer.type,["esriPMS","esriSMS"])==-1){
-//            html+=this.get_slit_cell_control(_resource_id)
-//        }
+        html+=' <div class="stacked-div-map">'
+        html += this.get_slider_html(id);// to control opacity
 
+         html += "<br/>"+this.get_slider_html(id+'_color_remove',LANG.MAP.REMOVE_COLOR);// to control color removal
+
+//        }
+        html+='</div>'
+        html+=this.get_split_cell_control(parent_id,item_id)
         html +='</li>'
 
         // add item to the beginning
@@ -282,20 +296,23 @@ console.log("Add to the map tab")
         $("#sortable_layers" ).trigger("resize");
 
 
-        // add interactivity
-        this.make_color_palette(id+'_line_color',"color")
-        this.make_color_palette(id+'_fill_color',"fillColor")
+//        // add interactivity
+//        this.make_color_palette(id+'_line_color',"color")
+//        this.make_color_palette(id+'_fill_color',"fillColor")
 
         this.make_slider(id+'_slider',100)
-        console.log("Added to the map tab")
+        this.make_remove_color_slider(id+'_color_remove'+'_slider',0)
+
 
   }
 
 
-  get_slit_cell_control(_id){
-    return '<table class="split_table"><tr><td class="split_left split_cell" onclick="layer_manager.split_map(this,\''+_id+'\',\'left\')"></td><td class="split_middle"></td><td class="split_right split_cell" onclick="layer_manager.split_map(this,\''+_id+'\',\'right\')"></td></tr></table>'
+  get_split_cell_control(parent_id,item_id){
+    return '<table class="split_table"><tr><td class="split_left split_cell" onclick="layer_manager.split_map(this,\''+parent_id+'\',\''+item_id+'\',\'left\')"></td><td class="split_middle"></td><td class="split_right split_cell" onclick="layer_manager.split_map(this,\''+parent_id+'\',\''+item_id+'\',\'right\')"></td></tr></table>'
   }
-  split_map(elm,_resource_id, side){
+  split_map(elm,parent_id,item_id, side){
+    var _resource_id="item_"+parent_id+"_"+item_id
+
     // only allow one left and one right layer - for now!
     // need to check if _resource_id is currently in use
     if(side=="right" && this.split_left_layers[0]==_resource_id){
@@ -310,18 +327,19 @@ console.log("Add to the map tab")
         this.split_right_layers=[]
         this.side_by_side.setRightLayers([])
     }
-    var layer_obj =  this.get_layer_obj(_resource_id).layer_obj
+
+    var layer_obj =  this.get_layer_obj(parent_id+"_"+item_id)
     if (side=="right"){
 
         if (this.split_right_layers.length>0){
             // remove button active state
             $("#"+this.split_right_layers[0]+"_drag .split_right").removeClass("split_cell_active")
             // reset the clipped area of the right layer
-            try{
-               this.side_by_side._rightLayer.getContainer().style.clip = ''
-            }catch(e){
+//            try{
+//               this.side_by_side._rightLayer.getContainer().style.clip = ''
+//            }catch(e){
                 this.side_by_side._rightLayer.getPane().style.clip = ''
-            }
+//            }
 
             this.side_by_side.setRightLayers([])
 
@@ -338,14 +356,9 @@ console.log("Add to the map tab")
 
         if (this.split_left_layers.length>0){
             $("#"+this.split_left_layers[0]+"_drag .split_left").removeClass("split_cell_active")
-            // reset the clipped area of the right layer
-           try{
-               this.side_by_side._leftLayer.getContainer().style.clip = ''
-            }catch(e){
-                this.side_by_side._leftLayer.getPane().style.clip = ''
-            }
+            // reset the clipped area of the left layer
+            this.side_by_side._leftLayer.getPane().style.clip = ''
             this.side_by_side.setLeftLayers([])
-
             if(this.split_left_layers[0]==_resource_id){
                // deselect if current already exists on left
                this.split_left_layers=[]
@@ -359,7 +372,7 @@ console.log("Add to the map tab")
     $(elm).addClass("split_cell_active");
     //and show/hide the control
     this.toggle_split_control()
-
+    console.log(this.split_left_layers,"split_left_layers")
     analytics_manager.track_event("map_tab","split_view","layer_id",_resource_id)
   }
   toggle_split_control(){
@@ -408,12 +421,14 @@ console.log("Add to the map tab")
   }
 
 
-  get_slider_html(elm_id){
-    return "<div class='slider_box'> <label class='lil' for='"+elm_id+"_slider' >"+LANG.MAP.TRANSPARENCY+"</label><div id='"+elm_id+"_slider'></div></div>"
+  get_slider_html(elm_id,title){
+  if(!title){
+    title=LANG.MAP.TRANSPARENCY
+  }
+    return "<div class='slider_box'> <label class='lil' for='"+elm_id+"_slider' >"+title+"</label><div id='"+elm_id+"_slider'></div></div>"
   }
   make_slider(elm_id,value){
 
-    console.log("slider")
     var $this = this
     $("#"+elm_id).slider({
             min: 0,
@@ -425,16 +440,15 @@ console.log("Add to the map tab")
                  var id = $(this).attr('id')
                  var _id= id.substring(0,id.length-ext.length).replaceAll("item_","")
 
-
                  var layer =  $this.get_layer_obj(_id)
-                 console.log("Slider",_id,layer)
+                 var type = layer.type
                  var val =ui.value/100
                  var set_opacity=["basemap","Map Service","Raster Layer","tms","","mapserver","mapservice","iiif"]
-                 if($.inArray( layer.type,set_opacity)>-1){
+                 if($.inArray(type,set_opacity)>-1){
                     layer.setOpacity(val)
-                 }else if($.inArray(layer.type,["esriPMS","esriSMS"])>-1){
+                 }else if($.inArray(type,["esriPMS","esriSMS"])>-1){
                        $("._marker_class"+_id).css({"opacity":val})
-                 }else if($.inArray(layer.type,["GeoJSON"])>-1){
+                 }else if($.inArray(type,["GeoJSON"])>-1){
                     layer.layer_obj.eachLayer(function (layer) {
                         layer.setStyle({
                             opacity: val,
@@ -455,7 +469,33 @@ console.log("Add to the map tab")
          });
          console.log("slider made", elm_id)
   }
+    make_remove_color_slider(elm_id,value){
+        var $this = this
+        $("#"+elm_id).slider({
+            min: 0,
+            max: 1,
+            step: 0.01,
+            value:value,
+            range: "min",
+            change: function( event, ui ) {
+                 var ext ="_color_remove_slider"
+                 var id = $(this).attr('id')
+                 var _id= id.substring(0,id.length-ext.length).replaceAll("item_","")
 
+                 var val = ui.value
+                 var layer =  $this.get_layer_obj(_id)
+                   console.log(_id,val, layer.dominant_color)
+                    layer.setRemoveColor({
+                      hexColor:  layer.dominant_color,
+                      threshold: val,
+                      hardness: 0.8,//controls the feathering 1=sharpest
+                    });
+
+                 }
+                 //analytics_manager.track_event("map_tab","transparency_slider","layer_id",_id,3)
+            });
+
+    }
 
 
     get_service_method(r){
@@ -1036,16 +1076,15 @@ console.log("Add to the map tab")
     add_basemap_control(){
 
         var $this = this
-        var html = "<li class=''>"
-         html += this.get_base_map_dropdown_html()
-         html+= this.get_slider_html("basemap");
-         var id = "basemap"
-         var fill_color =  rgbStrToHex($(".leaflet-container").css("backgroundColor"))
-         html += "<div class='color_box'><input type='text' id='"+id+"_base_color' value='"+fill_color+"'/><br/><label for='"+id+"_base_color' >"+LANG.BASEMAP.BACKGROUND+"</label></div>"
+        var id = "basemap"
+        var fill_color =  rgbStrToHex($(".leaflet-container").css("backgroundColor"))
 
-
-         $("#basemap_layer").html(html)
+        var html = "<li class='basemap_layer'><div class='left-div-map' style='width:30%'>"
+        html += this.get_base_map_dropdown_html()+"</div>"
+        html+= "<div class='stacked-div-map'>"+this.get_slider_html("basemap")+"</div>"
+        html += "<div class='stacked-div-map'><div class='color_box'><input type='text' id='"+id+"_base_color' value='"+fill_color+"'/><br/><label for='"+id+"_base_color' >"+LANG.BASEMAP.BACKGROUND+"</label></div>"+"</div>"
          html += "</li>"
+         $("#basemap_layer").html(html)
          this.make_slider("basemap_slider",100)
          this.make_color_palette(id+'_base_color')
 

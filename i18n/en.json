@@ -79,6 +79,7 @@
 	"DETAILS": {
 		"MORE_INFO": "More Details",
 		"CATALOG_VIEW": "View in Catalog",
+		"IMAGE_VIEW": "View Full Image",
 		"METADATA_LINK": "View Metadata",
 		"WEBSERVICE_LINK": "View Webservice",
 		"PREVIOUS": "Previous",
@@ -117,6 +118,7 @@
 
 		"LIMIT":			"Limit to map bounds",
 		"TO": "to",
+		"DATE_LABEL": "Limit by Year",
 		"SORT_OPTIONS": {
 			"RELEVANCE": 		{"name": "Relevance", "search": "score asc"},
 			"TITLE":            {"name": "Alphabetical", "search": "dct_title_s asc"},
@@ -172,6 +174,7 @@
 	},
 	"MAP": {
 		"TRANSPARENCY": "Transparency",
+		"REMOVE_COLOR": "Remove Color",
 		"OUTLINE_COLOR": "Line",
 		"Fill_COLOR": "Fill"
 
