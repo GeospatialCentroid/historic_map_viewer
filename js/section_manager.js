@@ -390,16 +390,12 @@ class Section_Manager {
         // update the data directly
         for (var i=0;i<all_data.length;i++){
             var properties={}
-//            for (var j=0;j<show_cols.length;j++){
                  for (var k=0;k<separated_cols.length;k++){
-//                    if(show_cols[j]==separated_cols[k]){
+
                         all_data[i][separated_cols[k]] =  all_data[i][separated_cols[k]].split(";").map(function(item) {
                           return getValidNumber(item.trim());
                         });
-//                    }
                  }
-
-//            }
             // and if there is an image col
             if(image_col){
                 //first split on ;

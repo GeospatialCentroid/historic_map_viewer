@@ -71,16 +71,16 @@ function initialize_interface() {
     $("#radio_place_label").text(LANG.SEARCH.RADIO_PLACE_LABEL)
 
 
-//    $('#toggle_hidden_checkbox').change(function() {
-//        if($(this).prop('checked') == true){
-//            show_hidden_controls=true
-//              $(".hidden_controls").show();
-//        }else{
-//             show_hidden_controls=false
-//             $(".hidden_controls").hide();
-//        }
-//       run_resize();
-//    });
+    $('#toggle_hidden_checkbox').change(function() {
+        if($(this).prop('checked') == true){
+            show_hidden_controls=true
+              $(".hidden_controls").show();
+        }else{
+             show_hidden_controls=false
+             $(".hidden_controls").hide();
+        }
+       run_resize();
+    });
 
     $("#map_search").autocomplete({
         source: function(request, response) {

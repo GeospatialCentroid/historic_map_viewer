@@ -64,7 +64,7 @@
   <body>
   <div class="overlay justify-content-center">
     <div class="progress">
-          <div id="loader" class="progress-bar progress-bar-success progress-bar-striped active align-middle bg-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+          <div id="loader" class="progress-bar progress-bar-success progress-bar-striped active align-middle bg-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
             <span id="current-progress"></span>
           </div>
          </div>
@@ -174,9 +174,9 @@
                         <div id="results_panel" class="panel border_top">
 
                             <div id="filter_area">
-<!--     <span class="toggle_text">List items <input id="toggle_hidden_checkbox" type="checkbox" value=""></span>-->
-                                    <div id="filters" class="ui-widget" ></div>
-                                <span class="hidden_controls">
+<span class="toggle_text">More Filters <input id="toggle_hidden_checkbox" type="checkbox" value=""></span><br/>
+                                    <span class="hidden_controls"><div id="filters" class="ui-widget" ></div> </span>
+
                                 <label for="list_sort" id="sort-title">Sort:</label>
                                 <select id="list_sort">
                                     <option value="">Default</option>
@@ -184,9 +184,9 @@
                                     <option value="desc">Name (Z-A)</option>
                                 </select>
                                  <span class="total_results"></span>
-                                </span>
+
                             </div>
-                            <div id="result_wrapper" class="scroll_wrapper hidden_controls">
+                            <div id="result_wrapper" class="scroll_wrapper ">
 
                                 <div id="results">
                                         <div id="results_view"></div>
