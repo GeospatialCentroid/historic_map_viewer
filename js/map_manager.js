@@ -24,67 +24,6 @@ class Map_Manager {
      L.control.scale().addTo( this.map);
      this.map.createPane('left');
     var right_pane=  this.map.createPane('right');
-
-     //
-
-//     L.control.layer_list({ position: 'bottomleft' }).addTo( this.map);
-//    var html=  "<span class='list_title'>Overprint Outlines in View</span> <input id='toggle_overprint_footprint_checkbox' type='checkbox' title='show/hide overprint footprints' checked/>"
-//    $("#layer_list_title").html(html)
-//    $('#toggle_overprint_footprint_checkbox').change(function() {
-//        if(this.checked) {
-//             rects.addTo(map_manager.map);
-//             $("#legend_section_id_1").show()
-//        }else{
-//             map_manager.map.removeLayer(rects);
-//              $("#legend_section_id_1").hide()
-//        }
-//
-//    });
-    /*
-
-   // get lat lng on click
-    this.map.on('dblclick', function(e) {
-     $this.create_marker(e.latlng)
-    });
-    //
-
-
-
-     L.control.location_search({ position: 'topleft' }).addTo( this.map);
-     var search_html=""
-     search_html+='<input type="text" id="search_text" name="search_text" placeholder="lat,lng or Well #" >'// value="2-59-8"
-     search_html+='<select name="bearing" id="bearing"><option value="NW">NW</option><option value="SW">SW</option><option value="NE">NE</option><option value="SE">SE</option></select>'
-     search_html+='<button type="submit" id="search_location">search</button>'
-     $("#location_search").append(search_html)
-
-     $("#search_location").on('click',function(){
-      if($("#search_text").val().indexOf(",")>-1){
-        var lat_lng=$("#search_text").val().split(",").map( Number )
-
-        lat_lng=new L.latLng(lat_lng[0],lat_lng[1])
-         $this.create_marker(lat_lng)
-        }else{
-            // we're working with and a well #
-            // start by parsing the sections
-            //Well #" 2-59-8 is actually Sec 8, T 2, R 59
-            //B7-66-14dcc
-            var well_nums=$("#search_text").val().split("-")
-            for (var i=0;i<well_nums.length;i++){
-                well_nums[i]= well_nums[i].replace(/[A-z]/g, '')
-                if( i==2 && well_nums[i].length==1){
-                    well_nums[i]="0"+well_nums[i]
-                }
-            }
-            var bearing = $("#bearing").val().split("")
-            var township_section_name=well_nums[0]+bearing[0]+"+"+well_nums[1]+bearing[1]+"+"+well_nums[2]//"12S+73W+08" - 012,120,102,021,210,201
-            var url="https://services5.arcgis.com/rqsYvPKZmvSrSWbw/arcgis/rest/services/PLSS_2020_VIEW/FeatureServer/2/query?where=Search_Name%3D%27"+township_section_name+"%27&fullText=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&relationParam=&returnGeodetic=false&outFields=*&returnGeometry=true&returnCentroid=false&returnEnvelope=false&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&defaultSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token="
-            $("#bearing").removeClass("option_valid")
-            $("#bearing").addClass("option_error")
-            load_do(url, $this.parse_township_section_geojson)
-        }
-     })
-*/
-
     this.map.on("moveend", function () {
       update_layer_list();
       var c =  map_manager.map.getCenter()
@@ -96,6 +35,32 @@ class Map_Manager {
 
 
     this.add_legend()
+
+   map_manager.map.on('warpedmapadded', (event) => {
+        const layers = event.target._layers;
+        const layer_ids = Object.keys(layers).map(k => parseInt(k));
+        const new_layer_id = Math.max(...layer_ids);
+      const but_id = "item_"+layers[new_layer_id].id
+
+      if (but_id) {
+        const $button = $("." + but_id + "_toggle");
+        $button.removeClass("progress-bar-striped progress-bar-animated");
+        layer_manager.layer_load_complete($button);
+        $button.html(LANG.RESULT.REMOVE);
+        $("." + but_id + "_zoom").show();
+
+        // update parent
+        var id_parts = but_id.replaceAll("item_","").split("_");
+        var section_id= id_parts[0]
+        var item_id=id_parts[1]
+        var item = filter_manager.get_item(section_id,item_id);
+        filter_manager.update_parent_but(section_id, item.parent_id);
+      }
+
+
+    });
+
+
   }
 
 

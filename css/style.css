@@ -601,7 +601,7 @@ position: absolute;
 
 
 .thumbnail {
-    height: 67px;
+    height: auto;
     width: 100px;
     border: 1px solid #fff;
     margin: 1px;
@@ -967,6 +967,10 @@ body.modal-open {
   overflow-y: hidden;
 }
 
+button {
+  white-space: nowrap;       /* keep text on one line */
+
+}
 .description p { display: inline }
 
 #disclaimer_heading{

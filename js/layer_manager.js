@@ -87,26 +87,26 @@ class Layer_Manager {
     this.set_layers_list()
 
   }
-  add_layer_toggle(parent_id,item_id){
+  add_layer_toggle(section_id,item_id){
   // called from the add/remove button
-    var id = "item_"+parent_id+"_"+item_id;
+    var id = "item_"+section_id+"_"+item_id;
 
 
     if($("#"+id+"_toggle").html()==LANG.RESULT.REMOVE){
-        this.remove_feature_layer(parent_id+"_"+item_id)
+        this.remove_feature_layer(section_id+"_"+item_id)
     }else{
         $("#"+id+"_toggle").addClass("progress-bar-striped progress-bar-animated")
-        layer_manager.toggle_layer(parent_id,item_id)//,match.type,false,match.URL)
+        layer_manager.toggle_layer(section_id,item_id)//,match.type,false,match.URL)
 
     }
 
   }
   remove_feature_layer(_layer_id){
     var layer =  this.get_layer_obj(_layer_id)
-   // var layer = this.get_layer_obj(_layer_id)
+    this.map.removeLayer(layer);
+
     $(".item_"+_layer_id+"_toggle").removeClass("active")
     $(".item_"+_layer_id+"_toggle").text(LANG.RESULT.ADD) // revert to Add button text
-    this.map.removeLayer(layer)
 
     $("#item_"+_layer_id+"_drag").remove();
     ////        $this.remove_legend(_resource_id);
@@ -129,9 +129,19 @@ class Layer_Manager {
         this.split_left_layers=[]
     }
     this.toggle_split_control();
+
+    // update the parent button
+    var id_parts = layer.id.split("_");
+    var section_id= id_parts[0]
+    var item_id=id_parts[1]
+    var item = filter_manager.get_item(section_id,item_id);
+    // slight delay to account for removing layer
+    setTimeout(
+        filter_manager.update_parent_but(section_id,item.parent_id)
+    , 1000);
   }
   get_layer_obj(_resource_id){
-     //param _resource_id: parent_id+"_"+child_id
+     //param _resource_id: section_id+"_"+child_id
       for(var i =0;i<this.layers.length;i++){
 
             //console.log(temp_layer,"VS",_resource_id)
@@ -148,7 +158,7 @@ class Layer_Manager {
      return false
   }
   is_on_map(_resource_id){
-   //param _resource_id: parent_id+"_"+child_id
+   //param _resource_id: section_id+"_"+child_id
     var layer = this.get_layer_obj(_resource_id)
     if (layer){
         return true;
@@ -157,92 +167,55 @@ class Layer_Manager {
     }
   }
 
-  toggle_layer(parent_id,item_id,type,drawing_info,url,z,item_ids){
-    var but_id = "item_"+parent_id+"_"+item_id+"_toggle";
-    var pane="item_"+parent_id+"_"+item_id
+  toggle_layer(section_id,item_id,type,drawing_info,url,z,item_ids){
+    var but_id = "item_"+section_id+"_"+item_id;
+    var pane="item_"+section_id+"_"+item_id;
     var $this = layer_manager;
 
     // either add or hide a layer
-    var resource = filter_manager.get_item(parent_id,item_id)
-
+    var resource = filter_manager.get_item(section_id,item_id)
+    var parent_id=resource.parent_id
     //get the annotation column 'annotation_col' and add it to the map
     map_manager.map.createPane(pane)
-    var layer = new Allmaps.WarpedMapLayer(resource[section_manager.get_section_details(parent_id).annotation_col],{pane: "item_"+parent_id+"_"+item_id})
 
+    const layer = new Allmaps.WarpedMapLayer(
+      resource[section_manager.get_section_details(section_id).annotation_col],{ pane: `item_${section_id}_${item_id}`}
+    );
+    console.log(layer)
      // if loading the annotation from a relative path
      //var map_layer =new Allmaps.WarpedMapLayer(window.location.origin+"/"+window.location.pathname+"/"+resource[section_manager.json_data[_id].annotation_col],{pane: 'left'})
 
-    getDominantColorFromWarpedLayer(section_manager.get_section_details(parent_id).base_url+resource["CONTENTdm number"]+"/thumbnail")
+    getDominantColorFromWarpedLayer(section_manager.get_section_details(section_id).base_url+resource["CONTENTdm number"]+"/thumbnail")
     .then(dominant => {
        layer.dominant_color=dominant
     });
 
     // keep a reference to the object
     resource.resource_obj=layer
-    layer.id=parent_id+"_"+item_id
+    layer.id=section_id+"_"+item_id
     layer.type='iiif'
     this.layers.push(layer); //for easy reference
     //
     map_manager.map.addLayer(layer)
-    map_manager.map.on(
-      'warpedmapadded',
-      (event) => {
-        // load complete
-
-         $("."+but_id).removeClass("progress-bar-striped progress-bar-animated")
-         layer_manager.layer_load_complete($("."+but_id));
-         $("."+but_id).html(LANG.RESULT.REMOVE);
 
 
-      },
-      map_manager.map
-    )
-    // we need to make sure a layer exist first before side to side control can function
-    //todo add side by side option
-//    if(!side_by_side_control){
-//        side_by_side_control = L.control.sideBySide(layer, []).addTo(map_manager.map);
-//    }
-//    // todo we need to be able to know whether an item is visible or not
-//
-//    if($this.is_on_map(_resource_id) && !item_ids){
-//        console.log("all ready on the map...REMOVe")
-//
-//      $this.remove_feature_layer(_resource_id);
-////
-////        filter_manager.update_parent_toggle_buttons(".content_right");
-////
-////        analytics_manager.track_event("side_bar","remove_layer","layer_id",_resource_id)
-//        return
-//    }
-//
-//     $this.add_layer(_resource_id,type,drawing_info,url,z,item_ids)
-console.log("Add to the map tab")
-     //if(type!="csv_geojson"){
-        $this.add_to_map_tab(parent_id,item_id,z);
-     //}
+    $this.add_to_map_tab(section_id,item_id,z);
 
   }
   zoom_layer(_id,item_id){
       var resource = filter_manager.get_item(_id,item_id)
       map_manager.map_zoom_event( resource.resource_obj.getBounds())
   }
-  add_to_map_tab(parent_id,item_id,_z){
+  add_to_map_tab(section_id,item_id,_z){
         var $this = this;
-        // use this.layers[] for reference since filter_manager can change with filter response.
-        //var layer = this.get_layer_obj(_resource_id)
-        var resource = filter_manager.get_item(parent_id,item_id);
-        console.log(resource)
-//        if (!layer){
-//            console_log("No layer to show")
-//            return
-//        }
-//        console.log(layer)
+
+        var resource = filter_manager.get_item(section_id,item_id);
+
         var resource_obj = resource.resource_obj
 
-        //var o = layer.layer_obj.options
         // reference using the parent and child id joined by an "_"
-        var id = "item_"+parent_id+"_"+item_id
-        var section=section_manager.get_section_details(parent_id)
+        var id = "item_"+section_id+"_"+item_id
+        var section=section_manager.get_section_details(section_id)
         var title = resource[section["title_col"]]
         var title_limit=25
         if(title.length>title_limit){
@@ -260,13 +233,13 @@ console.log("Add to the map tab")
 
 
 
-        html +="<br/><button type='button' id='"+id+"_toggle' class='btn btn-primary "+id+"_toggle' onclick='layer_manager.add_layer_toggle(\""+parent_id+"\",\""+item_id+"\")'>"+LANG.RESULT.REMOVE+"</button>"
+        html +="<br/><button type='button' id='"+id+"_toggle' class='btn btn-primary "+id+"_toggle' onclick='layer_manager.add_layer_toggle(\""+section_id+"\",\""+item_id+"\")'>"+LANG.RESULT.REMOVE+"</button>"
         //
-        html +="<button type='button' class='btn btn-primary' onclick='layer_manager.zoom_layer(\""+parent_id+"\",\""+item_id+"\")'>"+LANG.RESULT.ZOOM+"</button>"
+        html +="<button type='button' class='btn btn-primary' onclick='layer_manager.zoom_layer(\""+section_id+"\",\""+item_id+"\")'>"+LANG.RESULT.ZOOM+"</button>"
         if(download_link){
               html +=download_link;
          }
-        html +="<button type='button' class='btn btn-primary' onclick='filter_manager.select_item(\""+parent_id+"\",\""+item_id+"\")'>"+LANG.RESULT.DETAILS+"</button>"
+        html +="<button type='button' class='btn btn-primary' onclick='filter_manager.select_item(\""+section_id+"\",\""+item_id+"\")'>"+LANG.RESULT.DETAILS+"</button>"
          html+='</div>'
 //        console_log("the type is ",layer.type)
 //        if ($.inArray(layer.type,$this.table_types)>-1){
@@ -288,7 +261,7 @@ console.log("Add to the map tab")
 
 //        }
         html+='</div>'
-        html+=this.get_split_cell_control(parent_id,item_id)
+        html+=this.get_split_cell_control(section_id,item_id)
         html +='</li>'
 
         // add item to the beginning
@@ -307,11 +280,11 @@ console.log("Add to the map tab")
   }
 
 
-  get_split_cell_control(parent_id,item_id){
-    return '<table class="split_table"><tr><td class="split_left split_cell" onclick="layer_manager.split_map(this,\''+parent_id+'\',\''+item_id+'\',\'left\')"></td><td class="split_middle"></td><td class="split_right split_cell" onclick="layer_manager.split_map(this,\''+parent_id+'\',\''+item_id+'\',\'right\')"></td></tr></table>'
+  get_split_cell_control(section_id,item_id){
+    return '<table class="split_table"><tr><td class="split_left split_cell" onclick="layer_manager.split_map(this,\''+section_id+'\',\''+item_id+'\',\'left\')"></td><td class="split_middle"></td><td class="split_right split_cell" onclick="layer_manager.split_map(this,\''+section_id+'\',\''+item_id+'\',\'right\')"></td></tr></table>'
   }
-  split_map(elm,parent_id,item_id, side){
-    var _resource_id="item_"+parent_id+"_"+item_id
+  split_map(elm,section_id,item_id, side){
+    var _resource_id="item_"+section_id+"_"+item_id
 
     // only allow one left and one right layer - for now!
     // need to check if _resource_id is currently in use
@@ -328,7 +301,7 @@ console.log("Add to the map tab")
         this.side_by_side.setRightLayers([])
     }
 
-    var layer_obj =  this.get_layer_obj(parent_id+"_"+item_id)
+    var layer_obj =  this.get_layer_obj(section_id+"_"+item_id)
     if (side=="right"){
 
         if (this.split_right_layers.length>0){
@@ -467,7 +440,6 @@ console.log("Add to the map tab")
               }
 
          });
-         console.log("slider made", elm_id)
   }
     make_remove_color_slider(elm_id,value){
         var $this = this

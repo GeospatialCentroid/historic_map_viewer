@@ -59,9 +59,10 @@ class Section_Manager {
 
     parse_data(_data){
         var $this = section_manager
+          $this.json_data=[]
         // convert the csv file to json and create a subset of the records as needed
-       // strip any extraneous tabs
-       $this.json_data=[]
+       // strip any extraneous spaces and tabs
+
        $this.data= $.csv.toObjects(_data.replaceAll('\t', ''))
 
        // make sure to only work with the sections
@@ -163,6 +164,22 @@ class Section_Manager {
            }, "1000");
          }
     }
+    included_data(all_data,include_cols){
+       include_cols = include_cols
+            .split(',')
+            .map(c => c.trim()); // Split and trim column names
+        var temp_json=[]
+         for (var j=0;j<all_data.length;j++){
+            const row = all_data[j];
+            // Check if any include_col field is non-empty
+            const hasValue = include_cols.some(col => row[col] && row[col] !== '');
+            if (hasValue) {
+                temp_json.push(row);
+            }
+        }
+        return temp_json;
+
+    }
     check_section_completion(data,slot){
         console.log("check_section_completion")
         // when all the data for a section is loaded, join it together
@@ -177,29 +194,33 @@ class Section_Manager {
                 all_data_loaded =false
             }
           }
-          if(all_data_loaded){
-            console.log("we have all the data",$this.json_data[slot[0]])
-            $this.join_data($this.json_data[slot[0]])
-            //add parent_id to each item
-            var all_data=$this.json_data[slot[0]].all_data
-            for (var i=0;i<all_data.length;i++){
-               all_data[i].parent_id=slot[0]// create a reference to the for mix and match filtering
-            }
 
-             // be sure to filter data for complete records
+         if(all_data_loaded){
 
-            if($this.json_data[slot[0]]?.include_col){
-                var all_data=$this.json_data[slot[0]].all_data
-                var temp_json=[]
-                 for (var i=0;i<all_data.length;i++){
-                    if(all_data[i][$this.json_data[slot[0]].include_col]!=''){
-                        temp_json.push(all_data[i])
+            for (var i=0;i<section.data.length;i++){
+                $this.join_data($this.json_data[i])
 
-                    }
+                var all_data=$this.json_data[i].all_data
+                // be sure to filter data for complete records
+                if($this.json_data[i]?.include_col){
+                   $this.json_data[i].all_data = $this.included_data($this.json_data[i].all_data,$this.json_data[i].include_col)
                 }
-               $this.json_data[slot[0]].all_data = temp_json
-      }
 
+
+
+
+                for (var j=0;j<all_data.length;j++){
+
+                  var obj = all_data[j]
+
+                  obj.section_id=i// create a reference to the section for mix and match filtering
+
+                   //keep track of parent record we're a child of
+                   obj.record_section_id=false;
+                    // if the record is a child, attempt to find it's parent
+                     section_manager.add_parent_id(obj,all_data,section.id_col)
+                }
+              }
              //clean up
               delete section.json_data;
               section.items_showing=[]
@@ -207,6 +228,31 @@ class Section_Manager {
           }
 
           $this.check_all_section_completion()
+    }
+    add_parent_id(obj,all_data,_id_col){
+        // for each item, loop over all the items to connects it's parent
+        if(obj?.children && obj.children.trim()==""){
+                for (var k=0;k<all_data.length;k++){
+                    // look through the parents
+                    var parent = all_data[k]
+                     if(parent["children"]!=""){
+
+                        var children_array=parent["children"].split(",")
+                          .map(s => s.trim())     // remove extra spaces
+                          .filter(s => s !== '')  // remove empty entries
+                          .map(Number);
+
+                        if (children_array.includes(Number(obj[_id_col]))) {
+                            //store the parent _id with the child
+                            obj.parent_id=parent._id
+
+                            break;
+                        }
+
+                     }
+                }
+            };
+
     }
     check_all_section_completion(){
         var $this = section_manager
@@ -234,7 +280,7 @@ class Section_Manager {
     }
 
     join_data(section){
-    console.log("join_data")
+        console.log("join_data")
         // lets start by storing the first loaded data file in the top spot
         section.all_data= $.csv.toObjects(section.data[0].data)//todo if the first loaded data is geojson, we'll want to convert it to a flat json structure for searching
         //takes one or more data files and joins them on a key
@@ -266,37 +312,38 @@ class Section_Manager {
 
 
                  }
-                    section.show_cols=section.show_cols.split(",").map(function(item) {
-                          return item.trim();
-                        });
+                section.show_cols=section.show_cols.split(",").map(function(item) {
+                      return item.trim();
+                    });
 
-                    var filter_cols=section.filter_cols.split(",").map(function(item) {
-                          return item.trim();
-                        });
-                     if(transcription_mode){
-                       filter_cols.push("has_data")
+                var filter_cols=section.filter_cols.split(",").map(function(item) {
+                      return item.trim();
+                    });
+                 if(transcription_mode){
+                   filter_cols.push("has_data")
 
-                      }
-                    var separated_cols=section.separated_cols.split(";").map(function(item) {
-                          return item.trim();
-                        });
-                        console.log("separated_cols",separated_cols)
-                    section.filter_cols=filter_cols
-                    this.update_data(section.all_data,section.show_cols,separated_cols,section?.image_col,section?.color_col)
-                     filter_manager.create_filter_values(section,section.all_data,filter_cols,section?.year_start_col,section?.year_end_col);
+                  }
+                var separated_cols=section.separated_cols.split(";").map(function(item) {
+                      return item.trim();
+                    });
+                    console.log("separated_cols",separated_cols)
+                section.filter_cols=filter_cols
+                this.update_data(section.all_data,section.show_cols,separated_cols,section?.image_col,section?.color_col)
+                 filter_manager.create_filter_values(section,section.all_data,filter_cols,section?.year_start_col,section?.year_end_col);
 
-                     if(section?.year_start_col){
-                         console.log(section?.year_start_col, "is the start col", "Get all the dates")
+                 if(section?.year_start_col){
+                     console.log(section?.year_start_col, "is the start col", "Get all the dates")
 
 
-                        filter_manager.show_date_search(section?.year_start_col,section.all_data)
-                     }
-                    //console.log("second data",section.data[j].data,section.data[j][1])
+                    filter_manager.show_date_search(section?.year_start_col,section.all_data)
+                 }
+                //console.log("second data",section.data[j].data,section.data[j][1])
 
             }
           }
 
     }
+
     convert_csv_to_geojson(section,_data,title_col){
         var temp_data=[]
         field_data_post_url = section.post_url
@@ -305,12 +352,10 @@ class Section_Manager {
             if(_data[i]["Well #"]!=""){
                 _data[i]["_id"]=temp_data.length//IMPORTANT for controlling visibility
                  _data[i]._sort_col= _data[i][title_col]
-
                  var obj_props={
                     "id":Number(_data[i]["CONTENTdm number"]),
                    "title":_data[i]["Title"],
                     "info_page":_data[i]["Reference URL"],
-                    "id":_data[i]["CONTENTdm number"],
                     "thumb_url":section.base_url+_data[i]["CONTENTdm number"]+"/thumbnail",
 
                     "iiif":_data[i][section.iiif_base_url],
@@ -342,50 +387,7 @@ class Section_Manager {
          }
         return temp_data
     }
-    join_geojson(all_data,data_to_join,left_join_col,right_join_col,title_col){
 
-        for (var i=0;i<all_data.length;i++){
-            // inject an id for access
-            all_data[i]._id=i
-             all_data[i].id=i
-            //store a sort col for universal access
-             all_data[i]._sort_col= all_data[i][title_col]
-            console.log( all_data[i][title_col],title_col,all_data[i])
-            var left_join_val=all_data[i][left_join_col].toLowerCase()
-            for (var j=0;j<data_to_join.features.length;j++){
-                //console.log(data_to_join.features[j].properties[right_join_col],"values")
-               if( data_to_join.features[j].properties[right_join_col] && left_join_val == data_to_join.features[j].properties[right_join_col].toLowerCase()){
-                    for (var p in data_to_join.features[j].properties){
-                        // inject all the properties from the geojson
-                        all_data[i][p]=data_to_join.features[j].properties[p]
-                    }
-                    // add the feature
-                    if(!all_data[i]?.feature){
-                        //first time to add features
-
-                        all_data[i].feature = {"type": "FeatureCollection","features": []}
-                        all_data[i].feature.features.push(data_to_join.features[j])
-                        all_data[i].feature.features[0].geometry.type="MultiPolygon"
-                        // keep the feature and child id consistent
-                        all_data[i].feature.features[0].id=all_data[i]._id;//IMPORTANT
-                        //wrap the coordinates in an array to allow for more coordinates to be joined
-
-                        if(all_data[i].feature.features[0].geometry.coordinates[0][0].length==2){
-                             all_data[i].feature.features[0].geometry.coordinates=[all_data[i].feature.features[0].geometry.coordinates]
-                        }
-
-                    }else{
-                        all_data[i].feature.features[0].geometry.coordinates.push(data_to_join.features[j].geometry.coordinates)
-
-                    }
-
-
-                   // break // don't break as there may be more features to add
-               }
-            }
-
-        }
-    }
     update_data(all_data,show_cols,separated_cols,image_col,color_col){
         // update the data directly
         for (var i=0;i<all_data.length;i++){
@@ -470,7 +472,7 @@ class Section_Manager {
 
     get_match(_id){
         // return the data
-        _id=_id.replaceAll('section_id_', '')
+        _id=_id.replaceAll('section_id_', '');
         return this.json_data[_id].all_data
     }
      get_section_details(_id){
@@ -493,10 +495,11 @@ class Section_Manager {
                     nav_text=LANG.NAV.BACK_BROWSE+" <i class='bi bi-chevron-left'></i>"
                     $("#nav_wrapper").show();
                     break;
-//              case 'layers':
-//                    pos=width*3
-//                    nav_text=LANG.NAV.BACK_RESULTS+" <i class='bi bi-chevron-left'></i>"
-//                    break;
+              case 'layers':
+                    pos=width*4
+                    nav_text=LANG.NAV.BACK_RESULTS+" <i class='bi bi-chevron-left'></i>"
+                    $("#nav_wrapper").show();
+                    break;
 //              case 'sub_details':
 //                    pos=width*4
 //                    nav_text=LANG.NAV.BACK_LAYERS+" <i class='bi bi-chevron-left'></i>"

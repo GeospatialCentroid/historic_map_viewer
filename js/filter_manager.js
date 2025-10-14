@@ -543,13 +543,13 @@ class Filter_Manager {
     //-----------
     show_section(section_id){
         var $this=this
-        var parent_id=section_id.replaceAll('section_id_', '')
+        var section_id=section_id.replaceAll('section_id_', '')
         var data = $this.section_manager.get_match(section_id)
 
         var item_ids=[]
 
-         var items_showing=$this.section_manager.json_data[parent_id].items_showing
-         if($('#'+"section_id_"+parent_id).is(':checked')){
+         var items_showing=$this.section_manager.json_data[section_id].items_showing
+         if($('#'+"section_id_"+section_id).is(':checked')){
             for (var i=0;i<data.length;i++){
                 if(data[i]?.feature){
                     if($.inArray( data[i]._id, items_showing)==-1){
@@ -563,17 +563,17 @@ class Filter_Manager {
             // we are hiding, take all showing features
             item_ids= [...items_showing]
          }
-         $this.show_items(parent_id,item_ids)
+         $this.show_items(section_id,item_ids)
 //         console.log("FIT THE BOUNDS ..........")
          if(!$this.has_earth_param){
          //layer_manager.map.fitBounds(layer_manager.layers[layer_manager.layers.length-1].layer_obj.getBounds());
          }
          $this.has_earth_param=false
     }
-    list_results(parent_id){
+    list_results(section_id){
         var $this = this
         //set initial variables
-        $this.showing_id=parent_id;
+        $this.showing_id=section_id;
         $this.filters={};// reset filters
 
 
@@ -581,19 +581,19 @@ class Filter_Manager {
         //move to the results panel and list all the items
         // each items visibility is stored in the filter manager - if showing
 
-        var items_showing=$this.section_manager.json_data[parent_id].items_showing
-        var data = $this.section_manager.get_match('section_id_'+parent_id)
-        console.log("The filter column is:::::::",$this.section_manager.json_data[parent_id].filter_cols)
-        $this.generate_filters(data,$this.section_manager.json_data[parent_id].filter_cols)
+        var items_showing=$this.section_manager.json_data[section_id].items_showing
+        var data = $this.section_manager.get_match('section_id_'+section_id)
+
+        $this.generate_filters(data,$this.section_manager.json_data[section_id].filter_cols)
         $this.add_filter_watcher();
-        var title_col=$this.section_manager.json_data[parent_id]["title_col"]
+        var title_col=$this.section_manager.json_data[section_id]["title_col"]
         $this.sort_data(data,title_col)
     }
-    show_sorted_results(parent_id){
+    show_sorted_results(section_id){
        //take the subset and short by title
 
         if(!this.subset_data){
-            this.subset_data=this.section_manager.json_data[parent_id].all_data
+            this.subset_data=this.section_manager.json_data[section_id].all_data
         }
         this.sort_data(this.subset_data)
     }
@@ -654,65 +654,156 @@ class Filter_Manager {
             }
     }
 
+    get_child_ids(data,list){
+        //loop over the filtered data and if a child id exists - add it to the array
+         var children =[];
 
+         for (var i=0;i<data.length;i++){
 
+           if(list.includes(Number(data[i]._id))){
+                // note we are checking the parent "children" values against the the child '_id'
+                // this ._id value is only unique per collection
+                children.push(data[i]._id)
+           }
+         }
+         return children
+    }
+    get_add_button(section_id,item_id){
+        // A reusable button group that shows the add button
+        var text = LANG.RESULT.ADD
+         var id = "item_"+section_id+"_"+item_id;
+         var item = this.get_item(section_id,item_id);
+         var func ="layer_manager.add_layer_toggle"
+         //console.log(section_id,item_id,item)
+        // check if the layer has been added
+        if(layer_manager.is_on_map(section_id+"_"+item_id)){
+            text = LANG.RESULT.REMOVE
+        }
+
+        if(item.child_ids.length>0){
+            text = this.get_parent_text(section_id,item_id)
+            func="filter_manager.show_layers"
+        }
+
+       return "<button type='button' id='"+id+"_toggle' class='btn btn-primary "+id+"_toggle' onclick='"+func+"("+section_id+","+item_id+")'>"+text+"</button>"+"<br/>"
+        +"<button type='button' class='btn btn-primary "+id+"_zoom' style='display:none;' onclick='layer_manager.zoom_layer(\""+section_id+"\",\""+item_id+"\")'>"+LANG.RESULT.ZOOM+"</button>"
+    }
+    get_parent_text(section_id,item_id){
+        var item = this.get_item(section_id,item_id);
+        var displayed=0
+
+        // we need to get the count of the children that are on the map
+         for (var i=0;i<item.child_ids.length;i++){
+            if(layer_manager.is_on_map(section_id+"_"+item.child_ids[i])){
+                displayed+=1
+            }
+         }
+
+        return LANG.RESULT.ADD+" - "+displayed+"/"+item.child_ids.length
+    }
+    update_parent_but(section_id,item_id){
+        // when a child layer is added, update the parent text to reflect the number of children on the map
+        if(item_id){
+            var id = "item_"+section_id+"_"+item_id;
+            $("."+id+"_toggle").html(this.get_parent_text(section_id,item_id));
+
+        }
+    }
+    show_layers(section_id,item_id){
+         // create a panel allowing the individual layers to be added
+        // the thumbnail should be shown along with the name
+        var $this=this;
+        var title_col=$this.section_manager.json_data[section_id]["title_col"];
+
+        // Assume other metadata is the same - todo populate this child record metadata from parent records
+        var item = this.get_item(section_id,item_id);
+        var section=section_manager.get_section_details(section_id)
+        var html=""
+
+        html+='<b>'+item[section.title_col]+"</b><br/>";// add the title column
+        html+= '<ul class="list-group"' +'">'
+
+        for (var i=0;i<item.child_ids.length;i++){
+            var child = this.get_item(section_id,item.child_ids[i]);
+            var thumb_url=section.base_url+child["CONTENTdm number"]+"/thumbnail"
+            var iiif_url = child["IIIF"];
+            //
+            html += "<li class='list-group-item  list-group-item-action'>"
+            html+='<b>'+child[section.title_col]+"</b><br/>";// add the title column
+            html+='<img class="thumbnail" src="'+thumb_url+'">'+"<br/>";
+            html+='<a href="javascript:void(0);" onclick="image_manager.show_image(\''+iiif_url+'\',\''+child[section.title_col]+'\',\''+child["Reference URL"]+'\');">'+LANG.DETAILS.IMAGE_VIEW+'</a>'+"<br/>";
+            html+=this.get_add_button(section_id,item.child_ids[i]);
+            html+="</li>";
+        }
+        html+="</ul>";
+        $("#layers_view").html(html)
+        $this.section_manager.slide_position("layers");
+    }
+    //
     //--
      show_results(sorted_data){
         // hide all the items
         var $this = this;
         try{
-             var parent_id=sorted_data[0].parent_id
+             var section_id=sorted_data[0].section_id
              // todo hide the ids better
-             $this.show_items(parent_id,[...$this.section_manager.json_data[parent_id].items_showing])
+             $this.show_items(section_id,[...$this.section_manager.json_data[section_id].items_showing])
         }catch(e){}
 
           var item_ids =[]
          // the sorted data could be a mix of items from multiple sections
 
          var html= '<ul class="list-group"' +'">'
-        var title_col="_sort_col"
-         for (var i=0;i<sorted_data.length;i++){
-             item_ids.push(sorted_data[i]._id)
-            var items_showing = this.section_manager.json_data[sorted_data[i].parent_id].items_showing
 
-            var parent_id = sorted_data[i].parent_id
-            var but_id="item_"+parent_id+'_'+sorted_data[i]._id+"_toggle"
-             var showing=""
+         var title_col=$this.section_manager.json_data[section_id]["title_col"]
+         for (var i=0;i<sorted_data.length;i++){
+            var obj = sorted_data[i]
+            obj.child_ids=[]; //keep track of the filtered child ids
+            item_ids.push(obj._id)
+            var items_showing = this.section_manager.json_data[obj.section_id].items_showing
+
+            var section_id = obj.section_id
+            var but_id="item_"+section_id+'_'+obj._id+"_toggle"
+
 //             if($.inArray( sorted_data[i]._id, items_showing)>-1){
 //                //check if the item is showing
 //
 //             }
-             showing="checked";//we're showing them all for now
-             html += "<li class='list-group-item d-flex justify-content-between list-group-item-action'>"
-             if(sorted_data[i]?.feature){
-                    // onclick="filter_manager.zoom_item('+parent_id+','+sorted_data[i]._id+');filter_manager.click_item('+parent_id+','+sorted_data[i]._id+');javascript:map_manager.scroll_to_map()"
-                 html+='<a href="#">'+sorted_data[i][title_col]+'</a>'
-                // html+='<span><div class="form-check"  onclick="filter_manager.show_items('+parent_id+',['+sorted_data[i]._id+'])"><input class="form-check-input" type="checkbox" '+showing+' value="" id="section_'+parent_id+'_'+sorted_data[i]._id+'" ></div>'
-                 html+='<button type="button" class="btn btn-primary" onclick="filter_manager.select_item('+parent_id+','+sorted_data[i]._id+')">Details</button>'
+            if(typeof(obj["children"]) !="undefined" && obj["children"]!=""){
 
-                 //if(this.get_match(id).usable_links.length>0){
-                    //
-                    var but_text=LANG.RESULT.ADD
-//                    if(this.get_match(id).usable_links[0][1].name=='CSV'){
-//                        but_text="<i class='bi bi-table'></i>"
-//                    }
-                    html+="<button type='button' id='"+but_id+"' class='btn btn-primary "+but_id+"' onclick='layer_manager.add_layer_toggle("+parent_id+","+sorted_data[i]._id+")'>"+but_text+"</button>"
-                 //}
+              obj.child_ids = this.get_child_ids(sorted_data,obj["children"].split(",").map(Number))
 
-             }else{
-                  console.log(sorted_data[i])
-                  html+=sorted_data[i][title_col]
+            }
+            // make sure the item isn't a child that should be nested under a parent
+
+             if(typeof(obj.parent_id) =="undefined" || obj.parent_id==""){
+                // if the item doesn't have a parent
+                 var item_html = "<li class='list-group-item d-flex justify-content-between list-group-item-action'>"
+
+                 item_html+='<a href="#">'+obj[title_col]+'</a>'
+                 item_html+='<button type="button" class="btn btn-primary" onclick="filter_manager.select_item('+section_id+','+obj._id+')">Details</button>'
+                 item_html+=this.get_add_button(section_id,obj._id)
+
+
+                 item_html+="</span>";
+
+                 item_html+="</li>";
+                // skip adding the parent if it has not children
+//                if(obj["children"]!="" && obj.child_ids.length==0){
+//                    item_html=""
+//                }
+                html+=item_html;
+             //}else{
+
+
              }
-             html+="</span>"
-
-             html+="</li>"
         }
-        html+="</ul>"
+        html+="</ul>";
 
         $("#results_view").html(html)
         // todo show the ids better
         if(item_ids.length>0){
-            $this.show_items(parent_id,item_ids)
+            $this.show_items(section_id,item_ids)
         }
 
         //
@@ -732,11 +823,13 @@ class Filter_Manager {
          }
 
     }
-    select_item(parent_id,item_id){
+    select_item(section_id,item_id){
      //analytics_manager.track_event("side_bar","show_details","layer_id",_resource_id)
         // use the id of the csv
-         var item= this.get_item(parent_id,item_id)
-         var section=section_manager.get_section_details(parent_id)
+         var item= this.get_item(section_id,item_id)
+         var section=section_manager.get_section_details(section_id)
+         console.log(item)
+         //return
 //        this.show_match(match)
 //        //for reference track the selected page
 //        this.page_id=id
@@ -749,29 +842,20 @@ class Filter_Manager {
         this.show_details(item,section)
         section_manager.slide_position("details")
     }
+
     show_details(match,section){
         // @param match: a json object with details (including a page path to load 'path_col')
         //create html details to show
         var html="";
-        var parent_id = match.parent_id;
+        var section_id = match.section_id;
         var item_id=match._id;
-        var id = "item_"+parent_id+"_"+item_id;
+
         var thumb_url=section.base_url+match["CONTENTdm number"]+"/thumbnail"
         var iiif_url = match["IIIF"];
-        var text = LANG.RESULT.ADD
-        // check if the layer has been added
-        if(layer_manager.is_on_map(parent_id+"_"+item_id)){
-            text = LANG.RESULT.REMOVE
-        }
-        html +="<button type='button' id='"+id+"_toggle' class='btn btn-primary "+id+"_toggle' onclick='layer_manager.add_layer_toggle("+parent_id+","+item_id+")'>"+text+"</button>"+"<br/>";
+        html+=this.get_add_button(section_id,item_id);
         html+='<span class="fw-bold">Title:</span> '+match[section.title_col]+"<br/>";// add the title column
         html+='<img src="'+thumb_url+'">'+"<br/>";
-         html+='<a href="javascript:void(0);" onclick="image_manager.show_image(\''+iiif_url+'\',\''+match[section.title_col]+'\',\''+match["Reference URL"]+'\');">'+LANG.DETAILS.IMAGE_VIEW+'</a>'+"<br/>";
-
-       // var id =match._id
-//         if(match.usable_links.length>0){
-//            html+="<button type='button' id='"+id+"' class='btn btn-primary "+id+"_toggle' onclick='layer_manager.toggle_layer(\""+id+"\",this)'>"+LANG.RESULT.ADD+"</button><br/>"
-//         }
+        html+='<a href="javascript:void(0);" onclick="image_manager.show_image(\''+iiif_url+'\',\''+match[section.title_col]+'\',\''+match["Reference URL"]+'\');">'+LANG.DETAILS.IMAGE_VIEW+'</a>'+"<br/>";
 
         for (var i in match){
             if ($.inArray(i,section.show_cols)!=-1){
