@@ -109,6 +109,7 @@ class Layer_Manager {
     $(".item_"+_layer_id+"_toggle").text(LANG.RESULT.ADD) // revert to Add button text
 
     $("#item_"+_layer_id+"_drag").remove();
+    $(".item_"+_layer_id+"_zoom").hide();
     ////        $this.remove_legend(_resource_id);
     for(var i =0;i<this.layers.length;i++){
 
@@ -175,17 +176,18 @@ class Layer_Manager {
     // either add or hide a layer
     var resource = filter_manager.get_item(section_id,item_id)
     var parent_id=resource.parent_id
+    var section = section_manager.get_section_details(section_id)
     //get the annotation column 'annotation_col' and add it to the map
     map_manager.map.createPane(pane)
 
     const layer = new Allmaps.WarpedMapLayer(
-      resource[section_manager.get_section_details(section_id).annotation_col],{ pane: `item_${section_id}_${item_id}`}
+      resource[section.annotation_col],{ pane: `item_${section_id}_${item_id}`}
     );
     console.log(layer)
      // if loading the annotation from a relative path
      //var map_layer =new Allmaps.WarpedMapLayer(window.location.origin+"/"+window.location.pathname+"/"+resource[section_manager.json_data[_id].annotation_col],{pane: 'left'})
 
-    getDominantColorFromWarpedLayer(section_manager.get_section_details(section_id).base_url+resource["CONTENTdm number"]+"/thumbnail")
+    getDominantColorFromWarpedLayer(section_manager.get_section_details(section_id).base_url+resource[section.id_col]+"/thumbnail")
     .then(dominant => {
        layer.dominant_color=dominant
     });
@@ -227,20 +229,20 @@ class Layer_Manager {
         var html = "<li class='ui-state-default drag_li basemap_layer' id='"+id+"_drag'>"
         html+="<div class='left-div-map'>"
         html+="<div class='grip'><i class='bi bi-grip-vertical'></i></div>"
-        //html +="<button type='button' id='"+id+"_toggle' class='btn btn-primary "+id+"_toggle' onclick='layer_manager.add_layer_toggle(this)'>"+add_txt+"</button>"
 
         html +="<div class='item_title font-weight-bold'>"+title+"</span></div>"
 
 
-
-        html +="<br/><button type='button' id='"+id+"_toggle' class='btn btn-primary "+id+"_toggle' onclick='layer_manager.add_layer_toggle(\""+section_id+"\",\""+item_id+"\")'>"+LANG.RESULT.REMOVE+"</button>"
+        html+="<div class='left-div-map-buttons'>"
+        html +="<button type='button' id='"+id+"_toggle' class='btn btn-primary "+id+"_toggle' onclick='layer_manager.add_layer_toggle(\""+section_id+"\",\""+item_id+"\")'>"+LANG.RESULT.REMOVE+"</button>"
         //
         html +="<button type='button' class='btn btn-primary' onclick='layer_manager.zoom_layer(\""+section_id+"\",\""+item_id+"\")'>"+LANG.RESULT.ZOOM+"</button>"
         if(download_link){
               html +=download_link;
          }
         html +="<button type='button' class='btn btn-primary' onclick='filter_manager.select_item(\""+section_id+"\",\""+item_id+"\")'>"+LANG.RESULT.DETAILS+"</button>"
-         html+='</div>'
+        html+='</div>'
+        html+='</div>'
 //        console_log("the type is ",layer.type)
 //        if ($.inArray(layer.type,$this.table_types)>-1){
 //            html +="<button type='button' class='btn btn-primary' onclick='layer_manager.show_table_data(\""+id+"\")'><i class='bi bi-table'></i></button>"

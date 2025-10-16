@@ -205,20 +205,16 @@ class Section_Manager {
                 if($this.json_data[i]?.include_col){
                    $this.json_data[i].all_data = $this.included_data($this.json_data[i].all_data,$this.json_data[i].include_col)
                 }
-
-
-
-
                 for (var j=0;j<all_data.length;j++){
 
-                  var obj = all_data[j]
+                    var obj = all_data[j]
 
-                  obj.section_id=i// create a reference to the section for mix and match filtering
+                    obj.section_id=i// create a reference to the section for mix and match filtering
 
-                   //keep track of parent record we're a child of
-                   obj.record_section_id=false;
+                    //keep track of parent record we're a child of
+                    obj.record_section_id=false;
                     // if the record is a child, attempt to find it's parent
-                     section_manager.add_parent_id(obj,all_data,section.id_col)
+                    section_manager.add_parent_id(obj,all_data,section.unique_id_col)
                 }
               }
              //clean up
@@ -229,29 +225,50 @@ class Section_Manager {
 
           $this.check_all_section_completion()
     }
-    add_parent_id(obj,all_data,_id_col){
+    add_parent_id(obj,all_data,unique_id_col){
         // for each item, loop over all the items to connects it's parent
-        if(obj?.children && obj.children.trim()==""){
+
+        if(obj.children.trim()==""){//obj?.children &&
+
                 for (var k=0;k<all_data.length;k++){
                     // look through the parents
                     var parent = all_data[k]
+
                      if(parent["children"]!=""){
 
                         var children_array=parent["children"].split(",")
                           .map(s => s.trim())     // remove extra spaces
                           .filter(s => s !== '')  // remove empty entries
-                          .map(Number);
 
-                        if (children_array.includes(Number(obj[_id_col]))) {
+                        if (children_array.includes(obj[unique_id_col])) {
                             //store the parent _id with the child
                             obj.parent_id=parent._id
-
+                            obj=this.inject_parent_metadata(parent,obj,["children"])
                             break;
                         }
 
                      }
                 }
             };
+
+    }
+    inject_parent_metadata(parent, child, excludeKeys = []) {
+      const result = { ...child }; // Clone child to avoid mutation
+
+          for (const key in parent) {
+            if (
+              Object.prototype.hasOwnProperty.call(parent, key) &&
+              !excludeKeys.includes(key)
+            ) {
+              // Only replace if child property is explicitly an empty string
+              if (child[key] === "") {
+                result[key] = parent[key];
+              }
+            }
+          }
+
+          return result;
+
 
     }
     check_all_section_completion(){
@@ -323,7 +340,7 @@ class Section_Manager {
                    filter_cols.push("has_data")
 
                   }
-                var separated_cols=section.separated_cols.split(";").map(function(item) {
+                var separated_cols=section.separated_cols.split(",").map(function(item) {
                       return item.trim();
                     });
                     console.log("separated_cols",separated_cols)
@@ -345,45 +362,45 @@ class Section_Manager {
     }
 
     convert_csv_to_geojson(section,_data,title_col){
+        // inject easily accessible values
         var temp_data=[]
         field_data_post_url = section.post_url
          for (var i=0;i<_data.length;i++){
-            //todo put this filter in the config
-            if(_data[i]["Well #"]!=""){
-                _data[i]["_id"]=temp_data.length//IMPORTANT for controlling visibility
-                 _data[i]._sort_col= _data[i][title_col]
-                 var obj_props={
-                    "id":Number(_data[i]["CONTENTdm number"]),
-                   "title":_data[i]["Title"],
-                    "info_page":_data[i]["Reference URL"],
-                    "thumb_url":section.base_url+_data[i]["CONTENTdm number"]+"/thumbnail",
 
-                    "iiif":_data[i][section.iiif_base_url],
-                    "attribution":_data[i]["Title"],
+            _data[i]["_id"]=_data[i][section.unique_id_col]//IMPORTANT for controlling visibility
+             _data[i]._sort_col= _data[i][title_col]
+             var obj_props={
+                "id":_data[i][section.unique_id_col],
+               "title":_data[i][section.title_col],
+                "info_page":_data[i][section.ref_url],
+                "thumb_url":section.base_url+_data[i][section.id_col]+"/thumbnail",
+
+                "iiif":_data[i][section.iiif_base_url],
+                "attribution":_data[i][section.title_col],
+             }
+              if(transcription_mode){
+                 if(_data[i].data){
+                    obj_props["has_data"]= true
+                    _data[i]["has_data"]= "Yes"
+                 }else{
+                  _data[i]["has_data"]= ""
                  }
-                  if(transcription_mode){
-                     if(_data[i].data){
-                        obj_props["has_data"]= true
-                        _data[i]["has_data"]= "Yes"
-                     }else{
-                      _data[i]["has_data"]= ""
-                     }
-                }
-                 _data[i]["feature"]={}
-                 _data[i]["feature"]["features"] =[
-                    {
-                      "type": "Feature",
-                      "properties": obj_props,
-                      "geometry": {
-                        "coordinates": [
-                             Number(_data[i].Longitude),
-                             Number(_data[i].Latitude),
-                        ],
-                        "type": "Point"
-                      }
-                    }]
-                temp_data.push(_data[i])
             }
+             _data[i]["feature"]={}
+             _data[i]["feature"]["features"] =[
+                {
+                  "type": "Feature",
+                  "properties": obj_props,
+                  "geometry": {
+                    "coordinates": [
+                         Number(_data[i].Longitude),
+                         Number(_data[i].Latitude),
+                    ],
+                    "type": "Point"
+                  }
+                }]
+            temp_data.push(_data[i])
+
          }
         return temp_data
     }
@@ -393,10 +410,15 @@ class Section_Manager {
         for (var i=0;i<all_data.length;i++){
             var properties={}
                  for (var k=0;k<separated_cols.length;k++){
-
-                        all_data[i][separated_cols[k]] =  all_data[i][separated_cols[k]].split(";").map(function(item) {
-                          return getValidNumber(item.trim());
-                        });
+                       // if there is a number clean it up
+                       if (all_data[i][separated_cols[k]].match(/\d/) == null){
+                            all_data[i][separated_cols[k]] =  all_data[i][separated_cols[k]].split(",");
+                       }else{
+                            // contentdm uses semicolon for date lists
+                            all_data[i][separated_cols[k]] =  all_data[i][separated_cols[k]].split(";").map(function(item) {
+                              return getValidNumber(item.trim());
+                            });
+                     }
                  }
             // and if there is an image col
             if(image_col){
@@ -437,7 +459,7 @@ class Section_Manager {
                setTimeout(() => {$("#panels").show();} , "500");
 
                 //
-                 $("#nav_wrapper").hide();
+                 $("#nav").hide();
                  run_resize()
             }, "100");
 
@@ -488,17 +510,17 @@ class Section_Manager {
               case 'results':
                 pos=width*2
                 nav_text=LANG.NAV.BACK_BROWSE +" <i class='bi bi-chevron-left'></i>"
-                $("#nav_wrapper").hide();
+                $("#nav").hide();
                 break;
               case 'details':
                     pos=width*3
                     nav_text=LANG.NAV.BACK_BROWSE+" <i class='bi bi-chevron-left'></i>"
-                    $("#nav_wrapper").show();
+                    $("#nav").show();
                     break;
               case 'layers':
                     pos=width*4
                     nav_text=LANG.NAV.BACK_RESULTS+" <i class='bi bi-chevron-left'></i>"
-                    $("#nav_wrapper").show();
+                    $("#nav").show();
                     break;
 //              case 'sub_details':
 //                    pos=width*4

@@ -24,12 +24,23 @@ class Map_Manager {
      L.control.scale().addTo( this.map);
      this.map.createPane('left');
     var right_pane=  this.map.createPane('right');
-    this.map.on("moveend", function () {
-      update_layer_list();
-      var c =  map_manager.map.getCenter()
-         map_manager.set_url_params("c",c.lat+","+c.lng)
-         map_manager.set_url_params("z", map_manager.map.getZoom())
-         save_params()
+//    this.map.on("moveend", function () {
+//      update_layer_list();
+//      var c =  map_manager.map.getCenter()
+//         map_manager.set_url_params("c",c.lat+","+c.lng)
+//         map_manager.set_url_params("z", map_manager.map.getZoom())
+//         save_params()
+//    });
+    this.map.on('dragend', function (e) {
+       $this.update_map_pos()
+
+    });
+    this.map.on('zoomend', function (e) {
+        $this.update_map_pos()
+
+    });
+    this.map.on('moveend', function (e) {
+        $this.update_map_pos()
     });
 
 
@@ -63,7 +74,18 @@ class Map_Manager {
 
   }
 
-
+     update_map_pos(no_save){
+        var c = this.map.getCenter()
+        this.set_url_params("c",c.lat+","+c.lng)
+        this.set_url_params("z",this.map.getZoom())
+        if(!no_save){
+            save_params()
+        }
+//        // also update the table view if table bounds checked
+//        table_manager?.bounds_change_handler();
+        //update the search results if search results checked
+        filter_manager?.update_bounds_search();
+    }
 
     move_map_pos(_params){
         var z = Number(_params['z'])
@@ -79,34 +101,7 @@ class Map_Manager {
          this.params[type]= value
 
     }
-    // markers
-  create_geojson(){
-   var data=this.data;
-   var output_json={ "type": 'FeatureCollection', "features": []}
-   for(var i=0;i<data.length;i++){
-        if(data[i]["Well #"]!=""){
 
-           var obj_props={
-            "title":data[i]["Title"],
-            "info_page":data[i]["Reference URL"],
-            "id":data[i]["CONTENTdm number"],
-            "thumb_url":base_url+data[i]["CONTENTdm number"]+"/thumbnail",
-            "well":data[i]["Well #"],
-            "iiif":iiif_base_url+data[i]["CONTENTdm number"]+"/info.json",
-             "attribution":data[i]["Title"],
-           /* "creato":data[i]["Creator"],
-            "date":data[i]["Date"],*/
-              }
-             if(data[i].data){
-                obj_props["data"]= data[i].data
-             }
-
-            output_json["features"].push({ "type": 'Feature', "properties": obj_props,
-                           "geometry":{"type": 'Point',"coordinates": [Number(data[i]["Longitude"]),Number(data[i]["Latitude"])]}})
-        }
-   }
-    map_manager.show_geojson(output_json)
-}
  popup_show(feature){
         var $this=this
 

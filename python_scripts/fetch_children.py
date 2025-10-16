@@ -72,7 +72,8 @@ def main():
             data = response.json()
 
             children = data.get("parent", {}).get("children", [])
-            child_ids = [str(child.get("id")) for child in children if "id" in child]
+            # prepend each child ID with a string collection followed by a dash (-)
+            child_ids = [f"{collection}-{child.get('id')}" for child in children if "id" in child]
             row[children_col] = ",".join(child_ids) if child_ids else ""
 
         except requests.RequestException as e:

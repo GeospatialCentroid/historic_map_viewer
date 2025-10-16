@@ -77,11 +77,22 @@ class Filter_Manager {
     );
 
     }
+    update_bounds_search(){
+        if ($('#filter_bounds_checkbox').is(':checked')){
+            var b =layer_manager.map.getBounds()
+            //search lower-left corner as the start of the range and the upper-right corner as the end of the range
+            filter_manager.add_filter("bounds",[b._southWest.lat.toFixed(3),b._southWest.lng.toFixed(3),b._northEast.lat.toFixed(3),b._northEast.lng.toFixed(3)])
+        }else{
+           //Remove bound filter
+           this.remove_filter('bounds')
+        }
+        this.filter()
+    }
     show_date_search(col,all_data){
          //date search
          var dates=[]
         for (var i=0;i<all_data.length;i++){
-            if(all_data[i][col][0] != null){
+            if(all_data[i][col][0] != null && all_data[i][col][0]!=''){
                dates = dates.concat(all_data[i][col])
             }
 
@@ -142,10 +153,11 @@ class Filter_Manager {
 
             this.add_filter(col, [start,end])
             this.filter();
-
+            section_manager.slide_position("results");
          }else{
            this.remove_filter(col)
            this.filter();
+
         }
     }
      show_place_bounds(b){
@@ -276,27 +288,28 @@ class Filter_Manager {
                         }
 
                     }else if (a=='bounds'){
-                         if(obj?.[this['bounds_col']]){
-                             var b = obj[this['bounds_col']].split(',')
-                              var poly1 = turf.polygon([[
-                                [b[1],b[0]],
-                                [b[1],b[2]],
-                                [b[3],b[2]],
-                                [b[3],b[0]],
-                                [b[1],b[0]]
-                                ]])
-                              var b = layer_manager.map.getBounds()
-                              var poly2 = turf.polygon([[
-                              [b._southWest.lat,b._southWest.lng],
-                              [b._southWest.lat,b._northEast.lng],
-                              [b._northEast.lat,b._northEast.lng],
-                              [b._northEast.lat,b._southWest.lng],
-                               [b._southWest.lat,b._southWest.lng]
-                              ]])
+                         var bounds_col=this.section_manager.json_data[i].geojson_col
+                         if(obj?.[bounds_col]){
+                             // try{
+                                  const geojson = JSON.parse(obj[bounds_col]);
+                                  const poly1 = turf.polygon(geojson.features[0].geometry.coordinates);
+                                  const b = layer_manager.map.getBounds()
+                                  const sw = b.getSouthWest();
+                                    const ne = b.getNorthEast();
+                                  const poly2 = turf.polygon([[
+                                  [sw.lng, sw.lat],  // southwest
+                                    [sw.lng, ne.lat],  // northwest
+                                    [ne.lng, ne.lat],  // northeast
+                                    [ne.lng, sw.lat],  // southeast
+                                    [sw.lng, sw.lat]   // back to southwest to close
+                                  ]])
 
                               if (!turf.booleanIntersects(poly1, poly2)){
                                 meets_criteria=false
                               }
+//                              }catch(e){
+//
+//                              }e
                         }else{
                              // no coordinates
                              meets_criteria=false
@@ -563,7 +576,7 @@ class Filter_Manager {
             // we are hiding, take all showing features
             item_ids= [...items_showing]
          }
-         $this.show_items(section_id,item_ids)
+
 //         console.log("FIT THE BOUNDS ..........")
          if(!$this.has_earth_param){
          //layer_manager.map.fitBounds(layer_manager.layers[layer_manager.layers.length-1].layer_obj.getBounds());
@@ -617,12 +630,7 @@ class Filter_Manager {
         this.show_results(sorted_data)
     }
 
-    show_items(_id,item_ids){
-        return
-        //toggle the layer but only show the specific item id
-        // note: we'll want to pass an array of ids to
-        layer_manager.toggle_layer("section_id_"+_id,"csv_geojson",JSON.parse(this.section_manager.json_data[_id].drawing_info.replaceAll('\n', '')),false,100,item_ids)
-    }
+
     zoom_item(_id,item_id){
           var data = this.section_manager.get_match('section_id_'+_id)
             for (var i=0;i<data.length;i++){
@@ -660,7 +668,7 @@ class Filter_Manager {
 
          for (var i=0;i<data.length;i++){
 
-           if(list.includes(Number(data[i]._id))){
+           if(list.includes(data[i]._id)){
                 // note we are checking the parent "children" values against the the child '_id'
                 // this ._id value is only unique per collection
                 children.push(data[i]._id)
@@ -685,7 +693,7 @@ class Filter_Manager {
             func="filter_manager.show_layers"
         }
 
-       return "<button type='button' id='"+id+"_toggle' class='btn btn-primary "+id+"_toggle' onclick='"+func+"("+section_id+","+item_id+")'>"+text+"</button>"+"<br/>"
+       return "<button type='button' id='"+id+"_toggle' class='btn btn-primary "+id+"_toggle' onclick='"+func+"("+section_id+",\""+item_id+"\")'>"+text+"</button>"+"<br/>"
         +"<button type='button' class='btn btn-primary "+id+"_zoom' style='display:none;' onclick='layer_manager.zoom_layer(\""+section_id+"\",\""+item_id+"\")'>"+LANG.RESULT.ZOOM+"</button>"
     }
     get_parent_text(section_id,item_id){
@@ -709,7 +717,76 @@ class Filter_Manager {
 
         }
     }
-    show_layers(section_id,item_id){
+
+    //--
+     show_results(sorted_data){
+        // hide all the items
+        var $this = this;
+
+          var item_ids =[]
+         // the sorted data could be a mix of items from multiple sections
+
+         var html= '<ul class="list-group"' +'">'
+
+         for (var i=0;i<sorted_data.length;i++){
+            var item = sorted_data[i]
+            var section = section_manager.get_section_details(item.section_id);
+
+            item.child_ids=[]; //keep track of the filtered child ids
+            item_ids.push(item._id)
+            var items_showing = section.items_showing
+
+            var section_id = item.section_id
+            var but_id="item_"+section_id+'_'+item._id+"_toggle"
+
+            //             if($.inArray( sorted_data[i]._id, items_showing)>-1){
+            //                //check if the item is showing
+            //
+            //             }
+            if(typeof(item["children"]) !="undefined" && item["children"]!=""){
+
+                item.child_ids = this.get_child_ids(sorted_data,item["children"].split(","));
+
+            }
+            // make sure the item isn't a child that should be nested under a parent
+
+            if(typeof(item.parent_id) =="undefined" || item.parent_id==""){
+                // if the item doesn't have a parent
+                 var item_html = '<li class="list-group-item list-group-item-action" onmouseover="filter_manager.show_highlight('+section_id+',\''+item._id+'\');" onmouseout="map_manager.hide_highlight_feature();">'
+
+                 item_html+='<a href="#" onclick="filter_manager.select_item('+section_id+',\''+item._id+'\')">'+item[section.title_col]+'</a><br/>'
+                 item_html+="<div class='item_text_sm'>Creator:<b> "+item[section.creator_col]+"</b></div>"
+                 item_html+="<div class='item_text_sm'>Date:<b> "+item[section.date_col]+"</b></div>"
+                 item_html+='<div class="results-buttons"><button type="button" class="btn btn-primary" onclick="filter_manager.select_item('+section_id+',\''+item._id+'\')">Details</button>'
+                 item_html+=this.get_add_button(section_id,item._id)
+
+                 item_html+="</div>";
+
+                 item_html+="</li>";
+                // skip adding the parent if it has not children
+                if(item["children"]!="" && item.child_ids.length==0){
+                    item_html=""
+                }
+                html+=item_html;
+                //}else{
+
+
+             }
+        }
+        html+="</ul>";
+
+        $("#results_view").html(html)
+
+
+        //
+        $('#result_wrapper').animate({
+                scrollTop: 0
+            }, 1000);
+         $this.update_results_info(sorted_data.length)
+
+    }
+    //
+     show_layers(section_id,item_id){
          // create a panel allowing the individual layers to be added
         // the thumbnail should be shown along with the name
         var $this=this;
@@ -720,17 +797,18 @@ class Filter_Manager {
         var section=section_manager.get_section_details(section_id)
         var html=""
 
-        html+='<b>'+item[section.title_col]+"</b><br/>";// add the title column
+        html+='<div class="item_title">'+item[section.title_col]+"</div>";// add the title column
+        html+='<button type="button" class="btn btn-primary" onclick="filter_manager.select_item('+section_id+',\''+item._id+'\');" >Details</button>'
         html+= '<ul class="list-group"' +'">'
 
         for (var i=0;i<item.child_ids.length;i++){
             var child = this.get_item(section_id,item.child_ids[i]);
-            var thumb_url=section.base_url+child["CONTENTdm number"]+"/thumbnail"
+            var thumb_url=section.base_url+child[section.id_col]+"/thumbnail"
             var iiif_url = child["IIIF"];
             //
             html += "<li class='list-group-item  list-group-item-action'>"
             html+='<b>'+child[section.title_col]+"</b><br/>";// add the title column
-            html+='<img class="thumbnail" src="'+thumb_url+'">'+"<br/>";
+            html+='<div class="item_thumb_container"><img class="item_thumb" src="'+thumb_url+'"></div>'
             html+='<a href="javascript:void(0);" onclick="image_manager.show_image(\''+iiif_url+'\',\''+child[section.title_col]+'\',\''+child["Reference URL"]+'\');">'+LANG.DETAILS.IMAGE_VIEW+'</a>'+"<br/>";
             html+=this.get_add_button(section_id,item.child_ids[i]);
             html+="</li>";
@@ -740,79 +818,6 @@ class Filter_Manager {
         $this.section_manager.slide_position("layers");
     }
     //
-    //--
-     show_results(sorted_data){
-        // hide all the items
-        var $this = this;
-        try{
-             var section_id=sorted_data[0].section_id
-             // todo hide the ids better
-             $this.show_items(section_id,[...$this.section_manager.json_data[section_id].items_showing])
-        }catch(e){}
-
-          var item_ids =[]
-         // the sorted data could be a mix of items from multiple sections
-
-         var html= '<ul class="list-group"' +'">'
-
-         var title_col=$this.section_manager.json_data[section_id]["title_col"]
-         for (var i=0;i<sorted_data.length;i++){
-            var obj = sorted_data[i]
-            obj.child_ids=[]; //keep track of the filtered child ids
-            item_ids.push(obj._id)
-            var items_showing = this.section_manager.json_data[obj.section_id].items_showing
-
-            var section_id = obj.section_id
-            var but_id="item_"+section_id+'_'+obj._id+"_toggle"
-
-//             if($.inArray( sorted_data[i]._id, items_showing)>-1){
-//                //check if the item is showing
-//
-//             }
-            if(typeof(obj["children"]) !="undefined" && obj["children"]!=""){
-
-              obj.child_ids = this.get_child_ids(sorted_data,obj["children"].split(",").map(Number))
-
-            }
-            // make sure the item isn't a child that should be nested under a parent
-
-             if(typeof(obj.parent_id) =="undefined" || obj.parent_id==""){
-                // if the item doesn't have a parent
-                 var item_html = "<li class='list-group-item d-flex justify-content-between list-group-item-action'>"
-
-                 item_html+='<a href="#">'+obj[title_col]+'</a>'
-                 item_html+='<button type="button" class="btn btn-primary" onclick="filter_manager.select_item('+section_id+','+obj._id+')">Details</button>'
-                 item_html+=this.get_add_button(section_id,obj._id)
-
-
-                 item_html+="</span>";
-
-                 item_html+="</li>";
-                // skip adding the parent if it has not children
-//                if(obj["children"]!="" && obj.child_ids.length==0){
-//                    item_html=""
-//                }
-                html+=item_html;
-             //}else{
-
-
-             }
-        }
-        html+="</ul>";
-
-        $("#results_view").html(html)
-        // todo show the ids better
-        if(item_ids.length>0){
-            $this.show_items(section_id,item_ids)
-        }
-
-        //
-        $('#result_wrapper').animate({
-                scrollTop: 0
-            }, 1000);
-         $this.update_results_info(sorted_data.length)
-
-    }
     get_item(_id,item_id){
         var data = this.section_manager.get_match('section_id_'+_id)
         var item;
@@ -843,29 +848,31 @@ class Filter_Manager {
         section_manager.slide_position("details")
     }
 
-    show_details(match,section){
+    show_details(item,section){
         // @param match: a json object with details (including a page path to load 'path_col')
         //create html details to show
         var html="";
-        var section_id = match.section_id;
-        var item_id=match._id;
+        var section_id = item.section_id;
+        var item_id=item._id;
 
-        var thumb_url=section.base_url+match["CONTENTdm number"]+"/thumbnail"
-        var iiif_url = match["IIIF"];
-        html+=this.get_add_button(section_id,item_id);
-        html+='<span class="fw-bold">Title:</span> '+match[section.title_col]+"<br/>";// add the title column
-        html+='<img src="'+thumb_url+'">'+"<br/>";
-        html+='<a href="javascript:void(0);" onclick="image_manager.show_image(\''+iiif_url+'\',\''+match[section.title_col]+'\',\''+match["Reference URL"]+'\');">'+LANG.DETAILS.IMAGE_VIEW+'</a>'+"<br/>";
+        var thumb_url=section.base_url+item[section.id_col]+"/thumbnail"
+        var iiif_url = item["IIIF"];
+        html+='<div class="item_title">'+item[section.title_col]+"</div>";// add the title column
+        html+="<div class='item_text_sm'>Creator:<b> "+item[section.creator_col]+"</b></div>"
+        html+="<div class='item_text_sm'>Date:<b> "+item[section.date_col]+"</b></div>"
+        html+="<div class='details-buttons' >"+this.get_add_button(section_id,item_id)+"</div>"
+        html+='<div class="item_thumb_container"><img class="item_thumb" src="'+thumb_url+'"></div>';
+        html+='<a href="javascript:void(0);" onclick="image_manager.show_image(\''+iiif_url+'\',\''+item[section.title_col]+'\',\''+item["Reference URL"]+'\');">'+LANG.DETAILS.IMAGE_VIEW+'</a>'+"<br/>";
 
-        for (var i in match){
+        for (var i in item){
             if ($.inArray(i,section.show_cols)!=-1){
-                var link = match[i]
+                var link = item[i]
                 if ((typeof link === 'string' || link instanceof String) && link.indexOf("http")==0){
                    link="<a href='"+link+"' target='_blank'>"+link+"</a>"
                 }
                 // only show if not blank
                 if(link!=""){
-                    html+="<span class='fw-bold'>"+i+":</span> "+link+"<br/>"
+                    html+="<div class='meta-item'><span class='fw-bold'>"+i+"</span> "+"<br/>"+link+"</div>"
                 }
             }
         }
@@ -873,10 +880,10 @@ class Filter_Manager {
         // these could be any number of columns of the same size so they can be combined into a table
         var table_data =[]
         for (var c in this.table_data_col){
-            if(match[this.table_data_col[c]].indexOf(",")>-1){
-                table_data.push(match[this.table_data_col[c]].split(','))
+            if(item[this.table_data_col[c]].indexOf(",")>-1){
+                table_data.push(item[this.table_data_col[c]].split(','))
             }else{
-                table_data.push(match[this.table_data_col[c]])
+                table_data.push(item[this.table_data_col[c]])
             }
 
         }
@@ -892,5 +899,9 @@ class Filter_Manager {
 //        }
         $("#details_view").html(html)
     }
-
+   show_highlight(section_id,item_id){
+        var item= this.get_item(section_id,item_id)
+        var section=section_manager.get_section_details(section_id)
+        map_manager.show_highlight_geo_json(JSON.parse(item[section.geojson_col]));
+   }
 }

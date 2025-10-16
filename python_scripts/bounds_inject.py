@@ -4,8 +4,7 @@ The following file:
 - loops over a specific column, adding a new extension
 - opens the geojson, and injects it into a new column
 
-python3 bounds_inject.py -source_file "data/Groundwater map urls.csv" -column_name Annotation -column_extension "geojson" -new_column "geojson"
-
+python3 python_scripts/bounds_inject.py -source_file "data/Historic Maps - Special Collections Maps .csv" -column_name "Georeference Annotation" -column_extension "geojson" -new_column "geojson"
 
 '''
 
@@ -35,14 +34,17 @@ if(args.new_column not in data[0]):
         data[0].append(args.new_column)
 in_col_num=data[0].index(args.column_name)
 out_col_num=data[0].index(args.new_column)
-
+print("in_col_num",in_col_num)
 
 for i in range(1, len(data)):
         if not 0 <= out_col_num < len(data[i]):
-                with urllib.request.urlopen(data[i][in_col_num]+"."+args.column_extension) as url:
-                        data[i].append( str(json.load(url)).replace("'", '"'))
-#
-#
+                if data[i][in_col_num]!="":
+                    print("Accessing URL",data[i][in_col_num]+"."+args.column_extension)
+                    try:
+                        with urllib.request.urlopen(data[i][in_col_num]+"."+args.column_extension) as url:
+                                data[i].append( str(json.load(url)).replace("'", '"'))
+                    except Exception as e:
+                        data[i].append("")
 #
 
 with open(args.source_file, 'w', newline='') as file:

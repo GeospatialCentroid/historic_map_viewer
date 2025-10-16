@@ -58,7 +58,7 @@ display:inline;
 }
 
 a {
-    color: #20c997;
+    color: #008FB3;
     text-decoration: none;
     background-color: transparent;
 }
@@ -258,7 +258,8 @@ a.disabled {
     float:left;
 }
 .med_pad{
-  padding: 5px;
+    padding: 5px;
+    line-height: 1.5;
 }
 
 
@@ -345,12 +346,6 @@ margin-left:-15px;
     height:27px;
 }
 
-
-
-.item_title{
-    font-size: .7rem;
-
-}
 .total_results{
     font-size: .75rem;
     font-weight: bold;
@@ -391,22 +386,39 @@ margin-left:-15px;
       margin-right: 10px;
 }
 .item_title {
-    font-size: 100%;
+
+  font-size: 16px;
+  font-weight: 600;
+  word-break: break-all;
+  text-overflow: ellipsis;
+
 }
 .item_title_lg{
     font-size: 130%;
 }
-#item_thumb {
-    position: relative;
-    float: right;
-    top: 0px;
+.item_text_sm{
+    font-size: 80%;
+    text-overflow: ellipsis;
+    max-width:260px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.item_thumb_container{
+      text-align: center;
+    margin-bottom: 10px;
+}
+.item_thumb {
+
     display: inline-block;
     margin: 5px;
     width:200px;
     height:auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+
 }
 
-#item_thumb img{
+.item_thumb img{
  border: solid grey 1px;
 }
 
@@ -510,7 +522,7 @@ margin-left:-15px;
 
 
 #sortable_layers li span {
-position: absolute;
+    position: absolute;
 }
 #sortable_layers li:hover {
     background-color: #0490ce5c;
@@ -556,6 +568,27 @@ position: absolute;
 
 .left-div-map{
     width: 55%;
+    height:100%
+    position: relative;
+}
+
+.left-div-map-buttons{
+    position: absolute;
+    bottom: 2px;
+}
+
+.results-buttons{
+    position: absolute;
+    bottom: 2px;
+    right:0px;
+}
+#details_view{
+    position: relative;
+}
+.details-buttons{
+    position: absolute;
+    right:0px;
+    top:0px;
 }
 
 .stacked-div-map {
@@ -1175,10 +1208,6 @@ a[aria-disabled="true"] {
     z-index: 100000;
 }
 
-li a {
-    color:black;
-}
-
 .list_title{
     font-weight:bold
 
@@ -1216,4 +1245,43 @@ li a {
 }
 .leaflet-sbs{
     display:none;
+}
+.details-left {
+    flex: 1 1 250px;
+    min-width: 250px;
+}
+
+.details-right {
+    flex: 2 1 400px;
+    min-width: 300px;
+}
+.button-group {
+    margin-bottom: 10px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.thumbnail-container {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.thumbnail {
+    max-width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.view-link {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.meta-item {
+    margin-bottom: 5px;
+}
+
+.fw-bold {
+    font-weight: bold;
 }

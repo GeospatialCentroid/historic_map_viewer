@@ -26,7 +26,7 @@ Refer to the comments and usage instructions in each script for details on what 
 
 1. Clone or download this repository:
    ```bash
-   git clone https://github.com/yourusername/your-repo.git
+   git clone https://github.com/GeospatialCentroid/historic_map_viewer/
    cd your-repo
    ```
 
@@ -55,7 +55,7 @@ Refer to the comments and usage instructions in each script for details on what 
 
 5. Install dependencies:
    ```bash
-   pip install -r requirements.txt
+   pip install -r python_scripts/requirements.txt
    ```
 
 ---
@@ -65,13 +65,13 @@ Refer to the comments and usage instructions in each script for details on what 
 This script reads a CSV file and updates it with child record IDs fetched from a JSON API.
 
 ```bash
-python fetch_children.py <csv_path> <root_url> <collection_col> <id_col> <file_col> <children_col>
+python python_scripts/fetch_children.py <csv_path> <root_url> <collection_col> <id_col> <file_col> <children_col>
 ```
 
 ### Example
 
 ```bash
-python fetch_children.py "../data/Historic Maps - Special Collections Maps .csv" https://archives.mountainscholar.org/digital/api/collections/ collection "CONTENTdm number" "CONTENTdm file name" children
+python python_scripts/fetch_children.py "data/Historic Maps - Special Collections Maps .csv" https://archives.mountainscholar.org/digital/api/collections/ collection "CONTENTdm number" "CONTENTdm file name" children
 ```
 
 ### Arguments
@@ -116,15 +116,6 @@ python fetch_children.py "../data/Historic Maps - Special Collections Maps .csv"
 
 ---
 
-## 🧰 Automation Example
-
-To run a script nightly using `cron` (Linux/macOS):
-
-```bash
-0 0 * * * /path/to/venv/bin/python /path/to/fetch_children.py /path/to/data.csv https://example.com api_collection id filename children
-```
-
----
 
 ## 🧑‍💻 Author
 
