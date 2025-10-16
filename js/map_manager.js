@@ -130,9 +130,8 @@ class Map_Manager {
       show_highlight_geo_json(geo_json){
         var $this=this
         // when a researcher hovers over a resource show the bounds on the map
-        if (typeof(this.highlighted_feature) !="undefined"){
-            this.hide_highlight_feature();
-        }
+        this.hide_highlight_feature();
+
         if (geo_json?.geometry && geo_json.geometry.type =="Point" || geo_json?.type=="MultiPoint"){
             //special treatment for points
             this.highlighted_feature = L.geoJSON(geo_json, {
@@ -150,8 +149,10 @@ class Map_Manager {
 
     }
      hide_highlight_feature(){
-        this.map.removeLayer(this.highlighted_feature);
-        delete this.highlighted_feature;
+        if (typeof(this.highlighted_feature) !="undefined"){
+            this.map.removeLayer(this.highlighted_feature);
+            delete this.highlighted_feature;
+        }
     }
       update_map_size(){
         // make the map fill the difference
@@ -244,14 +245,13 @@ class Map_Manager {
         }
 
         var zoom_level = this.map.getBoundsZoom(bounds)
-        console.log("The zoom level is ",zoom_level)
         //prevent zooming in too close
         if (zoom_level>19){
             this.map.flyTo(bounds.getCenter(),19);
         }else{
             this.map.flyToBounds(bounds);
         }
-        this.scroll_to_map()
+        //this.scroll_to_map()
      }
      scroll_to_map(){
             console.log("Scroll to map")

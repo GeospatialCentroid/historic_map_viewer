@@ -90,13 +90,15 @@ class Filter_Manager {
     }
     show_date_search(col,all_data){
          //date search
-         var dates=[]
+         var dates=[];
+
         for (var i=0;i<all_data.length;i++){
-            if(all_data[i][col][0] != null && all_data[i][col][0]!=''){
+            if(all_data[i][col][0] != null && all_data[i][col][0]!='' && String(all_data[i][col][0]).length>1){
                dates = dates.concat(all_data[i][col])
             }
 
         }
+
         dates= dates.sort();
 
         $('#filter_date_checkbox').change(
@@ -117,6 +119,7 @@ class Filter_Manager {
         var values = [dates[0],dates[dates.length-1]]
          $("#filter_start_date").val(values[0])
          $("#filter_end_date").val(values[1])
+
         $("#filter_date .filter_slider_box").slider({
             range: true,
             min: values[0],
@@ -260,7 +263,7 @@ class Filter_Manager {
     }
     filter(section_id){
         // create a subset of the items based on the set filters
-        var subset=[]
+        var subset=[];
         //loop though the items in the list
         var start=0
         var end=this.section_manager.json_data.length
@@ -902,6 +905,8 @@ class Filter_Manager {
    show_highlight(section_id,item_id){
         var item= this.get_item(section_id,item_id)
         var section=section_manager.get_section_details(section_id)
-        map_manager.show_highlight_geo_json(JSON.parse(item[section.geojson_col]));
+        if(item[section.geojson_col]!=""){
+            map_manager.show_highlight_geo_json(JSON.parse(item[section.geojson_col]));
+        }
    }
 }
