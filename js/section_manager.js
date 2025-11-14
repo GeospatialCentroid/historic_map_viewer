@@ -459,7 +459,7 @@ class Section_Manager {
                setTimeout(() => {$("#panels").show();} , "500");
 
                 //
-                 $("#nav").hide();
+                 //$("#nav").hide();
                  run_resize()
             }, "100");
 
@@ -502,6 +502,7 @@ class Section_Manager {
         return this.json_data[_id]
     }
    slide_position(panel_name){
+
         var pos=0
         var width=$("#side_bar").width()
          var nav_text=""
@@ -510,7 +511,7 @@ class Section_Manager {
               case 'results':
                 pos=width*2
                 nav_text=LANG.NAV.BACK_BROWSE +" <i class='bi bi-chevron-left'></i>"
-                $("#nav").hide();
+                //$("#nav").hide();
                 break;
               case 'details':
                     pos=width*3
@@ -529,7 +530,8 @@ class Section_Manager {
               default:
                 //show the browse
                 nav_text="<i class='bi bi-chevron-right'></i> "+LANG.NAV.BACK_RESULTS
-                pos=width*2
+                pos=width
+                $("#nav").show();
 
             }
             $("#panels").animate({ scrollLeft: pos });

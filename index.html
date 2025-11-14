@@ -153,7 +153,7 @@
                 </div>
                 <div id="nav_wrapper">
                    <button id="nav" class="btn  btn-primary" onclick="javascript:section_manager.go_back()"></button>
-
+                     <span class="total_results"></span>
                 </div>
 
                 <div id="panels" class="border_top">
@@ -168,15 +168,13 @@
                         </div>
                         <div id='browse_wrapper' class="panel scroll_wrapper">
                             <div id="browse_panel">
-<!--                                 <div class="title"></div>-->
-
+                                <div id="filters" class="ui-widget" ></div>
                             </div>
                         </div>
                         <div id="results_panel" class="panel border_top">
 
                             <div id="filter_area">
-<span class="toggle_text">More Filters <input id="toggle_hidden_checkbox" type="checkbox" value=""></span><br/>
-                                    <span class="hidden_controls"><div id="filters" class="ui-widget" ></div> </span>
+
 
                                 <label for="list_sort" id="sort-title">Sort:</label>
                                 <select id="list_sort">
@@ -184,7 +182,7 @@
                                     <option value="asc">Name (A-Z)</option>
                                     <option value="desc">Name (Z-A)</option>
                                 </select>
-                                 <span class="total_results"></span>
+
 
                             </div>
                             <div id="result_wrapper" class="scroll_wrapper ">

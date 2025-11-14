@@ -91,9 +91,8 @@ class Layer_Manager {
   // called from the add/remove button
     var id = "item_"+section_id+"_"+item_id;
 
-
     if($("#"+id+"_toggle").html()==LANG.RESULT.REMOVE){
-        this.remove_feature_layer(section_id+"_"+item_id)
+        this.remove_feature_layer(id)
     }else{
         $("#"+id+"_toggle").addClass("progress-bar-striped progress-bar-animated")
         layer_manager.toggle_layer(section_id,item_id)//,match.type,false,match.URL)
@@ -102,33 +101,35 @@ class Layer_Manager {
 
   }
   remove_feature_layer(_layer_id){
-    var layer =  this.get_layer_obj(_layer_id)
+    var layer =  this.get_layer_obj(_layer_id.replace("item_",""))
     this.map.removeLayer(layer);
 
-    $(".item_"+_layer_id+"_toggle").removeClass("active")
-    $(".item_"+_layer_id+"_toggle").text(LANG.RESULT.ADD) // revert to Add button text
+    $("."+_layer_id+"_toggle").removeClass("active")
+    $("."+_layer_id+"_toggle").text(LANG.RESULT.ADD) // revert to Add button text
 
-    $("#item_"+_layer_id+"_drag").remove();
-    $(".item_"+_layer_id+"_zoom").hide();
+    $("#"+_layer_id+"_drag").remove();
+    $("."+_layer_id+"_zoom").hide();
     ////        $this.remove_legend(_resource_id);
-    for(var i =0;i<this.layers.length;i++){
 
+    for(var i =0;i<this.layers.length;i++){
             if (this.layers[i].id==_layer_id){
                this.layers.splice(i,1)
                break
-
             }
       }
     this.update_layer_count();
     this.set_layers_list();
     this.layer_list_change();
+
     // check if the split control needs updating
     if (this.split_right_layers[0]==_layer_id){
+
         this.split_right_layers=[]
     }
     if (this.split_left_layers[0]==_layer_id){
         this.split_left_layers=[]
     }
+
     this.toggle_split_control();
 
     // update the parent button

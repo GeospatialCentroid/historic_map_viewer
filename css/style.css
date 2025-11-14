@@ -399,7 +399,7 @@ margin-left:-15px;
 .item_text_sm{
     font-size: 80%;
     text-overflow: ellipsis;
-    max-width:260px;
+    max-width:240px;
     overflow: hidden;
     white-space: nowrap;
 }
@@ -445,6 +445,13 @@ margin-left:-15px;
       border-radius: 25px;
       background-color: #f1f1f1;
       margin: 3px;
+}
+.chip-text{
+display: inline-block;
+     overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 250px;
+    white-space: nowrap;
     }
 
 .chip_x {

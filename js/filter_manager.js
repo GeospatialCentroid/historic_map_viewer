@@ -50,11 +50,10 @@ class Filter_Manager {
         //When searching - all titles are added to the auto
          $("#search_but").click(function(){
             if($this.mode=="data"){
-                console.log("search the data")
                $this.add_filter(false,[$("#search").val()])
                $this.filter();
                //go to results
-               $this.section_manager.slide_position("results")
+
             }else{
 
                 $.get($this.place_url, { q: $("#map_search").val() }, function(data) {
@@ -249,17 +248,59 @@ class Filter_Manager {
                 text_val=value.join(", ")
             }
         }
-//        this.show_filter_selection(_id.replaceAll( " ", "__"),id+": "+text_val)
+       this.show_filter_selection(_id.replaceAll( " ", "__"),id+": "+text_val)
         if (value==null){
            this.remove_filter(_id)
         }
 
     }
+     show_filter_selection(_id,text){
+        // create chips with the selected property and values
+        var obj =this
+        var ext = "__chip"
+        var id =_id+ext
+
+        //create a list of selected filters to easily keep track
+        var html="<div class='chip blue lighten-4' id='"+id+"'><span class='chip-text'>"+text+"</span><a class='bi bi-x btn' style='margin-right:-10px;margin-top:-20px;'></a></div>"
+        //if exists update it
+        if($( "#"+id ).length) {
+            $( "#"+id ).html(text)
+        }else{
+            $("#filter_box").append(html)
+        }
+
+       //set remove functionality
+       $("#"+id+" a").click(function(){
+            console_log($(this).parent().attr("id"))
+            var id=$(this).parent().attr("id")
+            var _id= id.substring(0,id.length-ext.length)
+            //remove the visual
+             obj.reset_filter(_id)
+             obj.remove_filter(_id)
+             obj.filter();
+
+       })
+    }
+      reset_filter(id){
+        // take the id (maybe dropdown or slider) and remove the selection
+        //TODO - make this more specific to variable type (i.e numeric vs categorical)
+
+        $("#"+id+" input").prop('checked', false);
+
+        $("#"+id+'_slider').each(function(){
+          var options = $(this).slider( 'option' );
+
+          $(this).slider( 'values', [ options.min, options.max ] );
+        });
+}
      remove_filter(_id){
         var id = _id.replaceAll("__", " ");
         delete this.filters[id]
         //remove filter selection
-        //this.remove_filter_selection(_id)
+        this.remove_filter_selection(_id)
+    }
+    remove_filter_selection(_id){
+       $("#"+_id+"__chip").remove()
     }
     filter(section_id){
         // create a subset of the items based on the set filters
@@ -329,8 +370,8 @@ class Filter_Manager {
                             // make and exception for searching through array values
                              if ($.isArray(obj[a])){
                                 // loop over the filters array checking if its in the object attribute array
-                                for(var j=0;j<this.filters[a].length;j++){
-                                     if ($.inArray(this.filters[a][j],obj[a])==-1){
+                                for(var k=0;k<this.filters[a].length;k++){
+                                     if ($.inArray(this.filters[a][k],obj[a])==-1){
                                         meets_criteria=false
                                      }
                                 }
@@ -362,6 +403,7 @@ class Filter_Manager {
         // keep track of the subset for sorting
          this.subset_data=subset
          this.show_sorted_results(subset)
+         this.section_manager.slide_position("results")
     }
     add_filter_watcher(){
         var $this=this;
@@ -593,7 +635,7 @@ class Filter_Manager {
         $this.filters={};// reset filters
 
 
-        $this.section_manager.slide_position("results");
+
         //move to the results panel and list all the items
         // each items visibility is stored in the filter manager - if showing
 
@@ -730,6 +772,9 @@ class Filter_Manager {
          // the sorted data could be a mix of items from multiple sections
 
          var html= '<ul class="list-group"' +'">'
+
+         // do an initial loop to make sure that
+         // if parents has only one child, just sho
 
          for (var i=0;i<sorted_data.length;i++){
             var item = sorted_data[i]
