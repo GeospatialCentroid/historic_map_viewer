@@ -409,6 +409,7 @@ margin-left:-15px;
   font-weight: 600;
   word-break: break-all;
   text-overflow: ellipsis;
+  max-width: 80%;
 
 }
 .item_title_lg{
@@ -455,7 +456,7 @@ margin-left:-15px;
 }
 
  .chip {
-      display: inline-block;
+      display: inline-flex;
       padding: 0 10px;
       height: 30px;
       font-size: .8rem;
@@ -463,9 +464,10 @@ margin-left:-15px;
       border-radius: 25px;
       background-color: #f1f1f1;
       margin: 3px;
+      flex-wrap: nowrap;
 }
-.chip-text{
-display: inline-block;
+.chip .chip-text{
+
      overflow: hidden;
     text-overflow: ellipsis;
     max-width: 250px;
@@ -475,6 +477,9 @@ display: inline-block;
 .chip_x {
     padding-left: 10px;
     margin-right: -10px;
+    margin-left: 0.5rem;        /* spacing from text */
+    flex-shrink: 0;
+    margin-top:4px;
 }
 
 .popup .leaflet-popup-tip,

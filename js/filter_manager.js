@@ -226,7 +226,7 @@ class Filter_Manager {
 //      this.update_results_info(this.subset_data.length)
     }
 
-      add_filter(_id,value){
+      add_filter(_id,value, labels=null){
         console_log("add_filter with a chip",_id,value)
         if (_id ==false){
             _id = LANG.SEARCH.CHIP_SUBMIT_BUT_LABEL
@@ -241,16 +241,21 @@ class Filter_Manager {
         //create text for filter chip
         var text_val=""
         //for number range use dash - separator
-        if (value!=null){
-            if($.isNumeric(value[0]) && value.length<=2){
-                text_val=value[0]+" - "+value[1]
-            }else{
-                text_val=value.join(", ")
+        if (value != null) {
+            if ($.isNumeric(value[0]) && value.length <= 2) {
+                text_val = value[0] + " - " + value[1];
+            } else {
+                // use labels for display if provided
+                if(labels){
+                    text_val = labels.join(", ");
+                } else {
+                    text_val = value.join(", ");
+                }
             }
         }
-       this.show_filter_selection(_id.replaceAll( " ", "__"),id+": "+text_val)
-        if (value==null){
-           this.remove_filter(_id)
+        this.show_filter_selection(_id.replaceAll(" ", "__"), _id + ": " + text_val);
+        if (value == null) {
+            this.remove_filter(_id)
         }
 
     }
@@ -261,10 +266,10 @@ class Filter_Manager {
         var id =_id+ext
 
         //create a list of selected filters to easily keep track
-        var html="<div class='chip blue lighten-4' id='"+id+"'><span class='chip-text'>"+text+"</span><a class='bi bi-x btn' style='margin-right:-10px;margin-top:-20px;'></a></div>"
+        var html="<div class='chip blue lighten-4' id='"+id+"'><span class='chip-text'>"+text+"</span><a class='bi bi-x btn chip_x' ></a></div>"
         //if exists update it
         if($( "#"+id ).length) {
-            $( "#"+id ).html(text)
+            $( "#"+id +" span").html(text)
         }else{
             $("#filter_box").append(html)
         }
@@ -424,7 +429,8 @@ class Filter_Manager {
                 vals=null
            }
            console_log("add_filter_watcher",$(this).attr('id'),vals)
-           $this.add_filter($(this).attr('id'),vals);
+           $this.add_filter($(this).attr('id'),vals,
+           $(this).find(":checked").map(function(){ return $this.get_checkbox_label(this) }).get());
            $this.filter()
         });
     }
@@ -987,4 +993,15 @@ class Filter_Manager {
             map_manager.show_highlight_geo_json(JSON.parse(item[section.geojson_col]));
         }
    }
+   get_checkbox_label(checkbox){
+    // Return the visible label text for a checkbox (ignores badge)
+    return $(checkbox)
+        .closest("label")
+        .find("span")
+        .first()
+        .contents()
+        .filter(function () { return this.nodeType === Node.TEXT_NODE; })
+        .text()
+        .trim();
+}
 }
