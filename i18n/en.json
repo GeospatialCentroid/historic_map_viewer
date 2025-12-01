@@ -16,7 +16,7 @@
 	  	"FORMAT": 			"Format",
 		"NEW_DATA":			"New Data Layers",
 	  	"BLANK":			"(blank)",
-	  	"CATEGORIES": {
+	  	"Category": {
 			"farming":{"code":"001", "name":"farming", "title":"Agriculture and farming", "desc":"Rearing of animals or cultivation of plants, for example agriculture, irrigation, aquaculture, plantations, herding, pests and diseases affecting crops and livestock"},
 			"biota":{"code":"002", "name":"biota", "title":"Flora or fauna", "desc":"Flora or fauna in natural environment, for example wildlife, vegetation, biological sciences, ecology, wilderness, sea life, wetlands, habitat, biological resources"},
 			"boundaries":{"code":"003", "name":"boundaries", "title":"Census and administrative boundaries", "desc":"Legal land descriptions, for example political and administrative boundaries, governmental units, marine boundaries, voting districts, school districts, international boundaries"},

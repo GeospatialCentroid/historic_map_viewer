@@ -369,6 +369,7 @@ class Section_Manager {
 
             _data[i]["_id"]=_data[i][section.unique_id_col]//IMPORTANT for controlling visibility
              _data[i]._sort_col= _data[i][title_col]
+             //todo make these more dynamic
              var obj_props={
                 "id":_data[i][section.unique_id_col],
                "title":_data[i][section.title_col],
@@ -412,7 +413,9 @@ class Section_Manager {
                  for (var k=0;k<separated_cols.length;k++){
                        // if there is a number clean it up
                        if (all_data[i][separated_cols[k]].match(/\d/) == null){
-                            all_data[i][separated_cols[k]] =  all_data[i][separated_cols[k]].split(",");
+                            all_data[i][separated_cols[k]] = all_data[i][separated_cols[k]]
+                              .split(",")
+                              .map(s => s.trim());
                        }else{
                             // contentdm uses semicolon for date lists
                             all_data[i][separated_cols[k]] =  all_data[i][separated_cols[k]].split(";").map(function(item) {
@@ -509,10 +512,10 @@ class Section_Manager {
          this.panel_name=panel_name
          switch(panel_name) {
               case 'results':
-                pos=width*2
-                nav_text=LANG.NAV.BACK_BROWSE +" <i class='bi bi-chevron-left'></i>"
-                //$("#nav").hide();
-                break;
+                    pos=width*2
+                    nav_text=LANG.NAV.BACK_BROWSE +" <i class='bi bi-chevron-left'></i>"
+                    //$("#nav").hide();
+                    break;
               case 'details':
                     pos=width*3
                     nav_text=LANG.NAV.BACK_BROWSE+" <i class='bi bi-chevron-left'></i>"
@@ -534,7 +537,9 @@ class Section_Manager {
                 $("#nav").show();
 
             }
-            $("#panels").animate({ scrollLeft: pos });
+
+           $("#panels").animate({ scrollLeft: pos });
+
 
              $("#nav").html(nav_text)
 

@@ -403,7 +403,7 @@ class Filter_Manager {
         // keep track of the subset for sorting
          this.subset_data=subset
          this.show_sorted_results(subset)
-         this.section_manager.slide_position("results")
+         //this.section_manager.slide_position("results")
     }
     add_filter_watcher(){
         var $this=this;
@@ -414,6 +414,10 @@ class Filter_Manager {
            var vals=[]
            $(this).find(":checked").each(function() {
                 vals.push($(this).val())
+                //var text =  $(this).parent().contents()
+//                .filter(function () { return this.nodeType === 3; }) // text nodes only
+//                .text().trim();
+//                vals.push( text)
 
            })
            if(vals.length==0){
@@ -456,6 +460,8 @@ class Filter_Manager {
         this.catalog={}
         // create a separate obj to track the occurrences of each unique option
         this.catalog_counts={}
+       // allow mapping the search key to a different value
+         this.catalog_keys={}
         for (var i=0;i<_data.length;i++){
             var obj=_data[i]
 //            //add a unique id, prepend 'item_' for use as a variable, only do this on first pass
@@ -466,15 +472,17 @@ class Filter_Manager {
             //for (var a in obj){// use instead if we want to filter on all
             for (var j in filter_cols){
                 a=filter_cols[j]
+                this.catalog_keys[a]=[]
+
                //start with a check for numeric
                if ($.isNumeric(obj[a])){
                 obj[a]=parseInt(obj[a])
                }
-               // see if we hve and array
+               // see if we have an array
                if ($.isArray(obj[a])){
                     // need to add all the array items into the catalog
                     for (var j = 0; j<obj[a].length;j++){
-                        this.add_to_catalog(a,obj[a][j])
+                        this.add_to_catalog(a,obj[a][j].trim())
                     }
                }else{
                     this.add_to_catalog(a,obj[a])
@@ -507,9 +515,27 @@ class Filter_Manager {
                     this.catalog[a].push(catalog_and_counts[j][1])
                     this.catalog_counts[a].push(catalog_and_counts[j][0])
                }
+
+               // check for translation so we can provide a better key than value
+               var has_translation=false
+                if (a in LANG.FACET) {
+                    has_translation = LANG.FACET[a]
+                }
+               if(has_translation){
+                   // loop over the values and assign a user friendly key
+                   for(var j=0;j<this.catalog[a].length;j++){
+                        try{
+                            this.catalog_keys[a].push(has_translation[this.catalog[a][j]].title)
+                        }catch(e){
+                            this.catalog_keys[a].push(this.catalog[a][j])
+                        }
+                   }
+                }
                // generate control html based on data type (use last value to workaround blank first values)
                if (this.catalog[a].length>0 && $.inArray(a,$this.omit_filter_item)==-1){
+
                 if( $.isNumeric(this.catalog[a][this.catalog[a].length-1])){
+                    console.log("Create range slider",a)
                     //create a range slider for numbers - https://jqueryui.com/slider/#range
                      this.catalog[a] = this.catalog[a].filter(item => item !== null);
                      var min = Math.min.apply(Math, this.catalog[a]);
@@ -545,7 +571,7 @@ class Filter_Manager {
                     });
                     // add reference to input element to bind update
                 }else{
-                    $("#filters").append(this.get_multi_select(a,this.catalog[a],this.catalog_counts[a]))
+                    $("#filters").append(this.get_multi_select(a,this.catalog[a],this.catalog_counts[a],this.catalog_keys[a]))
                 }
            }
          }
@@ -565,14 +591,19 @@ class Filter_Manager {
                 }
             }
     }
-     get_multi_select(id,options,counts){
+     get_multi_select(id,options,counts,keys){
         var html=""
         var _id = id.replaceAll(" ", "__");
         html+="<label class='form-label' for='"+_id+"'>"+id+"</label>"
         html+="<div class='form-group filter_list' name='"+_id+"' id='"+_id+"' >"
         for (var o in options){
+       // console.log(o)
             var val = options[o];
+
             var text=options[o];
+            if(keys && keys.length>0){
+                text=keys[o]
+            }
             if(text==""){
                 text=LANG.SEARCH.BLANK
             }
@@ -724,12 +755,14 @@ class Filter_Manager {
     get_add_button(section_id,item_id){
         // A reusable button group that shows the add button
         var text = LANG.RESULT.ADD
+        var _class ="btn-primary"
          var id = "item_"+section_id+"_"+item_id;
          var item = this.get_item(section_id,item_id);
          var func ="layer_manager.add_layer_toggle"
          //console.log(section_id,item_id,item)
         // check if the layer has been added
         if(layer_manager.is_on_map(section_id+"_"+item_id)){
+            _class ="btn-danger"
             text = LANG.RESULT.REMOVE
         }
 
@@ -738,7 +771,7 @@ class Filter_Manager {
             func="filter_manager.show_layers"
         }
 
-       return "<button type='button' id='"+id+"_toggle' class='btn btn-primary "+id+"_toggle' onclick='"+func+"("+section_id+",\""+item_id+"\")'>"+text+"</button>"+"<br/>"
+       return "<button type='button' id='"+id+"_toggle' class='btn "+_class+" "+id+"_toggle' onclick='"+func+"("+section_id+",\""+item_id+"\")'>"+text+"</button>"+"<br/>"
         +"<button type='button' class='btn btn-primary "+id+"_zoom' style='display:none;' onclick='layer_manager.zoom_layer(\""+section_id+"\",\""+item_id+"\")'>"+LANG.RESULT.ZOOM+"</button>"
     }
     get_parent_text(section_id,item_id){
@@ -805,7 +838,7 @@ class Filter_Manager {
                  item_html+='<a href="#" onclick="filter_manager.select_item('+section_id+',\''+item._id+'\')">'+item[section.title_col]+'</a><br/>'
                  item_html+="<div class='item_text_sm'>Creator:<b> "+item[section.creator_col]+"</b></div>"
                  item_html+="<div class='item_text_sm'>Date:<b> "+item[section.date_col]+"</b></div>"
-                 item_html+='<div class="results-buttons"><button type="button" class="btn btn-primary" onclick="filter_manager.select_item('+section_id+',\''+item._id+'\')">Details</button>'
+                 item_html+='<div class="results-buttons"><button type="button" class="btn btn-success" onclick="filter_manager.select_item('+section_id+',\''+item._id+'\')">Details</button>'
                  item_html+=this.get_add_button(section_id,item._id)
 
                  item_html+="</div>";
@@ -846,7 +879,7 @@ class Filter_Manager {
         var html=""
 
         html+='<div class="item_title">'+item[section.title_col]+"</div>";// add the title column
-        html+='<button type="button" class="btn btn-primary" onclick="filter_manager.select_item('+section_id+',\''+item._id+'\');" >Details</button>'
+        html+='<button type="button" class="btn btn-success" onclick="filter_manager.select_item('+section_id+',\''+item._id+'\');" >Details</button>'
         html+= '<ul class="list-group"' +'">'
 
         for (var i=0;i<item.child_ids.length;i++){

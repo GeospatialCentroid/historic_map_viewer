@@ -304,8 +304,8 @@ function init_tabs(){
     $("#map_tab .label").text(LANG.TAB_TITLES.MAP_TAB)
     $("#download_tab").text(LANG.TAB_TITLES.DOWNLOAD_TAB)
     $(".tab_but").click(function() {
-        $(".tab_but").removeClass("active")
-        $(this).addClass("active")
+        $(".tab_but").removeClass('btn-primary').addClass('btn-secondary');
+        $(this).removeClass('btn-secondary').addClass('btn-primary');
         // hide all tab_panels
          $(".tab_panel").hide()
          // show only this one by assuming it's name from the button
@@ -315,7 +315,10 @@ function init_tabs(){
          save_params()
 
     });
-     section_manager.slide_position()
+
+     setTimeout(function(){
+        section_manager.slide_position()
+    }, 1000);
     // click the tab and slide to the panel as appropriate
     if( !$.isEmptyObject(usp) && usp.get("t")){
 
@@ -415,7 +418,7 @@ function run_resize_do(){
          if( $("#data_table_wrapper").is(":visible")){
            data_table_height= $("#data_table_wrapper").height()
         }
-        var header_height=$("#header").outerHeight()+20;
+        var header_height=$("#header").outerHeight()+100;
         var footer_height=15//$("#footer").height()
         var window_height= window.innerHeight
         var window_width=window.innerWidth

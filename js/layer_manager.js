@@ -101,18 +101,21 @@ class Layer_Manager {
 
   }
   remove_feature_layer(_layer_id){
-    var layer =  this.get_layer_obj(_layer_id.replace("item_",""))
+
+    var layer_id=_layer_id.replace("item_","")
+    var layer =  this.get_layer_obj(layer_id)
     this.map.removeLayer(layer);
 
     $("."+_layer_id+"_toggle").removeClass("active")
     $("."+_layer_id+"_toggle").text(LANG.RESULT.ADD) // revert to Add button text
-
+    $("."+_layer_id+"_toggle").removeClass('btn-danger').addClass('btn-primary');
     $("#"+_layer_id+"_drag").remove();
     $("."+_layer_id+"_zoom").hide();
     ////        $this.remove_legend(_resource_id);
 
     for(var i =0;i<this.layers.length;i++){
-            if (this.layers[i].id==_layer_id){
+
+            if (this.layers[i].id==layer_id){
                this.layers.splice(i,1)
                break
             }
@@ -235,7 +238,7 @@ class Layer_Manager {
 
 
         html+="<div class='left-div-map-buttons'>"
-        html +="<button type='button' id='"+id+"_toggle' class='btn btn-primary "+id+"_toggle' onclick='layer_manager.add_layer_toggle(\""+section_id+"\",\""+item_id+"\")'>"+LANG.RESULT.REMOVE+"</button>"
+        html +="<button type='button' id='"+id+"_toggle' class='btn btn-danger "+id+"_toggle' onclick='layer_manager.add_layer_toggle(\""+section_id+"\",\""+item_id+"\")'>"+LANG.RESULT.REMOVE+"</button>"
         //
         html +="<button type='button' class='btn btn-primary' onclick='layer_manager.zoom_layer(\""+section_id+"\",\""+item_id+"\")'>"+LANG.RESULT.ZOOM+"</button>"
         if(download_link){
@@ -803,7 +806,8 @@ class Layer_Manager {
   }
   layer_load_complete(elm_id){
 
-    $(elm_id).removeClass("progress-bar-striped progress-bar-animated")
+    $(elm_id).removeClass("progress-bar-striped progress-bar-animated");
+    $(this).removeClass('btn-primary').addClass('btn-danger');
     $(elm_id).text(LANG.RESULT.REMOVE)
 
     // update the maps ta
