@@ -539,7 +539,6 @@ class Filter_Manager {
                 }
                // generate control html based on data type (use last value to workaround blank first values)
                if (this.catalog[a].length>0 && $.inArray(a,$this.omit_filter_item)==-1){
-
                 if( $.isNumeric(this.catalog[a][this.catalog[a].length-1])){
                     console.log("Create range slider",a)
                     //create a range slider for numbers - https://jqueryui.com/slider/#range
@@ -890,7 +889,8 @@ class Filter_Manager {
 
         for (var i=0;i<item.child_ids.length;i++){
             var child = this.get_item(section_id,item.child_ids[i]);
-            var thumb_url=section.base_url+child[section.id_col]+"/thumbnail"
+            console.log(child,section.image_col)
+            var thumb_url=child[section.image_col]
             var iiif_url = child["IIIF"];
             //
             html += "<li class='list-group-item  list-group-item-action'>"
@@ -942,7 +942,7 @@ class Filter_Manager {
         var section_id = item.section_id;
         var item_id=item._id;
 
-        var thumb_url=section.base_url+item[section.id_col]+"/thumbnail"
+        var thumb_url=item[section.image_col]
         var iiif_url = item["IIIF"];
         html+='<div class="item_title">'+item[section.title_col]+"</div>";// add the title column
         html+="<div class='item_text_sm'>Creator:<b> "+item[section.creator_col]+"</b></div>"

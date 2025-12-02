@@ -1,6 +1,6 @@
 # Data Processing Scripts
 
-This repository contains several Python scripts designed to automate data processing tasks. Each script can be run independently from the command line to perform specific functions such as data enrichment, API lookups, and file updates.
+This repository contains several Python scripts designed to automate data processing tasks. Each script can be run independent of the command line to perform specific functions such as data enrichment, API lookups, and file updates.
 
 ---
 
@@ -71,7 +71,7 @@ python python_scripts/fetch_children.py <csv_path> <root_url> <collection_col> <
 ### Example
 
 ```bash
-python python_scripts/fetch_children.py "data/Historic Maps - Special Collections Maps .csv" https://archives.mountainscholar.org/digital/api/collections/ collection "CONTENTdm number" "CONTENTdm file name" children
+python python_scripts/fetch_children.py "data/Historic Maps.csv" https://archives.mountainscholar.org/digital/api/collections/ collection "CONTENTdm number" "CONTENTdm file name" children
 ```
 
 ### Arguments
@@ -109,7 +109,7 @@ python python_scripts/fetch_children.py "data/Historic Maps - Special Collection
 ---
 
 ## 🧾 Notes
-
+- for uniqueness of record ids, be sure to concatenate the collection and the id number 
 - Scripts that modify files will overwrite them by default. To preserve originals, copy the files first or modify the script to write to a new output file.
 - Network errors or invalid responses will skip updates for that row.
 - Non-`.cpd` filenames are automatically ignored in `fetch_children.py`.

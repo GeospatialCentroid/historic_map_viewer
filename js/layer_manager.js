@@ -191,7 +191,7 @@ class Layer_Manager {
      // if loading the annotation from a relative path
      //var map_layer =new Allmaps.WarpedMapLayer(window.location.origin+"/"+window.location.pathname+"/"+resource[section_manager.json_data[_id].annotation_col],{pane: 'left'})
 
-    getDominantColorFromWarpedLayer(section_manager.get_section_details(section_id).base_url+resource[section.id_col]+"/thumbnail")
+    getDominantColorFromWarpedLayer(resource[section.image_col])
     .then(dominant => {
        layer.dominant_color=dominant
     });
@@ -455,24 +455,24 @@ class Layer_Manager {
             step: 0.01,
             value:value,
             range: "min",
-            change: function( event, ui ) {
-                 var ext ="_color_remove_slider"
-                 var id = $(this).attr('id')
-                 var _id= id.substring(0,id.length-ext.length).replaceAll("item_","")
+            change: function(event, ui) {
+                var ext = "_color_remove_slider";
+                var id = $(this).attr('id');
+                var _id = id.substring(0, id.length - ext.length).replaceAll("item_", "");
 
-                 var val = ui.value
-                 var layer =  $this.get_layer_obj(_id)
-                   console.log(_id,val, layer.dominant_color)
-                    layer.setRemoveColor({
-                      hexColor:  layer.dominant_color,
-                      threshold: val,
-                      hardness: 0.8,//controls the feathering 1=sharpest
-                    });
+                var linear = ui.value;
+                var threshold = Math.pow(linear, 3); // nonlinear ramp
 
-                 }
-                 //analytics_manager.track_event("map_tab","transparency_slider","layer_id",_id,3)
-            });
+                var layer = $this.get_layer_obj(_id);
 
+                layer.setRemoveColor({
+                    hexColor: layer.dominant_color,
+                    threshold: threshold,
+                    hardness: 0.8,
+                });
+            }
+
+    })
     }
 
 

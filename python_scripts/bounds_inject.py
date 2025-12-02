@@ -4,7 +4,7 @@ The following file:
 - loops over a specific column, adding a new extension
 - opens the geojson, and injects it into a new column
 
-python3 python_scripts/bounds_inject.py -source_file "data/Historic Maps - Special Collections Maps .csv" -column_name "Georeference Annotation" -column_extension "geojson" -new_column "geojson"
+python3 python_scripts/bounds_inject.py -source_file "data/Historic Maps.csv" -column_name "Georeference Annotation" -column_extension "geojson" -new_column "geojson"
 
 '''
 

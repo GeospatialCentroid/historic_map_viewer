@@ -374,7 +374,7 @@ class Section_Manager {
                 "id":_data[i][section.unique_id_col],
                "title":_data[i][section.title_col],
                 "info_page":_data[i][section.ref_url],
-                "thumb_url":section.base_url+_data[i][section.id_col]+"/thumbnail",
+                "thumb_url":section.base_url+_data[i][section.collection_col]+"/id/"+_data[i][section.id_col]+"/thumbnail",
 
                 "iiif":_data[i][section.iiif_base_url],
                 "attribution":_data[i][section.title_col],
