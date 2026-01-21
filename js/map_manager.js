@@ -18,6 +18,8 @@ class Map_Manager {
         this.params={}
     }
      this.map = L.map('map',{doubleClickZoom: false}).setView([this.lat, this.lng], this.z);
+
+
   }
   init(){
     var $this=this
@@ -51,8 +53,9 @@ class Map_Manager {
         const layers = event.target._layers;
         const layer_ids = Object.keys(layers).map(k => parseInt(k));
         const new_layer_id = Math.max(...layer_ids);
-      const but_id = "item_"+layers[new_layer_id].id
-
+        const but_id = "item_"+layers[new_layer_id].id
+        console.log(layers)
+        console.log(layers[new_layer_id].id,new_layer_id)
       if (but_id) {
         const $button = $("." + but_id + "_toggle");
         $button.removeClass("progress-bar-striped progress-bar-animated");
@@ -84,7 +87,9 @@ class Map_Manager {
 //        // also update the table view if table bounds checked
 //        table_manager?.bounds_change_handler();
         //update the search results if search results checked
-        filter_manager?.update_bounds_search();
+        if ($('#filter_bounds_checkbox').is(':checked')){
+             filter_manager?.update_bounds_search();
+        }
     }
 
     move_map_pos(_params){
@@ -106,15 +111,9 @@ class Map_Manager {
         var $this=this
 
         var html = '<div id="popup_content">'
-        html+='<h6>'+feature.properties.title+'</h6><a href="javascript:void(0);" onclick="image_manager.show_image(\''+feature.properties.iiif+'\',\''+feature.properties.attribution+'\',\''+feature.properties.info_page+'\')" ><img class="center" src="'+feature.properties.thumb_url+'" alt="'+feature.properties.title+'"></a> '
-        if(feature.properties.well!=""){
-        //html+='<br/>County: '+feature.properties.county+''
-        html+='<br/>Well #: '+feature.properties.well+'<br/>'
-            if(transcription_mode){
-
-            html+='<a href="javascript:void(0);" onclick="transcription.show_form('+feature.properties.id+')" >transcription</a>'
-            }
-        }
+            html+='<h6>'+feature.properties.title+'</h6>'
+            html+='<a href="javascript:void(0);" onclick="filter_manger.show_image(\''+feature.properties.iiif+'\',\''+feature.properties.attribution+'\',\''+feature.properties.info_page+'\')" ><img class="center" src="'+feature.properties.thumb_url+'" alt="'+feature.properties.title+'"></a> '
+           //html+='<a href="javascript:void(0);" onclick="image_manager.show_image(\''+feature.properties.iiif+'\',\''+feature.properties.attribution+'\',\''+feature.properties.info_page+'\')" ><img class="center" src="'+feature.properties.thumb_url+'" alt="'+feature.properties.title+'"></a> '
 
           html+='</div>'
 
@@ -295,6 +294,7 @@ class Map_Manager {
             return
         }
          // show popup
+         console.log("popup_show....")
         this.popup_show();
         var query_base =false
         try{

@@ -326,7 +326,7 @@ class Section_Manager {
 
                     //section.all_data=transcription.connect_transcription(section.all_data)
                     section.all_data= this.convert_csv_to_geojson(section,section.all_data,section["title_col"])
-
+                   // console.log(section.all_data)
 
                  }
                 section.show_cols=section.show_cols.split(",").map(function(item) {
@@ -374,7 +374,8 @@ class Section_Manager {
                 "id":_data[i][section.unique_id_col],
                "title":_data[i][section.title_col],
                 "info_page":_data[i][section.ref_url],
-                "thumb_url":section.base_url+_data[i][section.collection_col]+"/id/"+_data[i][section.id_col]+"/thumbnail",
+                "thumb_url":_data[i][section.image_col],
+                //section.base_url+_data[i][section.collection_col]+"/id/"+_data[i][section.id_col]+"/thumbnail",
 
                 "iiif":_data[i][section.iiif_base_url],
                 "attribution":_data[i][section.title_col],
@@ -387,19 +388,22 @@ class Section_Manager {
                   _data[i]["has_data"]= ""
                  }
             }
-             _data[i]["feature"]={}
-             _data[i]["feature"]["features"] =[
-                {
-                  "type": "Feature",
-                  "properties": obj_props,
-                  "geometry": {
-                    "coordinates": [
-                         Number(_data[i].Longitude),
-                         Number(_data[i].Latitude),
-                    ],
-                    "type": "Point"
-                  }
-                }]
+            // only adda feature value if the coordinates are set
+            if( Number(_data[i].longitude) !=0 && Number(_data[i].latitude) !=0){
+                 _data[i]["feature"]={}
+                 _data[i]["feature"]["features"] =[
+                    {
+                      "type": "Feature",
+                      "properties": obj_props,
+                      "geometry": {
+                        "coordinates": [
+                             Number(_data[i].longitude),
+                             Number(_data[i].latitude),
+                        ],
+                        "type": "Point"
+                      }
+                    }]
+                    }
             temp_data.push(_data[i])
 
          }
@@ -436,10 +440,10 @@ class Section_Manager {
              if(color_col){
                 properties['color']=all_data[i][color_col]
              }
-
-            if(all_data[i]?.feature){
-                all_data[i].feature.features[0].properties=properties
-            }
+// this is over writing the properties set earlier
+//            if(all_data[i]?.feature){
+//                all_data[i].feature.features[0].properties=properties
+//            }
 
         }
     }
@@ -496,8 +500,9 @@ class Section_Manager {
     }
 
     get_match(_id){
-        // return the data
-        _id=_id.replaceAll('section_id_', '');
+    //
+        // return all the section id data
+        _id=String(_id).replaceAll('section_id_', '');
         return this.json_data[_id].all_data
     }
      get_section_details(_id){

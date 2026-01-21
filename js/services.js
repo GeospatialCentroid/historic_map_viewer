@@ -75,5 +75,11 @@ var services = [
 "_method": "csv",
 "pattern":["/rows.csv"]
 },
-
+{
+"name": "AllMaps",
+"ref": "AllMaps",
+"_class": null,
+"_method": "AllMaps",
+"pattern":null
+},
 ]

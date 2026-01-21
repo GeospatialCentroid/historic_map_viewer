@@ -25,7 +25,26 @@ class Layer_Manager {
     }
     //keep reference to the basemap
     this.basemap_layer;
-    //Todo this will be handled in index
+
+    var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+	var osmAttrib='Map data &copy; OpenStreetMap contributors';
+
+	//Plugin magic goes here! Note that you cannot use the same layer object again, as that will confuse the two map controls
+	var osm2 = new L.TileLayer(osmUrl, {minZoom: 0, maxZoom: 13, attribution: osmAttrib });
+    this.miniMap = new L.Control.MiniMap( osm2,{toggleDisplay: true}).addTo(map_manager.map);
+
+    // fixing the minimap partial display
+    setTimeout(() => {
+      const mini = this.miniMap._miniMap;
+
+      if (!mini) return;
+
+      mini.invalidateSize();
+      mini.setView(
+        map_manager.map.getCenter(),
+        map_manager.map.getZoom()
+      );
+    }, 2000);
 
     this.side_by_side= L.control.sideBySide([], []).addTo(map_manager.map);
 
@@ -95,8 +114,9 @@ class Layer_Manager {
         this.remove_feature_layer(id)
     }else{
         $("#"+id+"_toggle").addClass("progress-bar-striped progress-bar-animated")
-        layer_manager.toggle_layer(section_id,item_id)//,match.type,false,match.URL)
-
+        layer_manager.toggle_layer(section_id,item_id,'AllMaps')//,,false,match.URL)
+         var layer =  this.get_layer_obj(section_id+"_"+item_id)
+         this.map.addLayer(layer.layer_obj)
     }
 
   }
@@ -104,7 +124,9 @@ class Layer_Manager {
 
     var layer_id=_layer_id.replace("item_","")
     var layer =  this.get_layer_obj(layer_id)
-    this.map.removeLayer(layer);
+
+    console.log("remove_feature_layer",layer_id,layer)
+    this.map.removeLayer(layer.layer_obj);
 
     $("."+_layer_id+"_toggle").removeClass("active")
     $("."+_layer_id+"_toggle").text(LANG.RESULT.ADD) // revert to Add button text
@@ -160,6 +182,10 @@ class Layer_Manager {
         return this.basemap_layer
 
      }
+      if(_resource_id ==-1){
+
+          console.log("unable to find the _resource_id in get_layer_obj",_resource_id)
+      }
      return false
   }
   is_on_map(_resource_id){
@@ -173,51 +199,41 @@ class Layer_Manager {
   }
 
   toggle_layer(section_id,item_id,type,drawing_info,url,z,item_ids){
+
     var but_id = "item_"+section_id+"_"+item_id;
     var pane="item_"+section_id+"_"+item_id;
     var $this = layer_manager;
+    var layer =false;
+
 
     // either add or hide a layer
     var resource = filter_manager.get_item(section_id,item_id)
-    var parent_id=resource.parent_id
-    var section = section_manager.get_section_details(section_id)
-    //get the annotation column 'annotation_col' and add it to the map
-    map_manager.map.createPane(pane)
+    try {
+        var parent_id=resource.parent_id
+        var section = section_manager.get_section_details(section_id)
+    }catch(e){
+        console.log("unable to get section details")
+    }
 
-    const layer = new Allmaps.WarpedMapLayer(
-      resource[section.annotation_col],{ pane: `item_${section_id}_${item_id}`}
-    );
-    console.log(layer)
-     // if loading the annotation from a relative path
-     //var map_layer =new Allmaps.WarpedMapLayer(window.location.origin+"/"+window.location.pathname+"/"+resource[section_manager.json_data[_id].annotation_col],{pane: 'left'})
+    this.add_layer(section_id,item_id,type,drawing_info,url,z,item_ids)
 
-    getDominantColorFromWarpedLayer(resource[section.image_col])
-    .then(dominant => {
-       layer.dominant_color=dominant
-    });
+    if(type!="csv_geojson"){
+        $this.add_to_map_tab(section_id,item_id,z);
+        return
+     }
 
-    // keep a reference to the object
-    resource.resource_obj=layer
-    layer.id=section_id+"_"+item_id
-    layer.type='iiif'
-    this.layers.push(layer); //for easy reference
-    //
-    map_manager.map.addLayer(layer)
-
-
-    $this.add_to_map_tab(section_id,item_id,z);
 
   }
   zoom_layer(_id,item_id){
       var resource = filter_manager.get_item(_id,item_id)
-      map_manager.map_zoom_event( resource.resource_obj.getBounds())
+
+     var layer =  this.get_layer_obj(_id+"_"+item_id)
+      map_manager.map_zoom_event(layer.layer_obj.getBounds())
   }
   add_to_map_tab(section_id,item_id,_z){
         var $this = this;
 
         var resource = filter_manager.get_item(section_id,item_id);
-
-        var resource_obj = resource.resource_obj
 
         // reference using the parent and child id joined by an "_"
         var id = "item_"+section_id+"_"+item_id
@@ -307,7 +323,7 @@ class Layer_Manager {
         this.side_by_side.setRightLayers([])
     }
 
-    var layer_obj =  this.get_layer_obj(section_id+"_"+item_id)
+    var layer_obj =  this.get_layer_obj(section_id+"_"+item_id).layer_obj
     if (side=="right"){
 
         if (this.split_right_layers.length>0){
@@ -422,9 +438,9 @@ class Layer_Manager {
                  var layer =  $this.get_layer_obj(_id)
                  var type = layer.type
                  var val =ui.value/100
-                 var set_opacity=["basemap","Map Service","Raster Layer","tms","","mapserver","mapservice","iiif"]
+                 var set_opacity=["basemap","Map Service","Raster Layer","tms","","mapserver","mapservice","iiif","AllMaps"]
                  if($.inArray(type,set_opacity)>-1){
-                    layer.setOpacity(val)
+                    layer.layer_obj.setOpacity(val)
                  }else if($.inArray(type,["esriPMS","esriSMS"])>-1){
                        $("._marker_class"+_id).css({"opacity":val})
                  }else if($.inArray(type,["GeoJSON"])>-1){
@@ -434,7 +450,6 @@ class Layer_Manager {
                             fillOpacity: val
                           })
                     });
-
                  }else{
                     layer.layer_obj.setStyle({
                     opacity: val,
@@ -465,7 +480,7 @@ class Layer_Manager {
 
                 var layer = $this.get_layer_obj(_id);
 
-                layer.setRemoveColor({
+                layer.layer_obj.setRemoveColor({
                     hexColor: layer.dominant_color,
                     threshold: threshold,
                     hardness: 0.8,
@@ -484,34 +499,32 @@ class Layer_Manager {
         }
     }
 
-  add_layer(_resource_id,_type,_drawing_info,url,_z,item_ids){
-
+  add_layer(section_id,item_id,_type,_drawing_info,url,_z,item_ids){
     var $this=this
     var update_url=false
     // create layer at pane
 
-    var resource = section_manager.get_match(_resource_id)
+    var resource = filter_manager.get_item(section_id,item_id); //section_manager.get_match(_resource_id)
     console_log("The url is",url)
 
-    var layer_options = this.get_layer_options(_resource_id,url,_drawing_info)
+    var layer_options = this.get_layer_options(section_id,item_id,url,_drawing_info)
 
     //create a pane for the resource
-    console_log(_resource_id,"_resource_id")
-    var pane = this.map.createPane(_resource_id);
+
+    var pane = this.map.createPane(`item_${section_id}_${item_id}`);
     // set the z if not already
     if(typeof(_z)=="undefined"){
           _z= this.layers.length
           update_url=true
     }
 
-    this.map.getPane(_resource_id).style.zIndex = _z+100;
+    this.map.getPane(`item_${section_id}_${item_id}`).style.zIndex = _z+100;
 
     var service_method = this.get_service_method(_type)
 
     //todo attempt overcoming cors
 //     layer_options.url='http://localhost:8000/sr/'+encodeURIComponent(layer_options.url)
      //check for a legend
-     //console.log(service_method)
     if(service_method._method=="tiledMapLayer" || service_method._method=="dynamicMapLayer" ){
 
         // todo test tms
@@ -566,6 +579,22 @@ class Layer_Manager {
          map_manager.image_map.attributionControl._attributions = {};
          map_manager.image_map.attributionControl.addAttribution(this.get_attribution(resource));
         return
+    }else if(service_method._method=="AllMaps"){
+
+        var section = section_manager.get_section_details(section_id);
+        var layer_obj = new Allmaps.WarpedMapLayer(
+          resource[section.annotation_col],{ pane: `item_${section_id}_${item_id}`}
+        );
+
+         // if loading the annotation from a relative path
+         //var map_layer =new Allmaps.WarpedMapLayer(window.location.origin+"/"+window.location.pathname+"/"+resource[section_manager.json_data[_id].annotation_col],{pane: 'left'})
+
+        getDominantColorFromWarpedLayer(resource[section.image_col])
+        .then(dominant => {
+           layer.dominant_color=dominant
+        });
+
+
     }else if(service_method._method=="" || service_method._method==null){
         //todo - get this from the service
         layer_options.maxZoom= 21
@@ -586,10 +615,10 @@ class Layer_Manager {
            this.load_tabular_data(url,layer_obj,_resource_id);
       }else if (service_method._method=="csv_geojson"){
          // check if we have a layer obj already
-         var layer_obj=$this.get_layer_obj(_resource_id);
+         var layer_obj=$this.get_layer_obj(section_id+"_"+item_id);
          if(layer_obj){
               //notice layer_obj.layer_obj
-             this.show_csv_geojson_data(layer_obj.layer_obj,_resource_id,item_ids);
+             this.show_csv_geojson_data(layer_obj.layer_obj,section_id,item_id,item_ids);
              return
           }else{
              // only create this layer if it doesn't yet exist
@@ -597,7 +626,7 @@ class Layer_Manager {
               layer_obj.item_to_layer_id=[];//store an id associating the item with the layer id
               layer_obj.layer_options=layer_options
               console_log("about to call show_csv_geojson_data")
-              this.show_csv_geojson_data(layer_obj,_resource_id,item_ids);
+              this.show_csv_geojson_data(layer_obj,section_id,item_id,item_ids);
           }
 
       }else{
@@ -617,7 +646,9 @@ class Layer_Manager {
 
     try{
         layer_obj.on('click', function (e) {
-            $this.layer_click(e,_resource_id);
+            console.log(e)
+
+           // $this.layer_click(e,_resource_id);
 
         });
     }catch(e){
@@ -637,7 +668,7 @@ class Layer_Manager {
 
      }
 
-     var layer = { type:type,"id":_resource_id,"url":url,"layer_obj":layer_obj,"resource_obj":Object.assign({}, resource)}
+     var layer = { type:type,"id":section_id+"_"+item_id,"url":url,"layer_obj":layer_obj,"resource_obj":Object.assign({}, resource)}
 
 
      if(typeof(_z)=="undefined"){
@@ -650,17 +681,19 @@ class Layer_Manager {
            this.set_layers_list()
      }
      // for ease of access store a layer_id
-     layer_obj.layer_id=_resource_id
-     $("."+_resource_id+"_toggle").addClass("progress-bar-striped active progress-bar-animated")
+     layer_obj.layer_id=section_id+"_"+item_id
+     layer_obj.id=section_id+"_"+item_id
+     //$("."+_resource_id+"_toggle").addClass("progress-bar-striped active progress-bar-animated")
      // update the parent record to show loaded
      //todo only required if we have a parent
 
-     if (typeof(resource.parent)!="undefined"){
+
+     if (resource && typeof(resource.parent)!="undefined"){
           filter_manager.update_parent_but(resource.parent)
      }
 
      layer_obj.on('load', function (e) {
-
+        console.log("loaded",e)
         $this.layer_load_complete(this);
 
         //$this.show_bounds($this.get_layer_obj(this.layer_id).layer_obj.getBounds())
@@ -766,7 +799,7 @@ class Layer_Manager {
 
      //temp add service options
      layer_obj.service= {options:{url:url}}
-     geo.on('click', function(e) { $this.layer_click(e,_resource_id) });
+     geo.on('click', function(e) { $this.layer_click(e,unique_id) });
      return geo
   }
   show_bounds(b){
@@ -776,14 +809,32 @@ class Layer_Manager {
     return "<a href='javascript:void(0);' onclick=\"filter_manager.show_details('"+resource["id"]+"')\" >"+resource["dct_title_s"]+"</a>"
   }
   layer_click(e,_resource_id){
+
+        console.log("layer_click",e,_resource_id)
+
         map_manager.layer_clicked=true
         map_manager.selected_layer_id=_resource_id
 
         map_manager.click_lat_lng = e.latlng
         map_manager.click_x_y=e.containerPoint
 
-        map_manager.popup_show(e.layer.feature);
-//         console_log(e)
+        //map_manager.popup_show(e.layer.feature);
+
+       //show the details
+       // we need to make sure that the parent is selected
+       console.log(e)
+       //todo store section_id as part of item
+       var section_id=0
+       var item= filter_manager.get_item(section_id,e.layer.feature.properties.id);
+       // if there is a parent id - we should select it instead
+      if(typeof(item.parent_id) =="undefined" || item.parent_id==""){
+         //console.log(item.parent_id)
+          filter_manager.select_item(section_id,e.layer.feature.properties.id)
+
+       }else{
+          filter_manager.show_layers(section_id,item.parent_id)
+       }
+       //filter_manager.select_item(0,e.layer.feature.properties.id)
 //        try{
 //              map_manager.selected_feature_id=layer_manager.get_object_id(e.layer.feature);
 //              map_manager.show_popup_details([e.layer.feature])
@@ -836,11 +887,11 @@ class Layer_Manager {
          },500);
 
   }
-  get_layer_options(_resource_id,url,_drawing_info){
+  get_layer_options(section_id,item_id,url,_drawing_info){
 
       var layer_options ={
         url: url,
-        pane:_resource_id,
+        pane:`item_${section_id}_${item_id}`,
         // to enable cursor and click events on raster images
         interactive:true,
         bubblingMouseEvents: false,
@@ -944,73 +995,71 @@ class Layer_Manager {
     analytics_manager.track_event("map_tab","show_table","layer_id",_layer_id)
 
   }
-  show_csv_geojson_data(layer_obj,_resource_id,item_ids){
+ show_csv_geojson_data(layer_obj, section_id, id, item_ids) {
+    console.log("show_csv_geojson_data");
 
-   //console.log(layer_obj,_resource_id,item_ids)
-    var $this=this
-    if(!$this.map.hasLayer(layer_obj)){
-        // only add the layer once
+    var $this = this;
+
+    if (!$this.map.hasLayer(layer_obj)) {
         layer_obj.addTo($this.map);
     }
-  // the following creates a csv file which includes geojson features
-  // only rows with features can be mapped
-  // each item added should only be done so once and an array will track the visible items
-  // the showing/hiding of items can happen in several ways
-  // showing
-  // 1. selecting the checkbox for the entire section will show all the features
-  // 2. Selecting a group checkbox will show all the features in the group.
-  // 3. selecting an individual item (with/checkbox) will show individual item
-  // hiding
-  // Unchecking any checkbox will take all the ids associated with it and remove them from the map
-    var section_id=_resource_id.replaceAll('section_id_', '')
-    var items_showing=section_manager.json_data[section_id].items_showing
-    if(!section_manager.json_data[section_id].clustered_points){
-        //only create the cluster point object once
-        section_manager.json_data[section_id].clustered_points = L.markerClusterGroup();
-        layer_obj.addLayer(section_manager.json_data[section_id].clustered_points);
-        //start a new array of points
-        section_manager.json_data[section_id].geojson_markers = []
+
+    var section = section_manager.json_data[section_id];
+    var items_showing = section.items_showing;
+
+    // Create cluster group ONCE
+    if (!section.clustered_points) {
+        section.clustered_points = L.markerClusterGroup();
+        layer_obj.addLayer(section.clustered_points);
     }
-    var markers =  section_manager.json_data[section_id].geojson_markers
 
-    $this.create_style_class(_resource_id)
-    var data = section_manager.get_match(_resource_id)
+    // reset markers for this call
+    section.geojson_markers = [];
+    var markers = section.geojson_markers;
 
-     for (var i=0;i<item_ids.length;i++){
-        var item_id=item_ids[i]
-        var index =$.inArray( item_id, items_showing)
-        if (index==-1){
-            //show the item
-            if(data[item_id]?.feature){
-              try{
+    // Clear existing clustered layers
+    section.clustered_points.clearLayers();
 
-                 var geo = $this.create_geo_feature(data[item_id].feature,_resource_id,layer_obj, false, false)
-                  markers.push(geo)
-                  // rather than force an id - lets associate the item_id, with the internal leaflet id
-                 layer_obj.item_to_layer_id[item_id]=layer_obj.getLayerId(geo)
+    $this.create_style_class(section_id);
 
-                 items_showing.push(item_id)
-               }catch(error){
-                      console.log(error,"Error trying to create",data[item_id].feature)//JSON.stringify(
-                 }
-             }
+    var data = section_manager.get_match(section_id);
 
-        }else{
-            items_showing.splice(index,1)
-            markers.splice(index,1)
+    // Loop over items to display
+    for (var i = 0; i < item_ids.length; i++) {
+        var item_id = item_ids[i];
+
+        var item_index = data.findIndex(item => item.id === item_id);
+        if (item_index === -1) continue;
+        var geo = $this.create_geo_feature(
+            data[item_index].feature,
+            item_id,
+            layer_obj,
+            false,
+            false
+        );
+
+        markers.push(geo);
+
+        // Associate item_id with Leaflet internal layer id
+        layer_obj.item_to_layer_id[item_index] = layer_obj.getLayerId(geo);
+
+        // Avoid duplicates
+        if (!items_showing.includes(item_id)) {
+            items_showing.push(item_id);
         }
+    }
 
-     }
-     section_manager.json_data[section_id].clustered_points.clearLayers();
-    section_manager.json_data[section_id].clustered_points.addLayers(markers);
-    //layer_obj.addLayer(markers)
-    //map_manager.map_zoom_event(layer_obj.getBounds())
-//    if(items_showing.length>0){
-//        $this.map.fitBounds(layer_obj.getBounds());
-//    }
-    // associate data for access during map click selection
-    layer_obj.data = data
-  }
+    // Re-add fresh markers to the cluster
+    section.clustered_points.addLayers(markers);
+
+    // Ensure cluster group is on the map
+    if (!layer_obj.hasLayer(section.clustered_points)) {
+        layer_obj.addLayer(section.clustered_points);
+    }
+
+    // Associate data for map click access
+    layer_obj.data = data;
+}
 
     //
     get_layer_select_html(_layer_id,_change_event,is_table,omit_selected){

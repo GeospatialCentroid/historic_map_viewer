@@ -73,7 +73,7 @@ class Filter_Manager {
         function(){
              filter_manager.update_bounds_search($(this))
         }
-    );
+       );
 
     }
     update_bounds_search(){
@@ -155,7 +155,7 @@ class Filter_Manager {
 
             this.add_filter(col, [start,end])
             this.filter();
-            section_manager.slide_position("results");
+
          }else{
            this.remove_filter(col)
            this.filter();
@@ -408,7 +408,8 @@ class Filter_Manager {
         // keep track of the subset for sorting
          this.subset_data=subset
          this.show_sorted_results(subset)
-         //this.section_manager.slide_position("results")
+
+          section_manager.slide_position("results");
     }
     add_filter_watcher(){
         var $this=this;
@@ -657,7 +658,7 @@ class Filter_Manager {
             // we are hiding, take all showing features
             item_ids= [...items_showing]
          }
-
+          //$this.show_items(parent_id,item_ids);
 //         console.log("FIT THE BOUNDS ..........")
          if(!$this.has_earth_param){
          //layer_manager.map.fitBounds(layer_manager.layers[layer_manager.layers.length-1].layer_obj.getBounds());
@@ -692,6 +693,7 @@ class Filter_Manager {
         this.sort_data(this.subset_data)
     }
     sort_data(data,sort_col){
+        console.log("sort_data")
         if(!sort_col){
             // use the default if none is provided
             sort_col="_sort_col"
@@ -709,8 +711,33 @@ class Filter_Manager {
         }
 
         this.show_results(sorted_data)
-    }
 
+        var section_id= sorted_data[0].section_id
+
+        this.show_items(section_id,sorted_data)
+
+    }
+    show_items(section_id,data){
+        /*
+        section_id: Section id
+        data: the data to show
+        */
+
+         var item_ids=[]
+        // update the item_ids array to include all the items to show
+        for (var i=0;i<data.length;i++){
+                if(data[i]?.feature){
+                    item_ids.push(data[i]._id);
+                }
+            }
+        layer_manager.toggle_layer(section_id,-1,"csv_geojson",false,false,100,item_ids)
+         if (!$('#filter_bounds_checkbox').is(':checked')){
+          setTimeout(() => {
+                  layer_manager.map.fitBounds( section_manager.json_data[section_id].clustered_points.getBounds());
+                   $(window).resize(run_resize)
+                }, 2000);
+         }
+   }
 
     zoom_item(_id,item_id){
           var data = this.section_manager.get_match('section_id_'+_id)
@@ -803,8 +830,8 @@ class Filter_Manager {
 
     //--
      show_results(sorted_data){
-        // hide all the items
-        var $this = this;
+         // hide all the items
+         var $this = this;
 
           var item_ids =[]
          // the sorted data could be a mix of items from multiple sections
@@ -812,7 +839,7 @@ class Filter_Manager {
          var html= '<ul class="list-group"' +'">'
 
          // do an initial loop to make sure that
-         // if parents has only one child, just sho
+         // if parents has only one child, just show the child (it should have all the parent metadata)
 
          for (var i=0;i<sorted_data.length;i++){
             var item = sorted_data[i]
@@ -829,13 +856,15 @@ class Filter_Manager {
             //                //check if the item is showing
             //
             //             }
+
+            // check if we are working with a parent item
             if(typeof(item["children"]) !="undefined" && item["children"]!=""){
 
                 item.child_ids = this.get_child_ids(sorted_data,item["children"].split(","));
 
             }
-            // make sure the item isn't a child that should be nested under a parent
 
+            // make sure the item isn't a child that should be nested under a parent
             if(typeof(item.parent_id) =="undefined" || item.parent_id==""){
                 // if the item doesn't have a parent
                  var item_html = '<li class="list-group-item list-group-item-action" onmouseover="filter_manager.show_highlight('+section_id+',\''+item._id+'\');" onmouseout="map_manager.hide_highlight_feature();">'
@@ -849,13 +878,12 @@ class Filter_Manager {
                  item_html+="</div>";
 
                  item_html+="</li>";
-                // skip adding the parent if it has not children
+
+                // skip adding the parent if it has no children
                 if(item["children"]!="" && item.child_ids.length==0){
                     item_html=""
                 }
                 html+=item_html;
-                //}else{
-
 
              }
         }
@@ -871,6 +899,7 @@ class Filter_Manager {
          $this.update_results_info(sorted_data.length)
 
     }
+
     //
      show_layers(section_id,item_id){
          // create a panel allowing the individual layers to be added
@@ -881,6 +910,9 @@ class Filter_Manager {
         // Assume other metadata is the same - todo populate this child record metadata from parent records
         var item = this.get_item(section_id,item_id);
         var section=section_manager.get_section_details(section_id)
+        console.log(section,section_id)
+        console.log(item_id,item)
+        console.log(section.title_col)
         var html=""
 
         html+='<div class="item_title">'+item[section.title_col]+"</div>";// add the title column
@@ -889,11 +921,12 @@ class Filter_Manager {
 
         for (var i=0;i<item.child_ids.length;i++){
             var child = this.get_item(section_id,item.child_ids[i]);
-            console.log(child,section.image_col)
             var thumb_url=child[section.image_col]
             var iiif_url = child["IIIF"];
             //
-            html += "<li class='list-group-item  list-group-item-action'>"
+            //html += "<li class='list-group-item  list-group-item-action'>"
+            html += '<li class="list-group-item list-group-item-action" onmouseover="filter_manager.show_highlight('+section_id+',\''+item.child_ids[i]+'\');" onmouseout="map_manager.hide_highlight_feature();">'
+
             html+='<b>'+child[section.title_col]+"</b><br/>";// add the title column
             html+='<div class="item_thumb_container"><img class="item_thumb" src="'+thumb_url+'"></div>'
             html+='<a href="javascript:void(0);" onclick="image_manager.show_image(\''+iiif_url+'\',\''+child[section.title_col]+'\',\''+child["Reference URL"]+'\');">'+LANG.DETAILS.IMAGE_VIEW+'</a>'+"<br/>";
