@@ -7,14 +7,10 @@ L.Control.LayerList = L.Control.extend({
         var div_content = L.DomUtil.create('div','',div);
         div_content.id = 'layer_list';
 
-
         L.DomEvent.disableClickPropagation(div)
-//        console.log(div)
         return div;
     },
-
     onRemove: function(map) {
-        // Nothing to do here
     }
 });
 

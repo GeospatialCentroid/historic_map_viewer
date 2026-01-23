@@ -176,7 +176,8 @@
 		"TRANSPARENCY": "Transparency",
 		"REMOVE_COLOR": "Remove Color",
 		"OUTLINE_COLOR": "Line",
-		"Fill_COLOR": "Fill"
+		"Fill_COLOR": "Fill",
+		"MARKER_TOGGLE": "Map Points in View"
 
 	},
 	"BASEMAP": {

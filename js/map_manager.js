@@ -49,6 +49,18 @@ class Map_Manager {
 
     this.add_legend()
 
+    L.control.layer_list({ position: 'bottomleft' }).addTo( this.map);
+    var html=  "<label for='toggle_marker_checkbox'>"+LANG.MAP.MARKER_TOGGLE+"</lable> <input id='toggle_marker_checkbox' type='checkbox' checked/>"
+    $("#layer_list_title").html(html)
+    $('#toggle_marker_checkbox').change(function() {
+        if(this.checked) {
+             section_manager.json_data[0].clustered_points.addTo(map_manager.map);
+        }else{
+             map_manager.map.removeLayer(section_manager.json_data[0].clustered_points);
+        }
+
+    });
+
    map_manager.map.on('warpedmapadded', (event) => {
         const layers = event.target._layers;
         const layer_ids = Object.keys(layers).map(k => parseInt(k));

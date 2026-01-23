@@ -114,7 +114,9 @@ class Layer_Manager {
         this.remove_feature_layer(id)
     }else{
         $("#"+id+"_toggle").addClass("progress-bar-striped progress-bar-animated")
-        layer_manager.toggle_layer(section_id,item_id,'AllMaps')//,,false,match.URL)
+
+        //layer_manager.toggle_layer section_id,item_id,type,drawing_info,url,z,item_ids
+        layer_manager.toggle_layer(section_id,item_id,'AllMaps')//,false,false,this.layers_list.length)//,,false,match.URL)
          var layer =  this.get_layer_obj(section_id+"_"+item_id)
          this.map.addLayer(layer.layer_obj)
     }
@@ -246,7 +248,7 @@ class Layer_Manager {
         var download_link = false//filter_manager.get_download_link(resource)
         //var dcat_bbox = resource.dcat_bbox
 
-        var html = "<li class='ui-state-default drag_li basemap_layer' id='"+id+"_drag'>"
+        var html = "<li class='ui-state-default drag_li basemap_layer' id='"+id+"_drag'  onmouseover='filter_manager.show_highlight("+section_id+",\""+item_id+"\");' onmouseout='map_manager.hide_highlight_feature();'>"
         html+="<div class='left-div-map'>"
         html+="<div class='grip'><i class='bi bi-grip-vertical'></i></div>"
 
@@ -580,7 +582,7 @@ class Layer_Manager {
          map_manager.image_map.attributionControl.addAttribution(this.get_attribution(resource));
         return
     }else if(service_method._method=="AllMaps"){
-
+        console.log("Load the ",section_id,item_id)
         var section = section_manager.get_section_details(section_id);
         var layer_obj = new Allmaps.WarpedMapLayer(
           resource[section.annotation_col],{ pane: `item_${section_id}_${item_id}`}
@@ -676,6 +678,7 @@ class Layer_Manager {
      }else{
         this.layers.splice(_z, 0, layer);
      }
+
       // update a slim list for sharing only if no programmatically setting a z-index
      if (update_url){
            this.set_layers_list()
@@ -996,8 +999,6 @@ class Layer_Manager {
 
   }
  show_csv_geojson_data(layer_obj, section_id, id, item_ids) {
-    console.log("show_csv_geojson_data");
-
     var $this = this;
 
     if (!$this.map.hasLayer(layer_obj)) {
@@ -1197,6 +1198,7 @@ class Layer_Manager {
                id:obj["id"],
                });
            }
+           console.log("save_params")
         save_params()
     }
     layer_list_change(){

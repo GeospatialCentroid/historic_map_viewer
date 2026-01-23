@@ -12,6 +12,7 @@ class Filter_Manager {
     // a dictionary of all the filters set
     this.filters={}
     this.mode='data';
+    this.sort_str=""
     this.showing_id;// keep track of the current section on display
    }
      init_search_interface(json_data){
@@ -730,7 +731,8 @@ class Filter_Manager {
                     item_ids.push(data[i]._id);
                 }
             }
-        layer_manager.toggle_layer(section_id,-1,"csv_geojson",false,false,100,item_ids)
+            return
+        layer_manager.toggle_layer(section_id,-1,"csv_geojson",false,false,-1,item_ids)
          if (!$('#filter_bounds_checkbox').is(':checked')){
           setTimeout(() => {
                   layer_manager.map.fitBounds( section_manager.json_data[section_id].clustered_points.getBounds());
@@ -916,7 +918,7 @@ class Filter_Manager {
         var html=""
 
         html+='<div class="item_title">'+item[section.title_col]+"</div>";// add the title column
-        html+='<button type="button" class="btn btn-success" onclick="filter_manager.select_item('+section_id+',\''+item._id+'\');" >Details</button>'
+        html+='<div class="details-buttons">'+'<button type="button" class="btn btn-success" onclick="filter_manager.select_item('+section_id+',\''+item._id+'\');" >Details</button>'+"</div>";
         html+= '<ul class="list-group"' +'">'
 
         for (var i=0;i<item.child_ids.length;i++){
@@ -928,9 +930,10 @@ class Filter_Manager {
             html += '<li class="list-group-item list-group-item-action" onmouseover="filter_manager.show_highlight('+section_id+',\''+item.child_ids[i]+'\');" onmouseout="map_manager.hide_highlight_feature();">'
 
             html+='<b>'+child[section.title_col]+"</b><br/>";// add the title column
+            html+='<div class="details-buttons">'+this.get_add_button(section_id,item.child_ids[i])+"</div>";
             html+='<div class="item_thumb_container"><img class="item_thumb" src="'+thumb_url+'"></div>'
             html+='<a href="javascript:void(0);" onclick="image_manager.show_image(\''+iiif_url+'\',\''+child[section.title_col]+'\',\''+child["Reference URL"]+'\');">'+LANG.DETAILS.IMAGE_VIEW+'</a>'+"<br/>";
-            html+=this.get_add_button(section_id,item.child_ids[i]);
+
             html+="</li>";
         }
         html+="</ul>";

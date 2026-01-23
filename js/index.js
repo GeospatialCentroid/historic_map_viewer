@@ -28,17 +28,17 @@ function setup_params(){
      usp = new URLSearchParams(window.location.search.substring(1).replaceAll("~", "'").replaceAll("+", " "))
 
     if (window.location.search.substring(1)!="" && $.isEmptyObject(params)){
-       if (usp.get('e')!=null){
+       if (usp.get('f')!=null){
+            params['f'] = rison.decode("!("+usp.get("f")+")")
+        }
+        if (usp.get('e')!=null){
             params['e'] =  rison.decode(usp.get('e'))
         }
-        //support passing contentdm id
-        if (usp.get('id')!=null){
-            params['id'] =  usp.get('id')
+
+        if (usp.get('l')!=null && usp.get('l')!="!()"){
+            params['l'] =  rison.decode(usp.get('l'))
         }
-        if (usp.get('t')!=null){
-           console.log("transcription mode")
-           transcription_mode=true;
-        }
+
         // debug mode
         if (usp.get('d')!=null){
            DEBUGMODE=true
@@ -132,7 +132,6 @@ function initialize_interface() {
         //todo need to capture the variable
        //image_manager.show_image(iiif_base_url+params['id']+"/info.json","")
      }
-
      layer_manager = new Layer_Manager({
         map:map_manager.map,
         layers_list:params['l'],
@@ -146,6 +145,7 @@ function initialize_interface() {
     section_manager=new Section_Manager({config:"app.csv",map_manager:map_manager})
     filter_manager = new Filter_Manager({
         section_manager:section_manager,
+        params:params['f'],
         place_url:'https://nominatim.openstreetmap.org/search?format=json',
     });
     section_manager.init();
@@ -158,12 +158,17 @@ function after_filters(){
 
 
     init_tabs();
-//    if ( layer_manager.layers_list){
-//         for (var i =0;i<layer_manager.layers_list.length;i++){
-//            console.log(layer_manager.layers_list[i])
-//            layer_manager.toggle_layer(layer_manager.layers_list[i].id,i)
-//        }
-//    }
+    setTimeout(() =>{
+
+        if ( layer_manager.layers_list){
+            browser_control = true
+             for (var i =0;i<params['l'].length;i++){
+                var parts=params['l'][i].id.split("_")
+                layer_manager.add_layer_toggle(parts[0],parts[1])
+            }
+            browser_control = false
+        }
+        },1000)
 }
 
 
@@ -177,10 +182,40 @@ function save_marker_data(_data){
 
 
 function save_params(){
-    var p = "?"
-    +"e="+rison.encode(map_manager.params)
+    if (browser_control){
+        return
+    }
+    var p = "/?f="+encodeURIComponent(rison.encode(filter_manager.filters))
+    +"&e="+rison.encode(map_manager.params)
+
+    if(layer_manager && typeof(layer_manager.layers_list)!="undefined"){
+        p+="&l="+rison.encode(layer_manager.layers_list)
+    }
+
+    //p+='&t='+$("#tabs").find(".active").attr("id")
+    if(typeof(filter_manager.panel_name)!="undefined"){
+        // add the panel if available
+        p+="/"+filter_manager.panel_name;
+    }
+    if(typeof(filter_manager.display_resource_id)!="undefined"){
+        // add the display_resource_id if available
+        p+="/"+filter_manager.display_resource_id;
+    }
+
+
+    if (filter_manager.sort_str){
+        p +="&sort="+filter_manager.sort_str
+    }
+
+    // retain debug mode
+    if (DEBUGMODE){
+        p +="&d=1"
+    }
+
+
+    // before saving the sate, let's make sure they are not the same
     if(JSON.stringify(p) != JSON.stringify(last_params) && !browser_control){
-       window.history.pushState(p, null, window.location.pathname+p.replaceAll(" ", "+").replaceAll("'", "~"))
+        window.history.pushState(p, null, p.replaceAll(" ", "+").replaceAll("'", "~"))
         last_params = p
     }
 }
@@ -237,36 +272,7 @@ update_layer_list=function(){
     }
     $("#layer_list").html(html)
 }
-//toggle_layer = function(id){
-//    var layer = layer_rects[id]
-//    if(layer.toggle=="<i class='bi bi-map'></i>"){
-//        $("#layer_but_spin_"+id).show();
-//        layer.toggle="<i title='Hide Overlay Map in View' class='bi bi-map-fill'></i>"
-//        layer.map_layer =new Allmaps.WarpedMapLayer(window.location.origin+"/"+window.location.pathname+"/"+layer['annotation_url'],{pane: 'left'})
-//        map_manager.map.addLayer(layer.map_layer)
-//         map_manager.map.on(
-//              'warpedmapadded',
-//              (event) => {
-//               $("#layer_but_spin_"+layer.id).hide();
-//              },
-//              map_manager.map
-//            )
-//        // we need to make sure a layer exist first before side to side control can function
-//        if(!side_by_side_control){
-//            side_by_side_control = L.control.sideBySide(layer.map_layer, []).addTo(map_manager.map);
-//        }
-//     }else{
-//        map_manager.map.removeLayer(layer.map_layer)
-//        layer.on('click', function () {
-//            toggle_layer(this.id)
-//            this.off('click')
-//         });
-//        layer.toggle="<i class='bi bi-map'></i>"
-//        remove_side_by_side()
-//     }
-//     $("#layer_but_"+id).html(layer.toggle)
-//
-//}
+
 remove_side_by_side = function(){
     var hide_control=true
     for(var i = 0; i<layer_rects.length;i++){

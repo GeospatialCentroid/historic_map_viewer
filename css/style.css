@@ -621,6 +621,9 @@ margin-left:-15px;
     right:0px;
     top:0px;
 }
+#layers_view{
+position: relative;
+}
 
 .stacked-div-map {
       display: flex;
@@ -1171,7 +1174,6 @@ a[aria-disabled="true"] {
     background-color:#ffffff;
     max-height:300px;
     overflow-y:auto;
-    margin-bottom:90px;
     padding:3px;
 }
 .center {
