@@ -38,6 +38,9 @@ function setup_params(){
         if (usp.get('l')!=null && usp.get('l')!="!()"){
             params['l'] =  rison.decode(usp.get('l'))
         }
+        if (usp.get('p')!=null ){
+            params['p'] =  usp.get('p')
+        }
 
         // debug mode
         if (usp.get('d')!=null){
@@ -160,7 +163,7 @@ function after_filters(){
     init_tabs();
     setTimeout(() =>{
 
-        if ( layer_manager.layers_list){
+        if ( params['l']){
             browser_control = true
              for (var i =0;i<params['l'].length;i++){
                 var parts=params['l'][i].id.split("_")
@@ -168,7 +171,15 @@ function after_filters(){
             }
             browser_control = false
         }
+        // auto show details
+         if(params["p"]){
+
+            var parts=params['p'].split("_")
+            filter_manager.select_item(parts[0],parts[1])
+        }
+
         },1000)
+
 }
 
 
@@ -197,9 +208,10 @@ function save_params(){
         // add the panel if available
         p+="/"+filter_manager.panel_name;
     }
+    console.log(filter_manager.display_resource_id,"save")
     if(typeof(filter_manager.display_resource_id)!="undefined"){
         // add the display_resource_id if available
-        p+="/"+filter_manager.display_resource_id;
+        p+="&p="+filter_manager.display_resource_id;
     }
 
 

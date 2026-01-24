@@ -1194,11 +1194,12 @@ class Layer_Manager {
         this.layers_list=[]
         for(var i =0;i<this.layers.length;i++){
            var obj = this.layers[i]
-           this.layers_list.push({
-               id:obj["id"],
-               });
+           if(obj["id"]!="0_-1"){// exclude the point layer
+               this.layers_list.push({
+                   id:obj["id"],
+                   });
+               }
            }
-           console.log("save_params")
         save_params()
     }
     layer_list_change(){

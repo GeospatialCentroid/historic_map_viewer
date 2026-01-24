@@ -731,7 +731,7 @@ class Filter_Manager {
                     item_ids.push(data[i]._id);
                 }
             }
-            return
+
         layer_manager.toggle_layer(section_id,-1,"csv_geojson",false,false,-1,item_ids)
          if (!$('#filter_bounds_checkbox').is(':checked')){
           setTimeout(() => {
@@ -956,19 +956,11 @@ class Filter_Manager {
         // use the id of the csv
          var item= this.get_item(section_id,item_id)
          var section=section_manager.get_section_details(section_id)
-         console.log(item)
-         //return
-//        this.show_match(match)
-//        //for reference track the selected page
-//        this.page_id=id
-//        this.page_num=this.get_page_num(id)
-//        // add the page number to the address for quicker access via link sharing
-//        //this.filters['p']=this.page_num
-//        this.save_filter_params()
-
         //
         this.show_details(item,section)
         section_manager.slide_position("details")
+         this.display_resource_id = section_id+"_"+item_id;
+         save_params()
     }
 
     show_details(item,section){
@@ -977,6 +969,7 @@ class Filter_Manager {
         var html="";
         var section_id = item.section_id;
         var item_id=item._id;
+
 
         var thumb_url=item[section.image_col]
         var iiif_url = item["IIIF"];

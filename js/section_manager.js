@@ -515,6 +515,7 @@ class Section_Manager {
         var width=$("#side_bar").width()
          var nav_text=""
          this.panel_name=panel_name
+         delete filter_manager.display_resource_id;
          switch(panel_name) {
               case 'results':
                     pos=width*2
