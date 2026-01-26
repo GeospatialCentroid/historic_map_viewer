@@ -227,7 +227,12 @@ function save_params(){
 
     // before saving the sate, let's make sure they are not the same
     if(JSON.stringify(p) != JSON.stringify(last_params) && !browser_control){
-        window.history.pushState(p, null, p.replaceAll(" ", "+").replaceAll("'", "~"))
+        console.log(window.location.pathname,"path")
+        var path="";
+        if(window.location.pathname!="/"){
+            path =window.location.pathname
+        }
+        window.history.pushState(p, null, path+p.replaceAll(" ", "+").replaceAll("'", "~"))
         last_params = p
     }
 }
