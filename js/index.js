@@ -196,7 +196,7 @@ function save_params(){
     if (browser_control){
         return
     }
-    var p = "/?f="+encodeURIComponent(rison.encode(filter_manager.filters))
+    var p = "?f="+encodeURIComponent(rison.encode(filter_manager.filters))
     +"&e="+rison.encode(map_manager.params)
 
     if(layer_manager && typeof(layer_manager.layers_list)!="undefined"){
@@ -204,10 +204,10 @@ function save_params(){
     }
 
     //p+='&t='+$("#tabs").find(".active").attr("id")
-    if(typeof(filter_manager.panel_name)!="undefined"){
-        // add the panel if available
-        p+="/"+filter_manager.panel_name;
-    }
+//    if(typeof(filter_manager.panel_name)!="undefined"){
+//        // add the panel if available
+//        p+="/"+filter_manager.panel_name;
+//    }
     console.log(filter_manager.display_resource_id,"save")
     if(typeof(filter_manager.display_resource_id)!="undefined"){
         // add the display_resource_id if available
@@ -229,8 +229,11 @@ function save_params(){
     if(JSON.stringify(p) != JSON.stringify(last_params) && !browser_control){
         console.log(window.location.pathname,"path")
         const url = new URL(window.location.href);
-
-        window.history.pushState(p, null, url.pathname + p.replaceAll(" ", "+").replaceAll("'", "~"))
+        var path = ""
+        if(url.pathname!="/"){
+            path = url.pathname;
+        }
+        window.history.pushState(p, null, path + p.replaceAll(" ", "+").replaceAll("'", "~"))
         last_params = p
     }
 }
