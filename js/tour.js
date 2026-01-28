@@ -7,7 +7,9 @@ const tourSteps = [
   {
    element: "#side_bar",
     intro: "The sidebar on the right is were you can filter and navigate the collection. To view a historic map, click the <b>Add</b> button in the results pane.",
-    position: "right"
+    position: "right",
+    action: "run",
+    fn: "show_results"
   },
   {
     element:"#map",
@@ -18,13 +20,14 @@ const tourSteps = [
     element: "#map_tab",
     intro: "The map tab shows all the layers added to the map. This tab allows you to control layer transparency, drawing order, and enable split view.",
     position: "bottom",
-    onafterchange: () => {
-      document.querySelector("#map_tab")?.click();
-    }
+    action: "run",
+    fn: "show_map_tab",
 
   },
   {
-    intro: "Thanks for taking the tour! If you notice anything interesting while exploring the collection, be sure to let us know, and share a copy of the URL from the address bar along with your email.",
-    position: "center"
+    intro: "Thanks for taking the tour! Please let us know if you notice anything interesting while exploring the collection, and be sure to include a copy of the URL from the address bar along with your email.",
+    position: "center",
+     action: "run",
+    fn: "show_browse",
   }
 ];

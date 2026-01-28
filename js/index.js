@@ -523,17 +523,42 @@ function run_resize_do(){
  }
 
 function startHistoricMapTour() {
-   const intro = introJs();
-    intro.setOptions({
-      steps: tourSteps,
-      showProgress: true,
-      showBullets: true,
-      exitOnEsc: true,
-      exitOnOverlayClick: false
-    })
-    .onbeforechange(function (targetElement) {
-      // optional: you can do logging or extra delays
-    })
-    .start();
+  const intro = introJs();
+
+  intro.setOptions({
+    steps: tourSteps,
+    showProgress: true,
+    showBullets: true,
+    exitOnEsc: true,
+    exitOnOverlayClick: false
+  });
+
+  intro.onchange(function () {
+      const stepIndex = intro.getCurrentStep();
+      const step = tourSteps[stepIndex];
+      if (!step || step.action !== "run") return;
+
+      const fn = window[step.fn];
+      if (typeof fn !== "function") {
+        return;
+      }
+
+      fn(...(step.args || []));
+    });
+
+  intro.start();
+}
+// function for tour
+function show_map_tab(){
+    document.querySelector("#map_tab")?.click();
+}
+function show_search_tab(){
+    document.querySelector("#search_tab")?.click();
 }
 
+function show_results(){
+    section_manager.slide_position("results");
+}
+function show_browse(){
+    section_manager.slide_position();
+}
