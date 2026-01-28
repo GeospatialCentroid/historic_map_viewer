@@ -6,7 +6,7 @@ const tourSteps = [
   },
   {
    element: "#side_bar",
-    intro: "The sidebar on the right is were you can filter and navigate the collection. To view a historic map, click the <b>Add</b> button in the results pane.",
+    intro: "The sidebar on the right is where you can filter and navigate the collection. To view a historic map, click the <b>Add</b> button in the results pane.",
     position: "right",
     action: "run",
     fn: "show_results"
