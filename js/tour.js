@@ -11,12 +11,12 @@ const tourSteps = [
   },
   {
     element:"#map",
-    intro: "The map area is where historic maps are displayed.",
+    intro: "The map area is where historic maps are displayed. The map points represent available maps matching your search.",
     position: "top"
   },
   {
     element: "#map_tab",
-    intro: "The map tab shows all the layers in the map view.",
+    intro: "The map tab shows all the layers added to the map. This tab allows you to control layer transparency, drawing order, and enable split view.",
     position: "bottom",
     onafterchange: () => {
       document.querySelector("#map_tab")?.click();
@@ -24,7 +24,7 @@ const tourSteps = [
 
   },
   {
-    intro: "That’s the walkthrough! You’re ready to explore!",
+    intro: "Thanks for taking the tour! If you notice anything interesting while exploring the collection, be sure to let us know, and share a copy of the URL from the address bar along with your email.",
     position: "center"
   }
 ];
