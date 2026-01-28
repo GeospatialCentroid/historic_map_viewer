@@ -61,6 +61,10 @@
         <script src="js/table_manager.js"></script>
      <script src="js/index.js"></script>
 
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intro.js/minified/introjs.min.css"/>
+        <script src="https://cdn.jsdelivr.net/npm/intro.js/minified/intro.min.js"></script>
+
+       <script src="js/tour.js"></script>
       <!-- Google tag (gtag.js) -->
 
   </head>
@@ -79,7 +83,7 @@
 
         <div id="git_but" class="float-right"><a class="btn btn-default" href="https://github.com/geospatialcentroid/historic_map_viewer" target="git" data-toggle="tooltip" title="Go to Git Repo" data-original-title="Go to git Repo"><i class="bi bi-github"></i></a></div>
 
-        <div id="info_but" class="float-right"><a class="btn btn-default" href="#"  title="info" data-original-title="info"><i class="bi bi-info-circle"></i></a></div>
+        <div id="info_but" class="float-right"><a class="btn btn-default" href="#"  title="info" data-original-title="info"><i class="bi bi-info-circle"></i></a> </div>
 
 
 
@@ -287,6 +291,7 @@
           <span id="disclaimer_text">
 
           </span>
+          <button type="button" class="btn btn-primary" onclick="$('#disclaimer').modal('hide');startHistoricMapTour()">Tour</button>
         <button type="button" class="btn btn-primary" id="disclaimer_close" data-dismiss="modal">Close</button>
       </div>
 

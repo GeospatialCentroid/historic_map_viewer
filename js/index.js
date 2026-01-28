@@ -193,6 +193,7 @@ function save_marker_data(_data){
 
 
 function save_params(){
+    // todo add delay to group multiple calls
     if (browser_control){
         return
     }
@@ -208,7 +209,7 @@ function save_params(){
 //        // add the panel if available
 //        p+="/"+filter_manager.panel_name;
 //    }
-    console.log(filter_manager.display_resource_id,"save")
+
     if(typeof(filter_manager.display_resource_id)!="undefined"){
         // add the display_resource_id if available
         p+="&p="+filter_manager.display_resource_id;
@@ -227,7 +228,6 @@ function save_params(){
 
     // before saving the sate, let's make sure they are not the same
     if(JSON.stringify(p) != JSON.stringify(last_params) && !browser_control){
-        console.log(window.location.pathname,"path")
         const url = new URL(window.location.href);
         var path = ""
         if(url.pathname!="/"){
@@ -521,3 +521,19 @@ function run_resize_do(){
 
         $("#result_wrapper").css({"height":scroll_height-$("#filter_area").height()})
  }
+
+function startHistoricMapTour() {
+   const intro = introJs();
+    intro.setOptions({
+      steps: tourSteps,
+      showProgress: true,
+      showBullets: true,
+      exitOnEsc: true,
+      exitOnOverlayClick: false
+    })
+    .onbeforechange(function (targetElement) {
+      // optional: you can do logging or extra delays
+    })
+    .start();
+}
+
