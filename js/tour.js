@@ -16,7 +16,7 @@ const tourSteps = [
   },
   {
     element: "#map_tab",
-    intro: "The map tab tab shows all the layers in the map view.",
+    intro: "The map tab shows all the layers in the map view.",
     position: "bottom",
     onafterchange: () => {
       document.querySelector("#map_tab")?.click();
