@@ -734,10 +734,15 @@ class Filter_Manager {
 
         layer_manager.toggle_layer(section_id,-1,"csv_geojson",false,false,-1,item_ids)
          if (!$('#filter_bounds_checkbox').is(':checked')){
-          setTimeout(() => {
-                  layer_manager.map.fitBounds( section_manager.json_data[section_id].clustered_points.getBounds());
-                   $(window).resize(run_resize)
-                }, 2000);
+           if(typeof params['e'] == "undefined"){
+              setTimeout(() => {
+
+
+                      layer_manager.map.fitBounds( section_manager.json_data[section_id].clustered_points.getBounds());
+                       $(window).resize(run_resize)
+
+                    }, 2000);
+             }
          }
    }
 

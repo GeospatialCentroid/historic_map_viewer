@@ -672,13 +672,14 @@ class Layer_Manager {
 
      var layer = { type:type,"id":section_id+"_"+item_id,"url":url,"layer_obj":layer_obj,"resource_obj":Object.assign({}, resource)}
 
-
-     if(typeof(_z)=="undefined"){
-          this.layers.push(layer);
-     }else{
-        this.layers.splice(_z, 0, layer);
-     }
-
+      // exclude the points layer
+      if(layer.id!='0_-1'){
+         if(typeof(_z)=="undefined"){
+              this.layers.push(layer);
+         }else{
+            this.layers.splice(_z, 0, layer);
+         }
+    }
       // update a slim list for sharing only if no programmatically setting a z-index
      if (update_url){
            this.set_layers_list()
