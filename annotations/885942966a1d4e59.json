@@ -1,0 +1,132 @@
+{
+  "id": "https://annotations.allmaps.org/images/885942966a1d4e59",
+  "type": "AnnotationPage",
+  "@context": "http://www.w3.org/ns/anno.jsonld",
+  "items": [
+    {
+      "id": "https://annotations.allmaps.org/maps/8bc6fda0b4947b90",
+      "type": "Annotation",
+      "@context": [
+        "http://iiif.io/api/extension/georef/1/context.json",
+        "http://iiif.io/api/presentation/3/context.json"
+      ],
+      "created": "2025-11-04T17:55:20.733Z",
+      "modified": "2025-11-04T17:55:20.733Z",
+      "motivation": "georeferencing",
+      "target": {
+        "type": "SpecificResource",
+        "source": {
+          "id": "https://archives.mountainscholar.org/iiif/2/p17393coll186:25319",
+          "type": "ImageService2",
+          "height": 2352,
+          "width": 2324,
+          "provider": [
+            {
+              "type": "Organization",
+              "label": {
+                "none": [
+                  "University of Colorado Boulder"
+                ]
+              },
+              "homepage": [
+                {
+                  "id": "https://scholar.colorado.edu"
+                }
+              ]
+            }
+          ]
+        },
+        "selector": {
+          "type": "SvgSelector",
+          "value": "<svg width=\"2324\" height=\"2352\"><polygon points=\"16,2223 872,2230 888,2175 936,2174 940,2142 1306,2141 1310,2164 1386,2170 1394,2185 1432,2185 1450,2231 2310,2240 2312,38 18,25\" /></svg>"
+        }
+      },
+      "body": {
+        "type": "FeatureCollection",
+        "transformation": {
+          "type": "polynomial",
+          "options": {
+            "order": 1
+          }
+        },
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "resourceCoords": [
+                2161,
+                1124
+              ]
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -105.1323592,
+                40.6837199
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "resourceCoords": [
+                1596,
+                1461
+              ]
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -105.1464582,
+                40.6770427
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "resourceCoords": [
+                1921,
+                1282
+              ]
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -105.1384772,
+                40.6805539
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "resourceCoords": [
+                1382,
+                1903
+              ]
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -105.1515573,
+                40.6686853
+              ]
+            }
+          }
+        ],
+        "_allmaps": {
+          "id": "https://annotations.allmaps.org/maps/8bc6fda0b4947b90",
+          "version": "https://annotations.allmaps.org/maps/8bc6fda0b4947b90@5d59c009a558bc4c",
+          "image": {
+            "id": "https://annotations.allmaps.org/images/885942966a1d4e59",
+            "version": "https://annotations.allmaps.org/images/885942966a1d4e59@c9a83160404fa9e1",
+            "canvases": []
+          },
+          "scale": 0.475488,
+          "area": 22122785.12
+        }
+      }
+    }
+  ]
+}

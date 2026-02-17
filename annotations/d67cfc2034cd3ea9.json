@@ -1,0 +1,145 @@
+{
+  "id": "https://annotations.allmaps.org/images/d67cfc2034cd3ea9",
+  "type": "AnnotationPage",
+  "@context": "http://www.w3.org/ns/anno.jsonld",
+  "items": [
+    {
+      "id": "https://annotations.allmaps.org/maps/3940b0a3407a35dd",
+      "type": "Annotation",
+      "@context": [
+        "http://iiif.io/api/extension/georef/1/context.json",
+        "http://iiif.io/api/presentation/3/context.json"
+      ],
+      "created": "2025-09-23T16:20:18.885Z",
+      "modified": "2025-09-23T16:20:18.885Z",
+      "motivation": "georeferencing",
+      "target": {
+        "type": "SpecificResource",
+        "source": {
+          "id": "https://archives.mountainscholar.org/iiif/2/p17393coll70:286",
+          "type": "ImageService2",
+          "height": 2325,
+          "width": 3000,
+          "provider": [
+            {
+              "type": "Organization",
+              "label": {
+                "none": [
+                  "University of Colorado Boulder"
+                ]
+              },
+              "homepage": [
+                {
+                  "id": "https://scholar.colorado.edu"
+                }
+              ]
+            }
+          ]
+        },
+        "selector": {
+          "type": "SvgSelector",
+          "value": "<svg width=\"3000\" height=\"2325\"><polygon points=\"560,367 882,368 1180,376 1479,381 2057,381 2269,376 2650,365 2683,1019 2723,1922 2014,1940 1441,1941 713,1933 516,1927 546,1075\" /></svg>"
+        }
+      },
+      "body": {
+        "type": "FeatureCollection",
+        "transformation": {
+          "type": "thinPlateSpline"
+        },
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "resourceCoords": [
+                2647,
+                368
+              ]
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -102.0500878,
+                40.9918493
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "resourceCoords": [
+                2713,
+                1914
+              ]
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -102.0450085,
+                36.9932429
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "resourceCoords": [
+                563,
+                367
+              ]
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -109.0398353,
+                40.9948948
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "resourceCoords": [
+                519,
+                1924
+              ]
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -109.0314988,
+                37.0055225
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "resourceCoords": [
+                1503,
+                384
+              ]
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -106.1886849,
+                40.9949667
+              ]
+            }
+          }
+        ],
+        "_allmaps": {
+          "id": "https://annotations.allmaps.org/maps/3940b0a3407a35dd",
+          "version": "https://annotations.allmaps.org/maps/3940b0a3407a35dd@1ae3fa3cda7fb627",
+          "image": {
+            "id": "https://annotations.allmaps.org/images/d67cfc2034cd3ea9",
+            "version": "https://annotations.allmaps.org/images/d67cfc2034cd3ea9@bad953885d2320df",
+            "canvases": []
+          },
+          "scale": 0.003509,
+          "area": 272117004453.11
+        }
+      }
+    }
+  ]
+}

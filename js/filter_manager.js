@@ -798,11 +798,23 @@ class Filter_Manager {
          var id = "item_"+section_id+"_"+item_id;
          var item = this.get_item(section_id,item_id);
          var func ="layer_manager.add_layer_toggle"
+         var section=section_manager.get_section_details(section_id)
          //console.log(section_id,item_id,item)
         // check if the layer has been added
         if(layer_manager.is_on_map(section_id+"_"+item_id)){
             _class ="btn-danger"
             text = LANG.RESULT.REMOVE
+        }
+        let button_text = "<button type='button' id='"+id+"_toggle' class='btn "+_class+" "+id+"_toggle' onclick='"+func+"("+section_id+",\""+item_id+"\")'>"+text+"</button>"
+        // if the item doesn't have something mappable, show the view button
+
+        if(item[section.geojson_col]==""){
+         text = LANG.RESULT.VIEW
+         var iiif_url = item["IIIF"];
+         var func ="image_manager.show_image"
+         var title = item[section.title_col]
+         var ref_url = item["Reference URL"]
+         button_text = `<button type="button" class="btn ${_class}" onclick="${func}(\`${iiif_url}\`, \`${title}\`, \`${ref_url}\`)">${text}</button>`
         }
 
         if(item.child_ids.length>0){
@@ -810,7 +822,7 @@ class Filter_Manager {
             func="filter_manager.show_layers"
         }
 
-       return "<button type='button' id='"+id+"_toggle' class='btn "+_class+" "+id+"_toggle' onclick='"+func+"("+section_id+",\""+item_id+"\")'>"+text+"</button>"+"<br/>"
+       return button_text+""
         +"<button type='button' class='btn btn-primary "+id+"_zoom' style='display:none;' onclick='layer_manager.zoom_layer(\""+section_id+"\",\""+item_id+"\")'>"+LANG.RESULT.ZOOM+"</button>"
     }
     get_parent_text(section_id,item_id){

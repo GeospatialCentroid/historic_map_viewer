@@ -23,20 +23,26 @@ Dependencies:
     pandas, shapely
 
 Example call
-python python_scripts/extract_lat_lng.py "data/Historic Maps.csv" geojson latitude longitude --inplace
+python python_scripts/extract_lat_lng.py "data/Historic Maps.csv" geojson latitude longitude  area --inplace
 
 """
+
+#!/usr/bin/env python3
 
 import argparse
 import pandas as pd
 import json
 from shapely.geometry import shape
+from shapely.ops import transform
+from pyproj import Transformer
 
-def extract_lat_lng_from_featurecollection(geojson_str):
+
+def extract_geometry_info(geojson_str):
     """
-    Extract latitude and longitude from a GeoJSON FeatureCollection string.
-    - Takes the first feature's geometry.
+    Extract latitude, longitude, and area (km²) from a GeoJSON FeatureCollection string.
+    - Uses first feature.
     - Returns centroid for non-point geometries.
+    - Area returned in square kilometers.
     """
     try:
         geojson_obj = json.loads(geojson_str)
@@ -45,52 +51,75 @@ def extract_lat_lng_from_featurecollection(geojson_str):
 
         features = geojson_obj.get("features", [])
         if not features:
-            return None, None
+            return None, None, None
 
-        # Take the first feature's geometry
         geom = shape(features[0]["geometry"])
         if geom.is_empty:
-            return None, None
+            return None, None, None
 
-        if geom.geom_type == 'Point':
-            return geom.y, geom.x
+        # Extract centroid or point coords
+        if geom.geom_type == "Point":
+            lat, lng = geom.y, geom.x
+            area_km2 = 0.0
         else:
             centroid = geom.centroid
-            return centroid.y, centroid.x
+            lat, lng = centroid.y, centroid.x
+
+            # Reproject to Web Mercator (meters)
+            transformer = Transformer.from_crs(
+                "EPSG:4326", "EPSG:3857", always_xy=True
+            )
+            projected_geom = transform(transformer.transform, geom)
+
+            area_m2 = projected_geom.area
+            area_km2 = area_m2 / 1_000_000
+
+        return lat, lng, area_km2
 
     except Exception as e:
-        print(f"Warning: failed to parse GeoJSON '{geojson_str}': {e}")
-        return None, None
+        print(f"Warning: failed to parse GeoJSON: {e}")
+        return None, None, None
+
 
 def main():
-    parser = argparse.ArgumentParser(description="Extract lat/lng from GeoJSON FeatureCollection column in a CSV.")
+    parser = argparse.ArgumentParser(
+        description="Extract lat/lng and area (km²) from GeoJSON FeatureCollection column in a CSV."
+    )
     parser.add_argument("csv_file", help="Path to the CSV file")
     parser.add_argument("geojson_col", help="Name of the column containing GeoJSON")
     parser.add_argument("lat_col", help="Name of the latitude column to create")
     parser.add_argument("lng_col", help="Name of the longitude column to create")
-    parser.add_argument("--inplace", action="store_true",
-                        help="If set, updates the source CSV file instead of creating a new one")
+    parser.add_argument("area_col", help="Name of the area (km²) column to create")
+    parser.add_argument(
+        "--inplace",
+        action="store_true",
+        help="If set, updates the source CSV file instead of creating a new one",
+    )
+
     args = parser.parse_args()
 
-    # Read CSV
     df = pd.read_csv(args.csv_file)
 
-    # Extract lat/lng
     latitudes = []
     longitudes = []
+    areas = []
+
     for geojson_str in df[args.geojson_col]:
-        lat, lng = extract_lat_lng_from_featurecollection(geojson_str)
+        lat, lng, area = extract_geometry_info(geojson_str)
         latitudes.append(lat)
         longitudes.append(lng)
+        areas.append(area)
 
-    # Add new columns
     df[args.lat_col] = latitudes
     df[args.lng_col] = longitudes
+    df[args.area_col] = areas
 
-    # Save CSV
     output_file = args.csv_file if args.inplace else f"processed_{args.csv_file}"
     df.to_csv(output_file, index=False)
+
     print(f"CSV saved as: {output_file}")
+
 
 if __name__ == "__main__":
     main()
+

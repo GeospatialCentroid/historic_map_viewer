@@ -1,0 +1,132 @@
+{
+  "id": "https://annotations.allmaps.org/images/19426a2a1f48479a",
+  "type": "AnnotationPage",
+  "@context": "http://www.w3.org/ns/anno.jsonld",
+  "items": [
+    {
+      "id": "https://annotations.allmaps.org/maps/9aae6a76a8f082f1",
+      "type": "Annotation",
+      "@context": [
+        "http://iiif.io/api/extension/georef/1/context.json",
+        "http://iiif.io/api/presentation/3/context.json"
+      ],
+      "created": "2025-11-20T19:36:45.627Z",
+      "modified": "2025-11-20T19:36:45.627Z",
+      "motivation": "georeferencing",
+      "target": {
+        "type": "SpecificResource",
+        "source": {
+          "id": "https://archives.mountainscholar.org/iiif/2/p17393coll70:501",
+          "type": "ImageService2",
+          "height": 2100,
+          "width": 2802,
+          "provider": [
+            {
+              "type": "Organization",
+              "label": {
+                "none": [
+                  "University of Colorado Boulder"
+                ]
+              },
+              "homepage": [
+                {
+                  "id": "https://scholar.colorado.edu"
+                }
+              ]
+            }
+          ]
+        },
+        "selector": {
+          "type": "SvgSelector",
+          "value": "<svg width=\"2802\" height=\"2100\"><polygon points=\"2301,239 2342,438 2363,521 2397,698 2438,883 2486,1138 2496,1148 2505,1232 2532,1322 2568,1522 2648,1872 2649,1913 277,1896 275,1854 326,1735 321,1688 333,1652 363,1578 435,1254 468,1119 471,1003 475,981 484,971 484,940 501,939 508,850 500,786 535,748 529,719 543,705 546,669 539,649 546,626 563,625 566,609 564,584 571,568 583,553 581,537 590,521 588,493 597,473 600,460 612,451 623,328 622,295 623,256 636,227\" /></svg>"
+        }
+      },
+      "body": {
+        "type": "FeatureCollection",
+        "transformation": {
+          "type": "polynomial",
+          "options": {
+            "order": 1
+          }
+        },
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "resourceCoords": [
+                2397,
+                1671
+              ]
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -105.10288561991223,
+                40.014787997472126
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "resourceCoords": [
+                663,
+                1240
+              ]
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -105.85731117218812,
+                40.15451547835312
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "resourceCoords": [
+                947,
+                499
+              ]
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -105.78837285400263,
+                40.49975827945701
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "resourceCoords": [
+                2142,
+                411
+              ]
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -105.07493370849795,
+                40.616410847908355
+              ]
+            }
+          }
+        ],
+        "_allmaps": {
+          "id": "https://annotations.allmaps.org/maps/9aae6a76a8f082f1",
+          "version": "https://annotations.allmaps.org/maps/9aae6a76a8f082f1@9051ff0135966e29",
+          "image": {
+            "id": "https://annotations.allmaps.org/images/19426a2a1f48479a",
+            "version": "https://annotations.allmaps.org/images/19426a2a1f48479a@afabb5c68ab0b3ad",
+            "canvases": []
+          },
+          "scale": 0.021289,
+          "area": 7414853889.23
+        }
+      }
+    }
+  ]
+}

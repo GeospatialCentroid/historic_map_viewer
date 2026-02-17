@@ -448,9 +448,9 @@ function run_resize_do(){
         var window_width=window.innerWidth
         var minus_height=header_height+footer_height
 //        console.log(window.innerHeight,"CONTENT HEIGHT",window_height,minus_height,header_height,footer_height)
-       $("#content").height(window_height-minus_height)
+       $("#content").height(window_height-minus_height+80)
 
-       $("#map_wrapper").height()
+
        //this gets out of hand with too many results
        var scroll_height=window_height-minus_height-$("#side_header").outerHeight()
        if(scroll_height>800){
@@ -520,6 +520,8 @@ function run_resize_do(){
         }
 
         $("#result_wrapper").css({"height":scroll_height-$("#filter_area").height()})
+
+
  }
 
 function startHistoricMapTour() {

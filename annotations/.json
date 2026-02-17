@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+
+    <title>Allmaps Viewer</title>
+    <!-- <meta name="description" content=""> -->
+    <meta property="og:url" content="https://viewer.allmaps.org" />
+    <meta property="og:title" content="Allmaps Viewer" />
+    <!-- <meta property="og:description" content="" /> -->
+    <!-- 1200x630 pixels -->
+    <!-- <meta property="og:image" content="https://raw.githubusercontent.com/allmaps/style/master/images/allmaps-logo.png" /> -->
+    
+		<link rel="modulepreload" href="/_app/immutable/entry/start.D9Mneq-y.js">
+		<link rel="modulepreload" href="/_app/immutable/chunks/CIc93a_S.js">
+		<link rel="modulepreload" href="/_app/immutable/chunks/DYrvG4TM.js">
+		<link rel="modulepreload" href="/_app/immutable/entry/app.4TMkaT_8.js">
+		<link rel="modulepreload" href="/_app/immutable/chunks/CI2lzpUt.js">
+  </head>
+  <body>
+    <div style="display: contents">
+			<script>
+				{
+					__sveltekit_1y6by9o = {
+						base: ""
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("/_app/immutable/entry/start.D9Mneq-y.js"),
+						import("/_app/immutable/entry/app.4TMkaT_8.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element);
+					});
+				}
+			</script>
+		</div>
+  </body>
+</html>

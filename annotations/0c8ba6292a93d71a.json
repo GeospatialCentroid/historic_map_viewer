@@ -1,0 +1,148 @@
+{
+  "id": "https://annotations.allmaps.org/images/0c8ba6292a93d71a",
+  "type": "AnnotationPage",
+  "@context": "http://www.w3.org/ns/anno.jsonld",
+  "items": [
+    {
+      "id": "https://annotations.allmaps.org/maps/5bf26b648315439d",
+      "type": "Annotation",
+      "@context": [
+        "http://iiif.io/api/extension/georef/1/context.json",
+        "http://iiif.io/api/presentation/3/context.json"
+      ],
+      "created": "2025-11-06T19:48:35.311Z",
+      "modified": "2025-11-06T19:48:35.311Z",
+      "motivation": "georeferencing",
+      "target": {
+        "type": "SpecificResource",
+        "source": {
+          "id": "https://archives.mountainscholar.org/iiif/2/p17393coll186:25306",
+          "type": "ImageService2",
+          "height": 2364,
+          "width": 2378,
+          "provider": [
+            {
+              "type": "Organization",
+              "label": {
+                "none": [
+                  "University of Colorado Boulder"
+                ]
+              },
+              "homepage": [
+                {
+                  "id": "https://scholar.colorado.edu"
+                }
+              ]
+            }
+          ]
+        },
+        "selector": {
+          "type": "SvgSelector",
+          "value": "<svg width=\"2378\" height=\"2364\"><polygon points=\"126,61 128,2180 900,2184 943,2180 957,2147 1315,2151 1321,2173 1397,2179 1406,2193 1436,2192 2225,2189 2242,57\" /></svg>"
+        }
+      },
+      "body": {
+        "type": "FeatureCollection",
+        "transformation": {
+          "type": "polynomial",
+          "options": {
+            "order": 1
+          }
+        },
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "resourceCoords": [
+                2011,
+                1870
+              ]
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -105.0574625,
+                40.7112851
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "resourceCoords": [
+                491,
+                1831
+              ]
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -105.0955241,
+                40.7113889
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "resourceCoords": [
+                1280,
+                308
+              ]
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -105.0760727,
+                40.7403101
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "resourceCoords": [
+                1270,
+                1084
+              ]
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -105.0763021,
+                40.7257747
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "resourceCoords": [
+                502,
+                1067
+              ]
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -105.095509,
+                40.725803
+              ]
+            }
+          }
+        ],
+        "_allmaps": {
+          "id": "https://annotations.allmaps.org/maps/5bf26b648315439d",
+          "version": "https://annotations.allmaps.org/maps/5bf26b648315439d@32d0c44c7dabe7b3",
+          "image": {
+            "id": "https://annotations.allmaps.org/images/0c8ba6292a93d71a",
+            "version": "https://annotations.allmaps.org/images/0c8ba6292a93d71a@15408aaa4a110e77",
+            "canvases": []
+          },
+          "scale": 0.475783,
+          "area": 19731201.98
+        }
+      }
+    }
+  ]
+}

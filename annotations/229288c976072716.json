@@ -1,0 +1,132 @@
+{
+  "id": "https://annotations.allmaps.org/images/229288c976072716",
+  "type": "AnnotationPage",
+  "@context": "http://www.w3.org/ns/anno.jsonld",
+  "items": [
+    {
+      "id": "https://annotations.allmaps.org/maps/6f9a24a4635a0dfb",
+      "type": "Annotation",
+      "@context": [
+        "http://iiif.io/api/extension/georef/1/context.json",
+        "http://iiif.io/api/presentation/3/context.json"
+      ],
+      "created": "2025-09-25T14:31:43.598Z",
+      "modified": "2025-09-25T14:31:43.598Z",
+      "motivation": "georeferencing",
+      "target": {
+        "type": "SpecificResource",
+        "source": {
+          "id": "https://archives.mountainscholar.org/iiif/2/p17393coll70:297",
+          "type": "ImageService2",
+          "height": 2675,
+          "width": 3500,
+          "provider": [
+            {
+              "type": "Organization",
+              "label": {
+                "none": [
+                  "University of Colorado Boulder"
+                ]
+              },
+              "homepage": [
+                {
+                  "id": "https://scholar.colorado.edu"
+                }
+              ]
+            }
+          ]
+        },
+        "selector": {
+          "type": "SvgSelector",
+          "value": "<svg width=\"3500\" height=\"2675\"><polygon points=\"151,93 165,158 161,245 173,306 189,334 229,381 267,407 290,417 300,441 303,474 295,503 282,534 299,595 361,645 405,683 443,700 473,690 542,804 514,830 512,852 520,871 555,889 600,898 639,914 662,1001 663,1042 674,1076 702,1092 712,1120 757,1237 786,1392 813,1409 830,1432 828,1470 831,1498 850,1526 864,1531 869,1598 881,1656 876,1686 879,1698 951,1693 1000,1741 999,1821 1091,1830 1101,1858 1130,1886 1123,1933 1098,1974 1105,2030 1121,2038 1164,2107 1167,2134 1228,2233 1301,2280 1327,2322 1392,2351 1384,2385 1395,2396 1413,2396 1449,2537 1514,2559 1527,2556 2187,2569 2232,2549 3040,2558 3039,2265 3321,2270 3343,91\" /></svg>"
+        }
+      },
+      "body": {
+        "type": "FeatureCollection",
+        "transformation": {
+          "type": "polynomial",
+          "options": {
+            "order": 1
+          }
+        },
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "resourceCoords": [
+                154,
+                110
+              ]
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -106.1907139,
+                40.9973956
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "resourceCoords": [
+                3334,
+                99
+              ]
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -104.942351,
+                40.9977959
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "resourceCoords": [
+                3309,
+                2260
+              ]
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -104.9453311,
+                40.3490057
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "resourceCoords": [
+                1516,
+                2548
+              ]
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -105.6527458,
+                40.2598796
+              ]
+            }
+          }
+        ],
+        "_allmaps": {
+          "id": "https://annotations.allmaps.org/maps/6f9a24a4635a0dfb",
+          "version": "https://annotations.allmaps.org/maps/6f9a24a4635a0dfb@96ab7f2e7c5b0184",
+          "image": {
+            "id": "https://annotations.allmaps.org/images/229288c976072716",
+            "version": "https://annotations.allmaps.org/images/229288c976072716@9ac5d90025a817d7",
+            "canvases": []
+          },
+          "scale": 0.029951,
+          "area": 6938466036.63
+        }
+      }
+    }
+  ]
+}

@@ -32,10 +32,11 @@ input_file.close()
 
 if(args.new_column not in data[0]):
         data[0].append(args.new_column)
+
 in_col_num=data[0].index(args.column_name)
 out_col_num=data[0].index(args.new_column)
 print("in_col_num",in_col_num)
-
+print("out_col_num",out_col_num)
 for i in range(1, len(data)):
         if not 0 <= out_col_num < len(data[i]):
                 if data[i][in_col_num]!="":

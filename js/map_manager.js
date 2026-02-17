@@ -62,12 +62,12 @@ class Map_Manager {
     });
 
    map_manager.map.on('warpedmapadded', (event) => {
+        // when the layer is added, update the associated buttons
         const layers = event.target._layers;
         const layer_ids = Object.keys(layers).map(k => parseInt(k));
         const new_layer_id = Math.max(...layer_ids);
         const but_id = "item_"+layers[new_layer_id].id
-        console.log(layers)
-        console.log(layers[new_layer_id].id,new_layer_id)
+
       if (but_id) {
         const $button = $("." + but_id + "_toggle");
         $button.removeClass("progress-bar-striped progress-bar-animated");

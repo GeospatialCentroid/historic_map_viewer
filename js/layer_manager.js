@@ -584,13 +584,13 @@ class Layer_Manager {
     }else if(service_method._method=="AllMaps"){
         console.log("Load the ",section_id,item_id)
         var section = section_manager.get_section_details(section_id);
-        var layer_obj = new Allmaps.WarpedMapLayer(
-          resource[section.annotation_col],{ pane: `item_${section_id}_${item_id}`}
-        );
+//        var layer_obj = new Allmaps.WarpedMapLayer(
+//          resource[section.annotation_col],{ pane: `item_${section_id}_${item_id}`}
+//        );
 
          // if loading the annotation from a relative path
-         //var map_layer =new Allmaps.WarpedMapLayer(window.location.origin+"/"+window.location.pathname+"/"+resource[section_manager.json_data[_id].annotation_col],{pane: 'left'})
-
+        var layer_obj =new Allmaps.WarpedMapLayer(window.location.origin+"/"+window.location.pathname+"/"+resource[section.annotation_col],{pane: `item_${section_id}_${item_id}`})
+        console.log(window.location.origin+"/"+window.location.pathname+"/"+resource[section.annotation_col])
         getDominantColorFromWarpedLayer(resource[section.image_col])
         .then(dominant => {
            layer.dominant_color=dominant
@@ -794,16 +794,19 @@ class Layer_Manager {
     if(feature?.features[0]?.properties?.has_data){
         extra='style="border-color: black;"'
     }
-    feature.id= feature.features[0].id
-    var geo =L.geoJSON(feature, {pane: _resource_id, style: style,
-        pointToLayer: function(feature, latlng) {
-            return L.marker(latlng, {  icon: map_manager.get_marker_icon(extra)});
-        },
-    })
+    var geo
+    if(feature?.features[0]){
+        feature.id= feature.features[0].id
+         geo =L.geoJSON(feature, {pane: _resource_id, style: style,
+            pointToLayer: function(feature, latlng) {
+                return L.marker(latlng, {  icon: map_manager.get_marker_icon(extra)});
+            },
+        })
 
-     //temp add service options
-     layer_obj.service= {options:{url:url}}
-     geo.on('click', function(e) { $this.layer_click(e,unique_id) });
+         //temp add service options
+         layer_obj.service= {options:{url:url}}
+         geo.on('click', function(e) { $this.layer_click(e,unique_id) });
+     }
      return geo
   }
   show_bounds(b){
@@ -1039,12 +1042,12 @@ class Layer_Manager {
             false,
             false
         );
+        if(geo){// to handle broken geo's
+            markers.push(geo);
 
-        markers.push(geo);
-
-        // Associate item_id with Leaflet internal layer id
-        layer_obj.item_to_layer_id[item_index] = layer_obj.getLayerId(geo);
-
+            // Associate item_id with Leaflet internal layer id
+            layer_obj.item_to_layer_id[item_index] = layer_obj.getLayerId(geo);
+        }
         // Avoid duplicates
         if (!items_showing.includes(item_id)) {
             items_showing.push(item_id);

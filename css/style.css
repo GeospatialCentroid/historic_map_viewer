@@ -28,6 +28,7 @@ display:inline;
 #map_wrapper{
     float:left;
      position: relative;
+      height: 100%;
 }
 .map{
     float:left;
@@ -611,6 +612,7 @@ margin-left:-15px;
     position: absolute;
     bottom: 2px;
     right:0px;
+    height:26px;
 }
 #details_view{
     position: relative;

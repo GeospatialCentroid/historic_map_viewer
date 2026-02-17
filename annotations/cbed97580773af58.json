@@ -1,0 +1,148 @@
+{
+  "id": "https://annotations.allmaps.org/images/cbed97580773af58",
+  "type": "AnnotationPage",
+  "@context": "http://www.w3.org/ns/anno.jsonld",
+  "items": [
+    {
+      "id": "https://annotations.allmaps.org/maps/569c4d4a91f4c7f3",
+      "type": "Annotation",
+      "@context": [
+        "http://iiif.io/api/extension/georef/1/context.json",
+        "http://iiif.io/api/presentation/3/context.json"
+      ],
+      "created": "2025-10-03T15:26:16.240Z",
+      "modified": "2025-10-03T15:26:16.240Z",
+      "motivation": "georeferencing",
+      "target": {
+        "type": "SpecificResource",
+        "source": {
+          "id": "https://archives.mountainscholar.org/iiif/2/p17393coll70:499",
+          "type": "ImageService2",
+          "height": 1788,
+          "width": 2272,
+          "provider": [
+            {
+              "type": "Organization",
+              "label": {
+                "none": [
+                  "University of Colorado Boulder"
+                ]
+              },
+              "homepage": [
+                {
+                  "id": "https://scholar.colorado.edu"
+                }
+              ]
+            }
+          ]
+        },
+        "selector": {
+          "type": "SvgSelector",
+          "value": "<svg width=\"2272\" height=\"1788\"><polygon points=\"1911,130 1968,556 1941,1121 1887,1304 1788,1343 1733,1385 1727,1556 1512,1670 181,1708 187,130\" /></svg>"
+        }
+      },
+      "body": {
+        "type": "FeatureCollection",
+        "transformation": {
+          "type": "polynomial",
+          "options": {
+            "order": 1
+          }
+        },
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "resourceCoords": [
+                661,
+                1636
+              ]
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -106.0673959,
+                39.6286569
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "resourceCoords": [
+                1666,
+                466
+              ]
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -105.0011823,
+                40.5810821
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "resourceCoords": [
+                1534,
+                1505
+              ]
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -105.1891453,
+                39.7252779
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "resourceCoords": [
+                1596,
+                467
+              ]
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -105.0770214,
+                40.5814209
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "resourceCoords": [
+                762,
+                1028
+              ]
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -105.9814201,
+                40.108761
+              ]
+            }
+          }
+        ],
+        "_allmaps": {
+          "id": "https://annotations.allmaps.org/maps/569c4d4a91f4c7f3",
+          "version": "https://annotations.allmaps.org/maps/569c4d4a91f4c7f3@84ab7e3e50ec2d01",
+          "image": {
+            "id": "https://annotations.allmaps.org/images/cbed97580773af58",
+            "version": "https://annotations.allmaps.org/images/cbed97580773af58@8c609de2c1261c4e",
+            "canvases": []
+          },
+          "scale": 0.011183,
+          "area": 21178151320.38
+        }
+      }
+    }
+  ]
+}

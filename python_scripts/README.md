@@ -1,28 +1,10 @@
 # Data Processing Scripts
 
-This repository contains several Python scripts designed to automate data processing tasks. Each script can be run independent of the command line to perform specific functions such as data enrichment, API lookups, and file updates.
+This repository contains several Python scripts designed to automate data processing tasks. 
+Each script is run from the command line to perform specific functions such as data enrichment, API lookups, and file updates.
 
----
 
-## 🧩 Overview
-
-Each script in this repository serves a distinct purpose. For example:
-
-- **fetch_children.py** — Reads a CSV file and adds a column with child record IDs retrieved from a JSON API.
-- *(Additional scripts will be described here as they are added.)*
-
-Refer to the comments and usage instructions in each script for details on what they do and how to use them.
-
----
-
-## 🛠️ Requirements
-
-- Python **3.8+**
-- Internet access (for scripts that perform API requests)
-
----
-
-## 📦 Installation
+## Installation
 
 1. Clone or download this repository:
    ```bash
@@ -58,72 +40,105 @@ Refer to the comments and usage instructions in each script for details on what 
    pip install -r python_scripts/requirements.txt
    ```
 
----
 
-## 🚀 Usage Example (fetch_children.py)
+## Overview
 
-This script reads a CSV file and updates it with child record IDs fetched from a JSON API.
+Each script in this repository serves a distinct purpose. Please execute each one to:
 
-```bash
-python python_scripts/fetch_children.py <csv_path> <root_url> <collection_col> <id_col> <file_col> <children_col>
+### Fetch Child Records (fetch_children.py)
+
+**Purpose**
+Retrieves child records from a CONTENTdm collection API and appends them to the source CSV.
+
+***What it does***
+
+* Reads the source CSV (Historic Maps.csv)
+
+* Uses the provided collection API endpoint
+
+* Matches records using the CONTENTdm number field
+
+* Extracts child item metadata (e.g., CONTENTdm file name)
+
+* Writes child record data to a new column (children)
+
+**Command**
+```
+python python_scripts/fetch_children.py \
+  "data/Historic Maps.csv" \
+  https://archives.mountainscholar.org/digital/api/collections/ \
+  collection \
+  "CONTENTdm number" \
+  "CONTENTdm file name" \
+  children
 ```
 
-### Example
 
-```bash
-python python_scripts/fetch_children.py "data/Historic Maps.csv" https://archives.mountainscholar.org/digital/api/collections/ collection "CONTENTdm number" "CONTENTdm file name" children
+### Inject GeoJSON Annotation Column (bounds_inject.py)
+
+**Purpose**
+Adds a new geojson column to the CSV by retrieving or generating GeoJSON annotation data from the specified source column.
+
+**What it does**
+
+* Reads the source CSV file
+
+* Processes the Georeference Annotation column
+
+* Creates a new column named geojson
+
+* Stores GeoJSON content for downstream spatial processing
+
+**Command**
+
+```
+python python_scripts/bounds_inject.py \
+  -source_file "data/Historic Maps.csv" \
+  -column_name "Georeference Annotation" \
+  -column_extension "geojson" \
+  -new_column "geojson"
 ```
 
-### Arguments
+### Extract Latitude, Longitude, and Area (extract_lat_lng.py)
 
-| Argument | Description |
-|-----------|-------------|
-| `<csv_path>` | Path to the CSV file |
-| `<root_url>` | Root URL for the API requests |
-| `<collection_col>` | Column containing the collection name |
-| `<id_col>` | Column containing the record ID |
-| `<file_col>` | Column containing the record’s file name |
-| `<children_col>` | Column to create or update with child IDs |
+**Purpose**
+Parses the geojson column and calculates spatial attributes.
 
----
+**What it does**
 
-## 🧪 Example JSON Response
+* Reads GeoJSON geometry
 
-```json
-{
-  "parent": {
-    "children": [
-      {"id": 101},
-      {"id": 102}
-    ]
-  }
-}
+* Computes centroid latitude and longitude
+
+* Calculates area
+
+* Updates the original CSV file in place (--inplace)
+
+**Command**
 ```
+python python_scripts/extract_lat_lng.py \
+  "data/Historic Maps.csv" \
+  geojson latitude longitude area \
+  --inplace
+```
+### Download Annotation Files (annotation_download.py)
 
-**Resulting CSV update:**
+**Purpose**
+Downloads annotation files referenced in the CSV.
 
-| collection | id | filename | children |
-|-------------|----|-----------|-----------|
-| sampledata | 1 | record.cpd | 101,102 |
+**What it does**
 
----
+* Reads the Annotation column
 
-## 🧾 Notes
-- for uniqueness of record ids, be sure to concatenate the collection and the id number 
-- Scripts that modify files will overwrite them by default. To preserve originals, copy the files first or modify the script to write to a new output file.
-- Network errors or invalid responses will skip updates for that row.
-- Non-`.cpd` filenames are automatically ignored in `fetch_children.py`.
+* Downloads associated annotation files
 
----
+* Saves them to a specified output directory
 
+**Command**
 
-## 🧑‍💻 Author
-
-**Your Name or Organization**  
-*(Replace this section with your name and contact info.)*
-
----
-
-## 📄 License
-
-MIT License
+```
+python python_scripts/annotation_download.py \
+  -source_file "data/Historic Maps.csv" \
+  -column_name "Georeference Annotation" \
+  -output_folder "annotations"
+```

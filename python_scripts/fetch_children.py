@@ -16,7 +16,7 @@ Ref: https://chatgpt.com/share/68e805e0-e720-8004-af97-c3a7bff11434
 
 e.g python fetch_children.py data.csv https://example.com api_collection id filename children
 
-
+python python_scripts/fetch_children.py "data/Historic Maps.csv" https://archives.mountainscholar.org/digital/api/collections/ collection "CONTENTdm number" "CONTENTdm file name" children
 
 
 """
@@ -30,6 +30,7 @@ import requests
 import json
 
 def main():
+    print("fetch_children started...")
     if len(sys.argv) != 7:
         print("Usage: python script.py <csv_path> <root_url> <collection_col> <id_col> <file_col> <children_col>")
         sys.exit(1)
@@ -52,6 +53,15 @@ def main():
     updated_rows = []
 
     for row in reader:
+
+        collection_value = row.get(collection_col, "").strip()
+        id_value = row.get(id_col, "").strip()
+        # Create computed id column as {collection}-{id}
+        if collection_value and id_value:
+            row["id"] = f"{collection_value}-{id_value}"
+        else:
+            row["id"] = ""
+
         filename = row.get(file_col, "")
         if not filename or not filename.endswith(".cpd"):
             # Skip rows that don't have a .cpd filename
