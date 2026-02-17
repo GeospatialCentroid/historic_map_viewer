@@ -857,9 +857,9 @@ class Filter_Manager {
 
          var html= '<ul class="list-group"' +'">'
 
-         // do an initial loop to make sure that
-         // if parents has only one child, just show the child (it should have all the parent metadata)
 
+         // if parents has only one child, just show the child (it should have all the parent metadata)
+        console.log(sorted_data)
          for (var i=0;i<sorted_data.length;i++){
             var item = sorted_data[i]
             var section = section_manager.get_section_details(item.section_id);
@@ -875,6 +875,19 @@ class Filter_Manager {
             //                //check if the item is showing
             //
             //             }
+            // check if the parent is part of this list
+            var pass = false
+             if(typeof(item.parent_id) !="undefined" && item.parent_id!=""){
+                pass = true;
+                for (var j=0;j<sorted_data.length;j++){
+                    if(sorted_data[j][section.id_col]==item.parent_id){
+                        pass = false;
+
+                    }
+
+                }
+
+             }
 
             // check if we are working with a parent item
             if(typeof(item["children"]) !="undefined" && item["children"]!=""){
@@ -884,7 +897,7 @@ class Filter_Manager {
             }
 
             // make sure the item isn't a child that should be nested under a parent
-            if(typeof(item.parent_id) =="undefined" || item.parent_id==""){
+            if(typeof(item.parent_id) =="undefined" || item.parent_id=="" || pass){
                 // if the item doesn't have a parent
                  var item_html = '<li class="list-group-item list-group-item-action" onmouseover="filter_manager.show_highlight('+section_id+',\''+item._id+'\');" onmouseout="map_manager.hide_highlight_feature();">'
 
@@ -900,9 +913,14 @@ class Filter_Manager {
 
                 // skip adding the parent if it has no children
                 if(item["children"]!="" && item.child_ids.length==0){
+
+                    console.log(item["children"],item.child_ids.length==0)
                     item_html=""
                 }
                 html+=item_html;
+
+             }else{
+                console.log("No Add ",item.parent_id)
 
              }
         }

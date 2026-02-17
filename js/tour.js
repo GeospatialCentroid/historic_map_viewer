@@ -6,7 +6,7 @@ const tourSteps = [
   },
   {
    element: "#side_bar",
-    intro: "The sidebar on the right is where you can filter and navigate the collection. To view a historic map, click the <b>Add</b> button in the results pane.",
+    intro: "The sidebar on the right is where you can filter and navigate the collection. Historic maps can be added to the map using the <b>Add</b> button. For non-georeferenced maps, click <b>View</b> to display the scanned map.",
     position: "right",
     action: "run",
     fn: "show_results"
