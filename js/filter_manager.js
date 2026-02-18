@@ -999,8 +999,6 @@ class Filter_Manager {
         var thumb_url=item[section.image_col]
         var iiif_url = item["IIIF"];
         html+='<div class="item_title">'+item[section.title_col]+"</div>";// add the title column
-        html+="<div class='item_text_sm'>Creator:<b> "+item[section.creator_col]+"</b></div>"
-        html+="<div class='item_text_sm'>Date:<b> "+item[section.date_col]+"</b></div>"
         html+="<div class='details-buttons' >"+this.get_add_button(section_id,item_id)+"</div>"
         html+='<div class="item_thumb_container"><img class="item_thumb" src="'+thumb_url+'"></div>';
         html+='<a href="javascript:void(0);" onclick="image_manager.show_image(\''+iiif_url+'\',\''+item[section.title_col]+'\',\''+item["Reference URL"]+'\');">'+LANG.DETAILS.IMAGE_VIEW+'</a>'+"<br/>";
