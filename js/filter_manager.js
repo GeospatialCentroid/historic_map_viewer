@@ -913,7 +913,7 @@ class Filter_Manager {
                 // skip adding the parent if it has no children
                 if(item["children"]!="" && item.child_ids.length==0){
 
-                    console.log(item["children"],item.child_ids.length==0)
+                    //console.log(item["children"],item.child_ids.length==0)
                     item_html=""
                 }
                 html+=item_html;

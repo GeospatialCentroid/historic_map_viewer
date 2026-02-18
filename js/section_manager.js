@@ -58,9 +58,9 @@ class Section_Manager {
     }
 
     parse_data(_data){
-        var $this = section_manager
-          $this.json_data=[]
-        // convert the csv file to json and create a subset of the records as needed
+       var $this = section_manager
+       $this.json_data=[]
+       // convert the csv file to json and create a subset of the records as needed
        // strip any extraneous spaces and tabs
 
        $this.data= $.csv.toObjects(_data.replaceAll('\t', ''))
@@ -213,62 +213,123 @@ class Section_Manager {
 
                     //keep track of parent record we're a child of
                     obj.record_section_id=false;
-                    // if the record is a child, attempt to find it's parent
-                    section_manager.add_parent_id(obj,all_data,section.unique_id_col)
+                    // if the record is a child, attempt to find it's parent and transfer the values
+                    all_data[j]=section_manager.add_parent_id(obj,all_data,section.unique_id_col)
                 }
+                $this.json_data[i].all_data = all_data;
               }
              //clean up
               delete section.json_data;
               section.items_showing=[]
-              console_log(section)
+
           }
 
           $this.check_all_section_completion()
     }
-    add_parent_id(obj,all_data,unique_id_col){
-        // for each item, loop over all the items to connects it's parent
 
-        if(obj.children.trim()==""){//obj?.children &&
+      join_data(section){
+        console.log("join_data")
+        // lets start by storing the first loaded data file in the top spot
+        section.all_data= $.csv.toObjects(section.data[0].data)//todo if the first loaded data is geojson, we'll want to convert it to a flat json structure for searching
+        //takes one or more data files and joins them on a key
+        //starting with the second dataset, look for the left_join_col,right_join_col
+        //When matched, map all the parameters to the first dataset
+        if(section.data.length>0){
+        var start=0
+            if(transcription_mode){
+                start=1
+            }
+            for (var j=start;j<section.data.length;j++){
+                var data_to_join=section.data[j]
+                var type=data_to_join[1]
+                if(type=="geojson"){
+                    this.join_geojson(section.all_data,data_to_join.data,data_to_join[2],data_to_join[3],section["title_col"])
+                    this.update_geojson_properties(section.all_data,show_cols,separated_cols,section?.image_col,section?.color_col)
+                }else if(type=="csv"){
+                    section.all_data= this.convert_csv_to_geojson(section,section.all_data,section["title_col"])
 
-                for (var k=0;k<all_data.length;k++){
-                    // look through the parents
-                    var parent = all_data[k]
-
-                     if(parent["children"]!=""){
-
-                        var children_array=parent["children"].split(",")
-                          .map(s => s.trim())     // remove extra spaces
-                          .filter(s => s !== '')  // remove empty entries
-
-                        if (children_array.includes(obj[unique_id_col])) {
-                            //store the parent _id with the child
-                            obj.parent_id=parent._id
-                            obj=this.inject_parent_metadata(parent,obj,["children"])
-                            break;
-                        }
-
-                     }
+                 }
+                section.show_cols=section.show_cols.split(",").map(function(item) {
+                      return item.trim();
+                });
+                var filter_cols=section.filter_cols.split(",").map(function(item) {
+                      return item.trim();
+                 });
+                 if(transcription_mode){
+                   filter_cols.push("has_data")
                 }
-            };
+                var separated_cols=section.separated_cols.split(",").map(function(item) {
+                      return item.trim();
+                 });
+                section.filter_cols=filter_cols
+                this.update_data(section.all_data,section.show_cols,separated_cols,section?.image_col,section?.color_col)
+                filter_manager.create_filter_values(section,section.all_data,filter_cols,section?.year_start_col,section?.year_end_col);
 
-    }
-    inject_parent_metadata(parent, child, excludeKeys = []) {
-      const result = { ...child }; // Clone child to avoid mutation
+                if(section?.year_start_col){
+                     console.log(section?.year_start_col, "is the start col", "Get all the dates")
 
-          for (const key in parent) {
-            if (
-              Object.prototype.hasOwnProperty.call(parent, key) &&
-              !excludeKeys.includes(key)
-            ) {
-              // Only replace if child property is explicitly an empty string
-              if (child[key] === "") {
-                result[key] = parent[key];
-              }
+
+                    filter_manager.show_date_search(section?.year_start_col,section.all_data)
+                }
+                //console.log("second data",section.data[j].data,section.data[j][1])
+
             }
           }
 
-          return result;
+    }
+    add_parent_id(obj,all_data,unique_id_col){
+        /*
+        obj: who we are working with
+        all_data: the data
+        unique_id_col: the unique id column
+        */
+        // for each item, loop over all the items to connects it's parent
+        // a parent will have a child col with comma separated values
+        // Build lookup only once and cache it
+        // Initialize lookup directly on all_data
+        if (!all_data._parent_lookup) {
 
+            const lookup = new Map();
+
+            for (const parent of all_data) {
+
+                if (!parent.children || parent.children.trim() === "") continue;
+
+                const children_array = parent.children
+                    .split(",")
+                    .map(s => s.trim())
+                    .filter(Boolean);
+
+                for (const childId of children_array) {
+                    lookup.set(childId, parent);
+                }
+            }
+
+            all_data._parent_lookup = lookup;
+        }
+
+        const parent = all_data._parent_lookup.get(obj[unique_id_col]);
+
+        if ((!obj.children || obj.children.trim() === "") && parent) {
+            obj.parent_id = parent._id;
+            obj = this.inject_parent_metadata(parent, obj, ["children"]);
+        }
+        return obj
+    }
+    inject_parent_metadata(parent, child, excludeKeys = []) {
+
+      const result = { ...child }; // Clone child to avoid mutation
+      for (const key in parent) {
+        if (Object.prototype.hasOwnProperty.call(parent, key) && !excludeKeys.includes(key)) {
+          // Only replace if child property is explicitly an empty string
+          if (child[key] == "") {
+            result[key] = parent[key];
+          }
+        }
+      }
+
+
+      return result;
 
     }
     check_all_section_completion(){
@@ -294,71 +355,6 @@ class Section_Manager {
 
             $this.setup_interface()
         }
-    }
-
-    join_data(section){
-        console.log("join_data")
-        // lets start by storing the first loaded data file in the top spot
-        section.all_data= $.csv.toObjects(section.data[0].data)//todo if the first loaded data is geojson, we'll want to convert it to a flat json structure for searching
-        //takes one or more data files and joins them on a key
-        //starting with the second dataset, look for the left_join_col,right_join_col
-        //When matched, map all the parameters to the first dataset
-        if(section.data.length>0){
-        var start=0
-            if(transcription_mode){
-                start=1
-            }
-            for (var j=start;j<section.data.length;j++){
-                var data_to_join=section.data[j]
-                var type=data_to_join[1]
-
-//                console.log(type,"TYPE______")
-                if(type=="geojson"){
-                    this.join_geojson(section.all_data,data_to_join.data,data_to_join[2],data_to_join[3],section["title_col"])
-
-//                    console.log(section.filter_cols)
-
-                    this.update_geojson_properties(section.all_data,show_cols,separated_cols,section?.image_col,section?.color_col)
-
-                }else if(type=="csv"){
-//                    console.log(transcription)
-                    //transcription.group_transcription($.csv.toObjects(data_to_join.data.replaceAll('\t', '')))
-
-                    //section.all_data=transcription.connect_transcription(section.all_data)
-                    section.all_data= this.convert_csv_to_geojson(section,section.all_data,section["title_col"])
-                   // console.log(section.all_data)
-
-                 }
-                section.show_cols=section.show_cols.split(",").map(function(item) {
-                      return item.trim();
-                    });
-
-                var filter_cols=section.filter_cols.split(",").map(function(item) {
-                      return item.trim();
-                    });
-                 if(transcription_mode){
-                   filter_cols.push("has_data")
-
-                  }
-                var separated_cols=section.separated_cols.split(",").map(function(item) {
-                      return item.trim();
-                    });
-                    console.log("separated_cols",separated_cols)
-                section.filter_cols=filter_cols
-                this.update_data(section.all_data,section.show_cols,separated_cols,section?.image_col,section?.color_col)
-                 filter_manager.create_filter_values(section,section.all_data,filter_cols,section?.year_start_col,section?.year_end_col);
-
-                 if(section?.year_start_col){
-                     console.log(section?.year_start_col, "is the start col", "Get all the dates")
-
-
-                    filter_manager.show_date_search(section?.year_start_col,section.all_data)
-                 }
-                //console.log("second data",section.data[j].data,section.data[j][1])
-
-            }
-          }
-
     }
 
     convert_csv_to_geojson(section,_data,title_col){

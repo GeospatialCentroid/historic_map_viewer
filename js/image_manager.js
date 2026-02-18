@@ -93,7 +93,6 @@ class Image_Manager {
 
      }
      rotate_image(){
-     console.log(this.degrees)
         this.degrees-=90
         this.image_map.setBearing(this.degrees);
      }
@@ -111,7 +110,7 @@ class Image_Manager {
         L.DomEvent.on(button, 'click', function(){
             console.log('click');
         });
-
+        L.DomEvent.on(button, 'dblclick', L.DomEvent.stopPropagation);
         container.title = "Rotate Image";
 
         return container;
