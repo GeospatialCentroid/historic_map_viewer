@@ -1,7 +1,8 @@
-# Historic Map Viewer  
+# Historic Map Explorer  
 An interactive web‐viewer for historic maps, created through a partnership between CSU Libraries Archives & Special Collections and the Geospatial Centroid. This project is made possible by the generous support of John Garing and Janice Hill.
 
 Special thanks to Kasper Evenson, Bronson Griswold, Violet Sparks, and Cy Spears for their care in georeferencing these maps and for their metadata support.
+
 
 ## Table of Contents
 1. Overview
@@ -17,7 +18,7 @@ Special thanks to Kasper Evenson, Bronson Griswold, Violet Sparks, and Cy Spears
 10. Future Roadmap
 
 ## Overview
-The Historic Map Viewer is a lightweight, browser‑based map viewer for exploring historic map imagery via a simple web interface. 
+The Historic Map Explorer is a lightweight, browser‑based map viewer for exploring historic map imagery via a simple web interface. 
 The interface design is based on [Scholars GeoPortal](https://geo.scholarsportal.info/) 
 and the imagery source is made possible through the [Allmaps](https://allmaps.org/) 
 [IIIF georeferencing extension](https://iiif.io/api/extension/georef/), [Allmaps Editor](https://editor.allmaps.org/), and the [Leaflet WarpedMapLayer library](https://allmaps.org/docs/packages/leaflet/).
@@ -122,8 +123,6 @@ Note that you'll first need to have the geojson values populated.
 - Organized static web app
 - Contributions welcome
 
-## Build & Deployment
-Deploy to GitHub Pages, Netlify, or any static host.
 
 ## License
 MIT License.
@@ -131,6 +130,8 @@ MIT License.
 ## Credits and Acknowledgments
 Created by Kevin Worthington, Colorado State University, Geospatial Centroid
 Georeferencing and metadata support Kasper Evenson, Bronson Griswold, Violet Sparks, and Cy Spears, Geospatial Centroid Interns
+Extra special thanks to Kasper Evenson for developing a [keyword guide](https://github.com/GeospatialCentroid/historic_map_explorer/blob/main/historic-map-keywords.md) 
+and for helping improve the metadata.
 
 Enhancements supported by OpenAI. (2025). ChatGPT (Dec 3th version) [Large language model]. https://chat.openai.com/chat
 
