@@ -807,7 +807,6 @@ class Filter_Manager {
         }
         let button_text = "<button type='button' id='"+id+"_toggle' class='btn "+_class+" "+id+"_toggle' onclick='"+func+"("+section_id+",\""+item_id+"\")'>"+text+"</button>"
         // if the item doesn't have something mappable, show the view button
-
         if(item[section.geojson_col]==""){
          text = LANG.RESULT.VIEW
          var iiif_url = item["IIIF"];
@@ -819,7 +818,9 @@ class Filter_Manager {
 
         if(item.child_ids.length>0){
             text = this.get_parent_text(section_id,item_id)
-            func="filter_manager.show_layers"
+              func="filter_manager.show_layers"
+            button_text = "<button type='button' id='"+id+"_toggle' class='btn "+_class+" "+id+"_toggle' onclick='"+func+"("+section_id+",\""+item_id+"\")'>"+text+"</button>"
+
         }
 
        return button_text+""
@@ -851,12 +852,10 @@ class Filter_Manager {
      show_results(sorted_data){
          // hide all the items
          var $this = this;
-
-          var item_ids =[]
+          var item_ids =[];
+          var parent_ids =[];//empty list to store the parents to prevent repeat display
          // the sorted data could be a mix of items from multiple sections
-
          var html= '<ul class="list-group"' +'">'
-
 
          // if parents has only one child, just show the child (it should have all the parent metadata)
          for (var i=0;i<sorted_data.length;i++){
@@ -869,35 +868,29 @@ class Filter_Manager {
 
             var section_id = item.section_id
             var but_id="item_"+section_id+'_'+item._id+"_toggle"
+            var no_show=false;// used to prevent repeat parents from displaying
 
-            //             if($.inArray( sorted_data[i]._id, items_showing)>-1){
-            //                //check if the item is showing
-            //
-            //             }
-            // check if the parent is part of this list
-            var pass = false
+            // if the item has a parent = swap it for the parent
              if(typeof(item.parent_id) !="undefined" && item.parent_id!=""){
-                pass = true;
-                for (var j=0;j<sorted_data.length;j++){
-                    if(sorted_data[j][section.id_col]==item.parent_id){
-                        pass = false;
 
-                    }
-
+               //check that the parent id is not in the list of parent_ids
+               if(!parent_ids.includes(item.parent_id)){
+                    // store the parent id to prevent future parents from being displayed
+                    parent_ids.push(item.parent_id)
+                }else{
+                    no_show = true
                 }
-
+                // update the item to be the parent
+                item=section.parents[item.parent_id]
              }
 
             // check if we are working with a parent item
             if(typeof(item["children"]) !="undefined" && item["children"]!=""){
-
                 item.child_ids = this.get_child_ids(sorted_data,item["children"].split(","));
-
             }
 
-            // make sure the item isn't a child that should be nested under a parent
-            if(typeof(item.parent_id) =="undefined" || item.parent_id=="" || pass){
-                // if the item doesn't have a parent
+            if(!no_show){
+                // show the item in the results
                  var item_html = '<li class="list-group-item list-group-item-action" onmouseover="filter_manager.show_highlight('+section_id+',\''+item._id+'\');" onmouseout="map_manager.hide_highlight_feature();">'
 
                  item_html+='<a href="#" onclick="filter_manager.select_item('+section_id+',\''+item._id+'\')">'+item[section.title_col]+'</a><br/>'
@@ -919,7 +912,7 @@ class Filter_Manager {
                 html+=item_html;
 
              }else{
-                console.log("No Add ",item.parent_id)
+               // console.log("No Add ",item.parent_id)
 
              }
         }
@@ -946,9 +939,6 @@ class Filter_Manager {
         // Assume other metadata is the same - todo populate this child record metadata from parent records
         var item = this.get_item(section_id,item_id);
         var section=section_manager.get_section_details(section_id)
-        console.log(section,section_id)
-        console.log(item_id,item)
-        console.log(section.title_col)
         var html=""
 
         html+='<div class="item_title">'+item[section.title_col]+"</div>";// add the title column
@@ -959,11 +949,10 @@ class Filter_Manager {
             var child = this.get_item(section_id,item.child_ids[i]);
             var thumb_url=child[section.image_col]
             var iiif_url = child["IIIF"];
-            //
-            //html += "<li class='list-group-item  list-group-item-action'>"
+
             html += '<li class="list-group-item list-group-item-action" onmouseover="filter_manager.show_highlight('+section_id+',\''+item.child_ids[i]+'\');" onmouseout="map_manager.hide_highlight_feature();">'
 
-            html+='<b>'+child[section.title_col]+"</b><br/>";// add the title column
+            html+='<div class="breakable">'+child[section.title_col]+"</div>";// add the title column
             html+='<div class="details-buttons">'+this.get_add_button(section_id,item.child_ids[i])+"</div>";
             html+='<div class="item_thumb_container"><img class="item_thumb" src="'+thumb_url+'"></div>'
             html+='<a href="javascript:void(0);" onclick="image_manager.show_image(\''+iiif_url+'\',\''+child[section.title_col]+'\',\''+child["Reference URL"]+'\');">'+LANG.DETAILS.IMAGE_VIEW+'</a>'+"<br/>";
@@ -983,6 +972,8 @@ class Filter_Manager {
                     return data[i]
                 }
          }
+         // if the object can not be found - it's likely a parent
+        return section_manager.get_section_details(_id).parents[item_id]
 
     }
     select_item(section_id,item_id){

@@ -252,7 +252,7 @@ class Layer_Manager {
         html+="<div class='left-div-map'>"
         html+="<div class='grip'><i class='bi bi-grip-vertical'></i></div>"
 
-        html +="<div class='item_title font-weight-bold'>"+title+"</span></div>"
+        html +="<div class='item_title item_title_wide font-weight-bold'>"+title+"</span></div>"
 
 
         html+="<div class='left-div-map-buttons'>"

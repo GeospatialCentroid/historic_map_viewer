@@ -216,7 +216,19 @@ class Section_Manager {
                     // if the record is a child, attempt to find it's parent and transfer the values
                     all_data[j]=section_manager.add_parent_id(obj,all_data,section.unique_id_col)
                 }
-                $this.json_data[i].all_data = all_data;
+                // store the oarenst for easy access.
+                section.parents = {};
+                const remaining = [];
+
+                for (const obj of all_data) {
+                  if (obj.children !== "") {
+                     section.parents[obj[section.unique_id_col]] = obj;
+                  } else {
+                    remaining.push(obj);
+                  }
+                }
+
+                $this.json_data[i].all_data = remaining;
               }
              //clean up
               delete section.json_data;

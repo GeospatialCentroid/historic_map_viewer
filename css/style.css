@@ -410,7 +410,12 @@ margin-left:-15px;
   font-weight: 600;
   word-break: break-word;
   text-overflow: ellipsis;
-  max-width: 80%;
+  max-width: 70%;
+
+}
+.item_title_wide {
+
+  max-width: 100%;
 
 }
 .item_title_lg{
@@ -1319,4 +1324,10 @@ a[aria-disabled="true"] {
 
 .fw-bold {
     font-weight: bold;
+}
+.breakable {
+  overflow-wrap: anywhere;
+  width:230px;
+  font-weight: bold;
+  font-size:0.9rem;
 }
