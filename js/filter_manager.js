@@ -859,7 +859,6 @@ class Filter_Manager {
 
 
          // if parents has only one child, just show the child (it should have all the parent metadata)
-        console.log(sorted_data)
          for (var i=0;i<sorted_data.length;i++){
             var item = sorted_data[i]
             var section = section_manager.get_section_details(item.section_id);
