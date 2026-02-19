@@ -321,7 +321,7 @@ margin-left:-15px;
 
 #result_wrapper .list-group-item{
     border-bottom: 1px solid grey;
-    padding: 5px;
+    padding: 8px;
 }
 
 #result_wrapper .list-group-item:hover {
@@ -424,7 +424,7 @@ margin-left:-15px;
 .item_text_sm{
     font-size: 80%;
     text-overflow: ellipsis;
-    max-width:240px;
+    max-width:340px;
     overflow: hidden;
     white-space: nowrap;
 }
@@ -1330,4 +1330,7 @@ a[aria-disabled="true"] {
   width:230px;
   font-weight: bold;
   font-size:0.9rem;
+}
+.georeference_link{
+   text-decoration: underline;
 }

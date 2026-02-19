@@ -23,8 +23,6 @@ class Filter_Manager {
            $this.show_sorted_results($this.showing_id)
         });
 
-
-
         $("#search").focus();
         $("#search_clear").click(function(){
              if($this.mode=="data"){
@@ -818,7 +816,7 @@ class Filter_Manager {
 
         if(item.child_ids.length>0){
             text = this.get_parent_text(section_id,item_id)
-              func="filter_manager.show_layers"
+            func="filter_manager.show_layers"
             button_text = "<button type='button' id='"+id+"_toggle' class='btn "+_class+" "+id+"_toggle' onclick='"+func+"("+section_id+",\""+item_id+"\")'>"+text+"</button>"
 
         }
@@ -880,15 +878,19 @@ class Filter_Manager {
                 }else{
                     no_show = true
                 }
-                // update the item to be the parent
-                item=section.parents[item.parent_id]
+                let parent=section.parents[item.parent_id]
+                // store filtered children in the parent
+                if(typeof(parent["children"]) !="undefined" && parent["children"]!=""){
+                     parent.child_ids = this.get_child_ids(sorted_data,parent["children"].split(","));
+                 }
+                // update the item to be the parent -only if there are more than 1 children
+                if(parent.child_ids.length>1){
+                    item=parent
+                }else if (parent["children"].split(",").length==1){
+                    //preserve the parent title if there is only one child period
+                    item[section.title_col]=parent[section.title_col]
+                }
              }
-
-            // check if we are working with a parent item
-            if(typeof(item["children"]) !="undefined" && item["children"]!=""){
-                item.child_ids = this.get_child_ids(sorted_data,item["children"].split(","));
-            }
-
             if(!no_show){
                 // show the item in the results
                  var item_html = '<li class="list-group-item list-group-item-action" onmouseover="filter_manager.show_highlight('+section_id+',\''+item._id+'\');" onmouseout="map_manager.hide_highlight_feature();">'

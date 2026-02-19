@@ -89,7 +89,7 @@ class Image_Manager {
         this.image_map.invalidateSize(true)
 
         this.image_map.attributionControl._attributions = {};
-        this.image_map.attributionControl.addAttribution("<a href=\""+info_page+"\" target=\"_new\">"+attribution+"</a> <a href=\"https://editor.allmaps.org/#/collection?url="+img+"\" target=\"_new\">Georeference</a>");
+        this.image_map.attributionControl.addAttribution("<a href=\""+info_page+"\" target=\"_new\">"+attribution+"</a> | <a class=\"georeference_link\" href=\"https://editor.allmaps.org/#/collection?url="+img+"\" target=\"_new\">Georeference this map</a>");
 
      }
      rotate_image(){

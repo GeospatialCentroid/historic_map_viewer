@@ -200,11 +200,12 @@ class Section_Manager {
             for (var i=0;i<section.data.length;i++){
                 $this.join_data($this.json_data[i])
 
-                var all_data=$this.json_data[i].all_data
+
                 // be sure to filter data for complete records
                 if($this.json_data[i]?.include_col){
                    $this.json_data[i].all_data = $this.included_data($this.json_data[i].all_data,$this.json_data[i].include_col)
                 }
+                let all_data=$this.json_data[i].all_data
                 for (var j=0;j<all_data.length;j++){
 
                     var obj = all_data[j]
@@ -295,7 +296,7 @@ class Section_Manager {
         all_data: the data
         unique_id_col: the unique id column
         */
-        // for each item, loop over all the items to connects it's parent
+        // for each item, loop over all the items to connect it's parent
         // a parent will have a child col with comma separated values
         // Build lookup only once and cache it
         // Initialize lookup directly on all_data
@@ -324,7 +325,7 @@ class Section_Manager {
 
         if ((!obj.children || obj.children.trim() === "") && parent) {
             obj.parent_id = parent._id;
-            obj = this.inject_parent_metadata(parent, obj, ["children"]);
+            obj = this.inject_parent_metadata(parent, obj, ["children","is_map"]);
         }
         return obj
     }
