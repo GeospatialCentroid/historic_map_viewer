@@ -802,10 +802,16 @@ class Layer_Manager {
                 return L.marker(latlng, {  icon: map_manager.get_marker_icon(extra)});
             },
         })
-
          //temp add service options
          layer_obj.service= {options:{url:url}}
          geo.on('click', function(e) { $this.layer_click(e,unique_id) });
+
+         geo.on('mouseover', function (e) {
+           filter_manager.show_highlight(0,e.target.options.pane);
+        });
+        geo.on('mouseout', function (e) {
+           map_manager.hide_highlight_feature();
+        });
      }
      return geo
   }

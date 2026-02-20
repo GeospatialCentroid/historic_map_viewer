@@ -38,6 +38,23 @@
 			"utilitiesCommunication":{"code":"019", "name":"utilitiesCommunication", "title":"Utilities/Communication", "desc":"Energy, water and waste systems and communications infrastructure and services, for example hydroelectricity, geothermal, solar and nuclear sources of energy, water purification and distribution, sewage collection and disposal, electricity and gas distribution, data communication, telecommunication, radio, communication networks"},
 			"historic":{"code":"000", "name":"historic","title":"Historical Scanned Maps", "desc":"Non-digital maps that have been scanned"}
 		},
+	  "Keywords": {
+		"plss":{"title":"Public Land Survey System"},
+		"handDrawn":{"title":"Hand Drawn"},
+		"imagery":{"title":"Imagery"},
+		"irrigation":{"title":"Irrigation"},
+		"resources":{"title":"Resources"},
+		"railways":{"title":"Railways"},
+		"diversion":{"title":"Diversion"},
+		"roads":{"title":"Roads"},
+		"printed":{"title":"Printed"},
+		"contourLines":{"title":"Contour Lines"},
+		"industryCommerce":{"title":"Industry Commerce"},
+		"buildings":{"title":"Buildings"},
+		"recreation":{"title":"Recreation"},
+		"countourLines":{"title":"Countour Lines"}
+
+	  },
 	  "FACET_FIELD": {
 		  "dct_subject_sm": "Subject",
 		  "dct_spatial_sm": "Place",
