@@ -25,7 +25,7 @@ const tourSteps = [
 
   },
   {
-    intro: 'Thanks for taking the tour! Please email <a href=mailto:archives@colostate.libanswers.com">archives@colostate.libanswers.com</a> if you notice anything interesting while exploring the collection, and be sure to include a copy of the URL from the address bar along with your email.',
+    intro: 'Thanks for taking the tour! Please <a href=mailto:archives@colostate.libanswers.com">email</a> us if you notice anything interesting while exploring the collection, and be sure to include a copy of the URL from the address bar along with your email.',
     position: "center",
      action: "run",
     fn: "show_browse",
