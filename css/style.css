@@ -410,7 +410,6 @@ margin-left:-15px;
   font-weight: 600;
   word-break: break-word;
   text-overflow: ellipsis;
-  max-width: 70%;
 
 }
 .item_title_wide {
@@ -624,9 +623,7 @@ margin-left:-15px;
     overflow-wrap: anywhere
 }
 .details-buttons{
-    position: absolute;
-    right:0px;
-    top:0px;
+    float:right;
 }
 #layers_view{
 position: relative;
@@ -1374,4 +1371,7 @@ a[aria-disabled="true"] {
     font-weight: bold;
   font-size:0.9rem;
 }
+.readonly_input{
+    width:270px;
 
+}

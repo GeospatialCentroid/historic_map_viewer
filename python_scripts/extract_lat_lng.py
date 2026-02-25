@@ -95,6 +95,12 @@ def main():
         action="store_true",
         help="If set, updates the source CSV file instead of creating a new one",
     )
+    parser.add_argument(
+        "--start-row",
+        type=int,
+        default=0,
+        help="Row index to start processing from (0-based index). Default is 0."
+    )
 
     args = parser.parse_args()
 
@@ -104,7 +110,13 @@ def main():
     longitudes = []
     areas = []
 
-    for geojson_str in df[args.geojson_col]:
+    for i, geojson_str in enumerate(df[args.geojson_col]):
+        if i < args.start_row:
+            latitudes.append(None)
+            longitudes.append(None)
+            areas.append(None)
+            continue
+
         lat, lng, area = extract_geometry_info(geojson_str)
         latitudes.append(lat)
         longitudes.append(lng)

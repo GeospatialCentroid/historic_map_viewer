@@ -5,6 +5,7 @@ class Map_Manager {
         this[p]=properties[p]
     }
     if (this.params){
+        console.log(Map_Manager,this.params)
         if (this.params.hasOwnProperty('z')){
             this.z = Number(this.params['z'])
         }
@@ -23,16 +24,9 @@ class Map_Manager {
   }
   init(){
     var $this=this
-     L.control.scale().addTo( this.map);
-     this.map.createPane('left');
+    L.control.scale().addTo( this.map);
+    this.map.createPane('left');
     var right_pane=  this.map.createPane('right');
-//    this.map.on("moveend", function () {
-//      update_layer_list();
-//      var c =  map_manager.map.getCenter()
-//         map_manager.set_url_params("c",c.lat+","+c.lng)
-//         map_manager.set_url_params("z", map_manager.map.getZoom())
-//         save_params()
-//    });
     this.map.on('dragend', function (e) {
        $this.update_map_pos()
 
@@ -45,12 +39,10 @@ class Map_Manager {
         $this.update_map_pos()
     });
 
-
-
-    this.add_legend()
+    //this.add_legend()
 
     L.control.layer_list({ position: 'bottomleft' }).addTo( this.map);
-    var html=  "<label for='toggle_marker_checkbox'>"+LANG.MAP.MARKER_TOGGLE+"</lable> <input id='toggle_marker_checkbox' type='checkbox' checked/>"
+    var html=  "<label for='toggle_marker_checkbox'>"+LANG.MAP.MARKER_TOGGLE+"</lable> <input id='toggle_marker_checkbox' class='form-check-input' type='checkbox' checked/>"
     $("#layer_list_title").html(html)
     $('#toggle_marker_checkbox').change(function() {
         if(this.checked) {
@@ -98,6 +90,7 @@ class Map_Manager {
         }
 //        // also update the table view if table bounds checked
 //        table_manager?.bounds_change_handler();
+
         //update the search results if search results checked
         if ($('#filter_bounds_checkbox').is(':checked')){
              filter_manager?.update_bounds_search();
@@ -105,6 +98,7 @@ class Map_Manager {
     }
 
     move_map_pos(_params){
+        console.log("move_map_pos",_params)
         var z = Number(_params['z'])
         var c = _params['c'].split(',')
         var lat= Number(c[0])
@@ -173,7 +167,7 @@ class Map_Manager {
         image_manager.image_map.invalidateSize(true)
     }
      highlight_marker(_id){
-     var markers = section_manager.json_data[0].geojson_markers
+        var markers = section_manager.json_data[0].geojson_markers
         for(var i=0;i<markers.length;i++){
             if(markers[i]._layers[Object.keys(markers[i]._layers)[0]].feature.properties.id==_id){
                 var extra='style="border-color: black;"'
@@ -194,29 +188,29 @@ class Map_Manager {
     }
     // township search
 
-    parse_township_section_geojson(data){
-        var feature = L.geoJson(JSON.parse(data))//.addTo(map_manager.map);
-        map_manager.map.fitBounds(feature.getBounds());
-        map_manager.create_marker(feature.getBounds().getCenter())
-        //show success
-        $("#bearing").removeClass("option_error")
-        $("#bearing").addClass("option_valid")
-    }
-    create_marker(lat_lng){
-        if(click_marker){
-            this.map.removeLayer(click_marker);
-        }
-        click_marker = new L.marker(lat_lng).addTo(this.map);
-        var lat = lat_lng["lat"].toFixed(7);
-        var lng = lat_lng["lng"].toFixed(7);
-        var html="<table id='lat_lng_table'><tr><td>"+lat+"</td><td>"+lng+"</td></tr></table>"
-        html+="<a href='#' onclick='copyElementToClipboard(\"lat_lng_table\");'>copy</a>"
-
-        var popup = L.popup().setContent(html);
-
-        click_marker.bindPopup(popup).openPopup();
-
-    }
+//    parse_township_section_geojson(data){
+//        var feature = L.geoJson(JSON.parse(data))//.addTo(map_manager.map);
+//        map_manager.map.fitBounds(feature.getBounds());
+//        map_manager.create_marker(feature.getBounds().getCenter())
+//        //show success
+//        $("#bearing").removeClass("option_error")
+//        $("#bearing").addClass("option_valid")
+//    }
+//    create_marker(lat_lng){
+//        if(click_marker){
+//            this.map.removeLayer(click_marker);
+//        }
+//        click_marker = new L.marker(lat_lng).addTo(this.map);
+//        var lat = lat_lng["lat"].toFixed(7);
+//        var lng = lat_lng["lng"].toFixed(7);
+//        var html="<table id='lat_lng_table'><tr><td>"+lat+"</td><td>"+lng+"</td></tr></table>"
+//        html+="<a href='#' onclick='copyElementToClipboard(\"lat_lng_table\");'>copy</a>"
+//
+//        var popup = L.popup().setContent(html);
+//
+//        click_marker.bindPopup(popup).openPopup();
+//
+//    }
     show_layer_select(_layer_id){
         var trigger_map_click=false
         // triggered when there is an update

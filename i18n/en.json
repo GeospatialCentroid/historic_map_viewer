@@ -112,7 +112,8 @@
 		"TEXT": "String",
 		"GEOREFERENCE": "Georeference this Image",
 		"RIGHTS": "Rights",
-		"WEB_SERVICES": "Web Services"
+		"WEB_SERVICES": "Web Services",
+		"MAP_TILES": "Map Tiles URL"
 
 	},
 	"DISCLAIMER": {

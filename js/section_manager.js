@@ -525,6 +525,8 @@ class Section_Manager {
          var nav_text=""
          this.panel_name=panel_name
          delete filter_manager.display_resource_id;
+
+
          switch(panel_name) {
               case 'results':
                     pos=width*2
@@ -552,7 +554,30 @@ class Section_Manager {
                 $("#nav").show();
 
             }
-
+             // Make ALL panels inert
+//        document.querySelectorAll("#panels .panel").forEach(p => {
+//            p.setAttribute("inert", "");
+//            p.setAttribute("aria-hidden", "true");
+//        });
+            // make current panel active
+//            console.log("panel_name",panel_name)
+//            if(!panel_name){
+//                panel_name="browse";
+//            }
+//            console.log("panel_name",panel_name)
+//            const active_panel = document.getElementById(panel_name+"_wrapper");
+//             if (active_panel) {
+//                active_panel.removeAttribute("inert");
+//                active_panel.removeAttribute("aria-hidden");
+//
+//                // Optional but recommended: move focus inside
+//                const focusable = active_panel.querySelector(
+//                    "input, button, select, textarea, [tabindex]:not([tabindex='-1'])"
+//                );
+//                if (focusable) {
+//                    focusable.focus();
+//                }
+//            }
            $("#panels").animate({ scrollLeft: pos });
 
 

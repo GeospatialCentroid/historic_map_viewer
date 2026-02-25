@@ -773,7 +773,7 @@ class Filter_Manager {
               setTimeout(() => {
 
 
-                      layer_manager.map.fitBounds( section_manager.json_data[section_id].clustered_points.getBounds());
+                     layer_manager.map.fitBounds( section_manager.json_data[section_id].clustered_points.getBounds());
                        $(window).resize(run_resize)
 
                     }, 2000);
@@ -934,9 +934,14 @@ class Filter_Manager {
 
                  item_html+='<a href="#" onclick="filter_manager.select_item('+section_id+',\''+item._id+'\')">'+item[section.title_col]+'</a><br/>'
                  item_html+="<div class='item_text_sm'>Creator:<b> "+item[section.creator_col]+"</b></div>"
-                 item_html+="<div class='item_text_sm'>Date:<b> "+item[section.date_col]+"</b></div>"
-                 item_html+='<div class="results-buttons"><button type="button" class="btn btn-success" onclick="filter_manager.select_item('+section_id+',\''+item._id+'\')">Details</button>'
+                 item_html+="<div class='item_text_sm'>Date:<b> "+item[section.date_col]+"</b></div><div class=\"results-buttons\">"
                  item_html+=this.get_add_button(section_id,item._id)
+                 // if the record has no children
+                 if(item.child_ids.length==0){
+                    item_html+='<button type="button" class="btn btn-primary" onclick="filter_manager.download_item(\''+item[section.download_col]+'\')">'+LANG.RESULT.DOWNLOAD+'</button>'
+
+                 }
+                 item_html+='<button type="button" class="btn btn-success" onclick="filter_manager.select_item('+section_id+',\''+item._id+'\')">'+LANG.RESULT.DETAILS+'</button>'
 
                  item_html+="</div>";
 
@@ -992,7 +997,9 @@ class Filter_Manager {
             html += '<li class="list-group-item list-group-item-action" onmouseover="filter_manager.show_highlight('+section_id+',\''+item.child_ids[i]+'\');" onmouseout="map_manager.hide_highlight_feature();">'
 
             html+='<div class="breakable">'+child[section.title_col]+"</div>";// add the title column
-            html+='<div class="details-buttons">'+this.get_add_button(section_id,item.child_ids[i])+"</div>";
+            html+='<div class="details-buttons">'+this.get_add_button(section_id,item.child_ids[i])
+             html+='<button type="button" class="btn btn-primary" onclick="filter_manager.download_item(\''+child[section.download_col]+'\')">'+LANG.RESULT.DOWNLOAD+'</button>'
+             html+="</div>";
             html+='<div class="item_thumb_container"><img class="item_thumb" src="'+thumb_url+'"></div>'
             html+='<a href="javascript:void(0);" onclick="image_manager.show_image(\''+iiif_url+'\',\''+child[section.title_col]+'\',\''+child["Reference URL"]+'\');">'+LANG.DETAILS.IMAGE_VIEW+'</a>'+"<br/>";
 
@@ -1038,9 +1045,13 @@ class Filter_Manager {
         var thumb_url=item[section.image_col]
         var iiif_url = item["IIIF"];
         html+='<div class="item_title">'+item[section.title_col]+"</div>";// add the title column
-        html+="<div class='details-buttons' >"+this.get_add_button(section_id,item_id)+"</div>"
+        html+="<div class='details-buttons' >"+this.get_add_button(section_id,item_id)
+        if(item.child_ids.length==0){
+            html+='<button type="button" class="btn btn-primary" onclick="filter_manager.download_item(\''+item[section.download_col]+'\')">'+LANG.RESULT.DOWNLOAD+'</button>'
+          }
+        html+="</div>"
         html+='<div class="item_thumb_container"><img class="item_thumb" src="'+thumb_url+'"></div>';
-        console.log(item)
+
         if(item?.child_ids && item.child_ids.length==0){
             html+='<a href="javascript:void(0);" onclick="image_manager.show_image(\''+iiif_url+'\',\''+item[section.title_col]+'\',\''+item["Reference URL"]+'\');">'+LANG.DETAILS.IMAGE_VIEW+'</a>'+"<br/>";
         }
@@ -1055,6 +1066,11 @@ class Filter_Manager {
                     html+="<div class='meta-item'><span class='fw-bold'>"+i+"</span> "+"<br/>"+link+"</div>"
                 }
             }
+        }
+        if(item?.[section.map_tiles_col]){
+            html+="<div class='meta-item'><span class='fw-bold'>"+LANG.DETAILS.MAP_TILES+"</span> "+"<br/>"
+            html+='<input class="readonly_input" type="text" value='+item[section.map_tiles_col]+'>'
+            html+="</div>"
         }
         // generate a table from the table_data_cols
         // these could be any number of columns of the same size so they can be combined into a table
@@ -1097,4 +1113,13 @@ class Filter_Manager {
         .text()
         .trim();
 }
+
+    download_item(URl){
+        var link = document.createElement('a');
+        link.href = URl;
+        link.download = URl;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
 }

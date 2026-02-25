@@ -32,7 +32,7 @@ class Layer_Manager {
 	//Plugin magic goes here! Note that you cannot use the same layer object again, as that will confuse the two map controls
 	var osm2 = new L.TileLayer(osmUrl, {minZoom: 0, maxZoom: 13, attribution: osmAttrib });
     this.miniMap = new L.Control.MiniMap( osm2,{toggleDisplay: true}).addTo(map_manager.map);
-
+//
     // fixing the minimap partial display
     setTimeout(() => {
       const mini = this.miniMap._miniMap;
@@ -41,8 +41,8 @@ class Layer_Manager {
 
       mini.invalidateSize();
       mini.setView(
-        map_manager.map.getCenter(),
-        map_manager.map.getZoom()
+        map_manager.map.getCenter()
+
       );
     }, 2000);
 
