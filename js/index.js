@@ -239,90 +239,6 @@ function save_params(){
 }
 
 
-load_annotation_geojson= function(url,extra){
-    rect_requests.push(url)
-
-    $.ajax({
-        type: "GET",
-        url: url,
-        dataType: "json",
-        extra:extra,
-        success: function(json) {
-         parse_annotation(json,extra);
-         //when all the rects have been requested
-            create_rect_group();
-         }
-     });
-}
-create_rect_group=function(){
-    if(layer_rects.length==rect_requests.length){
-        rects=L.layerGroup(layer_rects , {pane: 'left'})
-        rects.addTo(map_manager.map);
-     }
-}
-parse_annotation= function(json,extra){
-         var rect = L.geoJson(json, {pane: 'left',color: 'blue'})//todo get this from app.csv
-         rect.title=extra["title"]
-         rect.tms=extra["tms"]
-         rect.url=extra["Image URL"]
-         rect['annotation_url']=extra['annotation_url'];
-         rect.toggle="<i class='bi bi-map'></i>"
-         layer_rects.push(rect)
-         rect.id=layer_rects.length-1
-         rect.on('click', function () {
-            toggle_layer(this.id)
-            this.off('click')
-         });
-
-}
-
-update_layer_list=function(){
-    var html=""
-    var map_bounds=map_manager.map.getBounds()
-    for(var i =0;i<layer_rects.length;i++){
-        if(map_bounds.intersects(layer_rects[i].getBounds())){
-
-            html+=layer_rects[i].title+"  <a target='_blank' title='Show Original Overlay Map' href='"+layer_rects[i].url+"'><i class='bi bi-image'></i></a> <a id='layer_but_"+i+"' href='#' onclick='toggle_layer("+i+");' title='Show Overlay Map in View'>"+layer_rects[i].toggle+"</a>"
-            html+=" <div id='layer_but_spin_"+i+"' style='display:none;' class='spinner-border spinner-border-sm' ></div>"+"<br/>"
-
-        }
-
-    }
-    $("#layer_list").html(html)
-}
-
-remove_side_by_side = function(){
-    var hide_control=true
-    for(var i = 0; i<layer_rects.length;i++){
-       if(layer_rects[i].toggle=='hide'){
-            hide_control=false
-       }
-    }
-
-    if(hide_control){
-         side_by_side_control.remove(map_manager.map);
-        side_by_side_control = null
-    }
-}
-
-
-function connect_transcription(_data){
-     var data = $.csv.toObjects(_data);
-     for(var i=0;i<data.length;i++){
-            console.log(data[i])
-     }
-}
-
-
-function copyElementToClipboard(element) {
-  window.getSelection().removeAllRanges();
-  let range = document.createRange();
-  range.selectNode(typeof element === 'string' ? document.getElementById(element) : element);
-  window.getSelection().addRange(range);
-  document.execCommand('copy');
-  window.getSelection().removeAllRanges();
-}
-
 function init_tabs(){
     $("#search_tab").text(LANG.TAB_TITLES.BROWSE_TAB)
     $("#map_tab .label").text(LANG.TAB_TITLES.MAP_TAB)
@@ -504,7 +420,7 @@ function run_resize_do(){
             $("#data_table_wrapper").width(window_width)
 
             map_manager.map.scrollWheelZoom.disable();
-             $("#side_bar").hide();
+             //$("#side_bar").hide();
        }
         //final sets
         $("#panels").width($("#side_bar").width())
@@ -515,6 +431,7 @@ function run_resize_do(){
         // slide to position
          $("#panels").stop(true, true)
          // if we are on the search tab, make sure the viewable panel stays when adjusted
+
         if("search_tab"==$("#tabs").find(".active").attr("id")){
             section_manager.slide_position(section_manager.panel_name)
         }
