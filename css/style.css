@@ -226,18 +226,18 @@ warning: #ff1b28
  }
 
 
-#result_wrapper .content_left{
+#results_scroll .content_left{
     width:100px;
     float:left;
 
 }
-#result_wrapper{
+#results_scroll{
      border: 1px solid rgba(0,0,0,.15);
      max-height:800px;
      width:100%;
 }
 
-#result_wrapper .content_right{
+#results_scroll .content_right{
   width:235px;
   float:left;
 }
@@ -319,12 +319,12 @@ margin-left:-15px;
 }
 
 
-#result_wrapper .list-group-item{
+#results_scroll .list-group-item{
     border-bottom: 1px solid grey;
     padding: 8px;
 }
 
-#result_wrapper .list-group-item:hover {
+#results_scroll .list-group-item:hover {
     background-color: #e4e4e4;
 }
 
@@ -623,7 +623,9 @@ margin-left:-15px;
     overflow-wrap: anywhere
 }
 .details-buttons{
-    float:right;
+     display: flex;
+  justify-content: flex-end; /* Aligns content to the right */
+  width: 100%; /* Ensures the container spans the full width */
 }
 #layers_view{
 position: relative;

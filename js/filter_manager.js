@@ -966,7 +966,7 @@ class Filter_Manager {
 
 
         //
-        $('#result_wrapper').animate({
+        $('#results_scroll').animate({
                 scrollTop: 0
             }, 1000);
          $this.update_results_info(sorted_data.length)

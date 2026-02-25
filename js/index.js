@@ -244,8 +244,8 @@ function init_tabs(){
     $("#map_tab .label").text(LANG.TAB_TITLES.MAP_TAB)
     $("#download_tab").text(LANG.TAB_TITLES.DOWNLOAD_TAB)
     $(".tab_but").click(function() {
-        $(".tab_but").removeClass('btn-primary').addClass('btn-secondary');
-        $(this).removeClass('btn-secondary').addClass('btn-primary');
+        $(".tab_but").removeClass('btn-primary').removeClass('active').addClass('btn-secondary');
+        $(this).removeClass('btn-secondary').addClass('btn-primary').addClass('active');
         // hide all tab_panels
          $(".tab_panel").hide()
          // show only this one by assuming it's name from the button
@@ -432,11 +432,12 @@ function run_resize_do(){
          $("#panels").stop(true, true)
          // if we are on the search tab, make sure the viewable panel stays when adjusted
 
+        console.log($("#tabs").find(".active").attr("id"))
         if("search_tab"==$("#tabs").find(".active").attr("id")){
             section_manager.slide_position(section_manager.panel_name)
         }
 
-        $("#result_wrapper").css({"height":scroll_height-$("#filter_area").height()})
+        $("#results_scroll").css({"height":scroll_height-$("#filter_area").height()})
 
 
  }
