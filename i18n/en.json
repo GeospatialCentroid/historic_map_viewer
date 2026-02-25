@@ -138,12 +138,13 @@
 		"TO": "to",
 		"DATE_LABEL": "Limit by Year",
 		"SORT_OPTIONS": {
-			"RELEVANCE": 		{"name": "Relevance", "search": "score asc"},
-			"TITLE":            {"name": "Alphabetical", "search": "dct_title_s asc"},
-			"NEWEST":			{"name": "Publish date: newest", "search": "gbl_mdModified_dt desc"},
+
 			"OLDEST":			{"name": "Publish date: oldest", "search": "gbl_mdModified_dt asc"},
-			"LARGEST":			{"name": "Area: largest", "search": "geom_area desc"},
-			"SMALLEST":			{"name": "Area: smallest", "search": "geom_area asc"}
+			"NEWEST":			{"name": "Publish date: newest", "search": "gbl_mdModified_dt desc"},
+			"TITLE_ASC":  		{"name": "Alphabetical (A-Z)", "search": "dct_title_s asc"},
+			"TITLE_DESC":  		{"name": "Alphabetical (Z-A)", "search": "dct_title_s desc"}
+
+
 		},
 		"BLANK": "(blank)"
 	},
@@ -195,8 +196,8 @@
 		"REMOVE_COLOR": "Remove Color",
 		"OUTLINE_COLOR": "Line",
 		"Fill_COLOR": "Fill",
-		"MARKER_TOGGLE": "Map Points in View"
-
+		"MARKER_TOGGLE": "Map Points in View",
+		"BASEMAP_TEXT": "Base Map Options"
 	},
 	"BASEMAP": {
 		"TITLE": "Basemap",

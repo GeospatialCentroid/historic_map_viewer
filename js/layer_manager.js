@@ -440,11 +440,13 @@ class Layer_Manager {
                  var layer =  $this.get_layer_obj(_id)
                  var type = layer.type
                  var val =ui.value/100
-                 var set_opacity=["basemap","Map Service","Raster Layer","tms","","mapserver","mapservice","iiif","AllMaps"]
+                 var set_opacity=["Map Service","Raster Layer","tms","","mapserver","mapservice","iiif","AllMaps"]
                  if($.inArray(type,set_opacity)>-1){
                     layer.layer_obj.setOpacity(val)
                  }else if($.inArray(type,["esriPMS","esriSMS"])>-1){
                        $("._marker_class"+_id).css({"opacity":val})
+                 }else if($.inArray(type,["basemap"])>-1){
+                    layer.setOpacity(val)
                  }else if($.inArray(type,["GeoJSON"])>-1){
                     layer.layer_obj.eachLayer(function (layer) {
                         layer.setStyle({
@@ -1020,7 +1022,15 @@ class Layer_Manager {
 
     // Create cluster group ONCE
     if (!section.clustered_points) {
-        section.clustered_points = L.markerClusterGroup();
+        section.clustered_points = L.markerClusterGroup({
+          iconCreateFunction: function (cluster) {
+            return L.divIcon({
+              html: `<div><span>${cluster.getChildCount()}</span></div>`,
+              className: 'my-cluster',
+              iconSize: L.point(40, 40)
+            });
+          }
+        });
         layer_obj.addLayer(section.clustered_points);
     }
 
@@ -1118,7 +1128,8 @@ class Layer_Manager {
         var id = "basemap"
         var fill_color =  rgbStrToHex($(".leaflet-container").css("backgroundColor"))
 
-        var html = "<li class='basemap_layer'><div class='left-div-map' style='width:30%'>"
+        var html = "<div class='basemap_text'>"+LANG.MAP.BASEMAP_TEXT+"</div><li class='basemap_layer'>"
+        html += "<div class='left-div-map' style='width:30%'>"
         html += this.get_base_map_dropdown_html()+"</div>"
         html+= "<div class='stacked-div-map'>"+this.get_slider_html("basemap")+"</div>"
         html += "<div class='stacked-div-map'><div class='color_box'><input type='text' id='"+id+"_base_color' value='"+fill_color+"'/><br/><label for='"+id+"_base_color' >"+LANG.BASEMAP.BACKGROUND+"</label></div>"+"</div>"

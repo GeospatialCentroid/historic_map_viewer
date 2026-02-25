@@ -68,11 +68,17 @@ class Filter_Manager {
         })
         //
 
-        $('#filter_bounds_checkbox').change(
+       $('#filter_bounds_checkbox').change(
         function(){
              filter_manager.update_bounds_search($(this))
         }
        );
+       // create list sort
+       var html =""
+       for(var o in LANG.SEARCH.SORT_OPTIONS){
+            html+=`<option value="${o}">${LANG.SEARCH.SORT_OPTIONS[o].name}</option>`
+       }
+       $("#list_sort").html(html)
 
     }
     update_bounds_search(){
@@ -433,6 +439,18 @@ class Filter_Manager {
            $(this).find(":checked").map(function(){ return $this.get_checkbox_label(this) }).get());
            $this.filter()
         });
+        // toggle reveal filter categories
+         $('.toggle-label').on('click', function (e) {
+            e.preventDefault();
+
+            const targetId = $(this).attr('for');
+            const $target = $('#' + targetId);
+            const $arrow = $(this).find('.arrow');
+
+            $target.slideToggle(250);
+            $arrow.toggleClass('rotate');
+          });
+
     }
     //---
      create_filter_values(section,all_data,filter_cols,year_start_col,year_end_col){
@@ -599,7 +617,7 @@ class Filter_Manager {
      get_multi_select(id,options,counts,keys){
         var html=""
         var _id = id.replaceAll(" ", "__");
-        html+="<label class='form-label' for='"+_id+"'>"+id+"</label>"
+        html+="<label class='form-label  toggle-label' for='"+_id+"'>"+id+"<span class='arrow'></span></label>"
         html+="<div class='form-group filter_list' name='"+_id+"' id='"+_id+"' >"
         for (var o in options){
        // console.log(o)
@@ -696,18 +714,37 @@ class Filter_Manager {
         if(!sort_col){
             // use the default if none is provided
             sort_col="_sort_col"
+
         }
 
-        var sort_dir=$('#list_sort').val()
+        var sort_option=$('#list_sort').val()
 
         var sorted_data= [...data]
 
-       if(sort_dir!=''){
+       if (["NEWEST","OLDEST"].includes(sort_option)) {
+            sort_col = "Date"
+           // TITLE_ASC
            sorted_data= sorted_data.sort((a,b) => (a[sort_col] > b[sort_col] ) ? 1 : ((b[sort_col]  > a[sort_col] ) ? -1 : 0))
-        }
-        if (sort_dir=='desc'){
+           if (sort_option=='NEWEST'){
               sorted_data.reverse()
+           }
+        }else if (["TITLE_ASC","TITLE_DESC"].includes(sort_option)) {
+            sort_col = "Title"
+           // TITLE_ASC
+           sorted_data= sorted_data.sort((a,b) => (a[sort_col] > b[sort_col] ) ? 1 : ((b[sort_col]  > a[sort_col] ) ? -1 : 0))
+           if (sort_option=='TITLE_DESC'){
+              sorted_data.reverse()
+           }
+        }else if (["LARGEST","SMALLEST"].includes(sort_option)) {
+            sort_col = "Area"
+           // TITLE_ASC
+           sorted_data= sorted_data.sort((a,b) => (a[sort_col] > b[sort_col] ) ? 1 : ((b[sort_col]  > a[sort_col] ) ? -1 : 0))
+           if (sort_option=='SMALLEST'){
+              sorted_data.reverse()
+           }
         }
+//			"SMALLEST":			{"name": "Area: smallest", "search": "geom_area asc"},
+//			"LARGEST":			{"name": "Area: largest", "search": "geom_area desc"}
 
         this.show_results(sorted_data)
 
@@ -814,7 +851,7 @@ class Filter_Manager {
          button_text = `<button type="button" class="btn ${_class}" onclick="${func}(\`${iiif_url}\`, \`${title}\`, \`${ref_url}\`)">${text}</button>`
         }
 
-        if(item.child_ids.length>0){
+        if(item?.child_ids && item.child_ids.length>0){
             text = this.get_parent_text(section_id,item_id)
             func="filter_manager.show_layers"
             button_text = "<button type='button' id='"+id+"_toggle' class='btn "+_class+" "+id+"_toggle' onclick='"+func+"("+section_id+",\""+item_id+"\")'>"+text+"</button>"
@@ -1003,8 +1040,10 @@ class Filter_Manager {
         html+='<div class="item_title">'+item[section.title_col]+"</div>";// add the title column
         html+="<div class='details-buttons' >"+this.get_add_button(section_id,item_id)+"</div>"
         html+='<div class="item_thumb_container"><img class="item_thumb" src="'+thumb_url+'"></div>';
-        html+='<a href="javascript:void(0);" onclick="image_manager.show_image(\''+iiif_url+'\',\''+item[section.title_col]+'\',\''+item["Reference URL"]+'\');">'+LANG.DETAILS.IMAGE_VIEW+'</a>'+"<br/>";
-
+        console.log(item)
+        if(item?.child_ids && item.child_ids.length==0){
+            html+='<a href="javascript:void(0);" onclick="image_manager.show_image(\''+iiif_url+'\',\''+item[section.title_col]+'\',\''+item["Reference URL"]+'\');">'+LANG.DETAILS.IMAGE_VIEW+'</a>'+"<br/>";
+        }
         for (var i in item){
             if ($.inArray(i,section.show_cols)!=-1){
                 var link = item[i]

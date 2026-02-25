@@ -13,7 +13,7 @@ const tourSteps = [
   },
   {
     element:"#map",
-    intro: "The dynamic map area is where the scanned maps are displayed in their geographic location. The colored points indicate the locations of where scanned maps exist.",
+    intro: "The dynamic map area is where the scanned maps are displayed in their geographic location. The blue points indicate the locations of where scanned maps exist.",
     position: "top"
   },
   {
