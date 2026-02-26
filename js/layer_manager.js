@@ -164,7 +164,7 @@ class Layer_Manager {
     var section_id= id_parts[0]
     var item_id=id_parts[1]
     var item = filter_manager.get_item(section_id,item_id);
-    // slight delay to account for removing layer
+    // slight delay to account of removing layer
     setTimeout(
         filter_manager.update_parent_but(section_id,item.parent_id)
     , 1000);

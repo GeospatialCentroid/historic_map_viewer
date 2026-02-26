@@ -142,9 +142,9 @@ warning: #ff1b28
 
 }
 .tabs_line{
-    margin-top: -1px;
+    margin-top: -2px;
     width:100%;
-    border-top: 3px solid #008FB3;
+    border-top: 3px solid #105456;
     content: '';
 }
 
@@ -1374,6 +1374,6 @@ a[aria-disabled="true"] {
   font-size:0.9rem;
 }
 .readonly_input{
-    width:270px;
+    width:100%;
 
 }

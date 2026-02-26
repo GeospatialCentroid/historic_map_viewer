@@ -562,12 +562,12 @@ class Section_Manager {
 
            $("#panels").animate({ scrollLeft: pos }, 500, function() {
                 // Code to execute after animation completes
-               //            // make current panel active
-            console.log("panel_name",panel_name)
+               // make current panel active
+
             if(!panel_name){
                 panel_name="browse";
             }
-            console.log("panel_name",panel_name)
+
             const active_panel = document.getElementById(panel_name+"_wrapper");
              if (active_panel) {
                 active_panel.removeAttribute("inert");
