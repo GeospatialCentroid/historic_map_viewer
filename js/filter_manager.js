@@ -997,6 +997,9 @@ class Filter_Manager {
             html += '<li id="'+item.child_ids[i]+'_item" class="list-group-item list-group-item-action" onmouseover="filter_manager.show_highlight('+section_id+',\''+item.child_ids[i]+'\');" onmouseout="map_manager.hide_highlight_feature();">'
 
             html+='<div class="breakable">'+child[section.title_col]+"</div>";// add the title column
+            html+="<div class='item_text_sm'>Date:<b> "+child[section.date_col]+"</b></div>"
+
+
             html+='<div class="details-buttons">'+this.get_add_button(section_id,item.child_ids[i])
             html+='<button type="button" class="btn btn-primary" onclick="filter_manager.download_item(\''+child[section.download_col]+'\')">'+LANG.RESULT.DOWNLOAD+'</button>'
             html+="</div>";
@@ -1015,15 +1018,40 @@ class Filter_Manager {
         }
     }
     scroll_to_element_in_container(_container, _target) {
-      var container = $(_container);
-      var target = $(_target);
-      if (container.length && target.length) {
-        // the target element's top position relative to the document
-        // minus the container's top position relative to the document
-        var scrollToPos = target.offset().top - container.offset().top + container.scrollTop();
-        container.animate({ scrollTop: scrollToPos}, 2000);
-      }
-    }
+        var container = $(_container);
+        var target = $(_target);
+
+        if (!container.length || !target.length) return;
+
+        var images = container.find('img');
+        var totalImages = images.length;
+        var loadedImages = 0;
+
+        if (totalImages === 0) {
+            doScroll();
+            return;
+        }
+
+        images.each(function () {
+            if (this.complete) {
+            loadedImages++;
+            if (loadedImages === totalImages) doScroll();
+            } else {
+            $(this).on('load error', function () {
+                loadedImages++;
+                if (loadedImages === totalImages) doScroll();
+            });
+            }
+        });
+
+        function doScroll() {
+            var scrollToPos = target.offset().top 
+            - container.offset().top 
+            + container.scrollTop();
+
+            container.animate({ scrollTop: scrollToPos }, 600);
+        }
+        }
     //
     get_item(_id,item_id){
         var data = this.section_manager.get_match('section_id_'+_id)
@@ -1110,11 +1138,11 @@ class Filter_Manager {
 //        }
         $("#details_view").html(html)
     }
-   show_highlight(section_id,item_id){
+   show_highlight(section_id,item_id,_no_fill){
         var item= this.get_item(section_id,item_id)
         var section=section_manager.get_section_details(section_id)
         if(item[section.geojson_col]!=""){
-            map_manager.show_highlight_geo_json(JSON.parse(item[section.geojson_col]));
+            map_manager.show_highlight_geo_json(JSON.parse(item[section.geojson_col]),_no_fill);
         }
    }
    get_checkbox_label(checkbox){

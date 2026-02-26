@@ -131,7 +131,9 @@ class Map_Manager {
 //              });
 
      }
-      show_highlight_geo_json(geo_json){
+      show_highlight_geo_json(geo_json,_no_fill){
+        let fill_opacity=.5
+        if (_no_fill){fill_opacity=0}
         var $this=this
         // when a researcher hovers over a resource show the bounds on the map
         this.hide_highlight_feature();
@@ -146,7 +148,7 @@ class Map_Manager {
         }else{
             this.highlighted_feature =  L.geoJSON(geo_json,{
                 style: function (feature) {
-                    return {color: "#fff",fillColor:"#fff",fillOpacity:.5};
+                    return {color: "#fff",fillColor:"#fff",fillOpacity:fill_opacity};
                 }
                 }).addTo(this.map);
         }

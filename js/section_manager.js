@@ -573,13 +573,13 @@ class Section_Manager {
                 active_panel.removeAttribute("inert");
                 active_panel.removeAttribute("aria-hidden");
 
-                // Optional but recommended: move focus inside
-                const focusable = active_panel.querySelector(
-                    "input, button, select, textarea, [tabindex]:not([tabindex='-1'])"
-                );
-                if (focusable) {
-                    focusable.focus();
-                }
+                
+                // const focusable = active_panel.querySelector(
+                //     "input, button, select, textarea, [tabindex]:not([tabindex='-1'])"
+                // );
+                // if (focusable) {
+                //     focusable.focus();
+                // }
             }
             });
 

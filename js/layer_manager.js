@@ -235,25 +235,25 @@ class Layer_Manager {
   add_to_map_tab(section_id,item_id,_z){
         var $this = this;
 
-        var resource = filter_manager.get_item(section_id,item_id);
+        var item = filter_manager.get_item(section_id,item_id);
 
         // reference using the parent and child id joined by an "_"
         var id = "item_"+section_id+"_"+item_id
         var section=section_manager.get_section_details(section_id)
-        var title = resource[section["title_col"]]
+        var title = item[section["title_col"]]
         var title_limit=25
         if(title.length>title_limit){
             title = title.substring(0,title_limit)+"..."
         }
-        var download_link = false//filter_manager.get_download_link(resource)
-        //var dcat_bbox = resource.dcat_bbox
-        //onmouseover='filter_manager.show_highlight("+section_id+",\""+item_id+"\");' onmouseout='map_manager.hide_highlight_feature();'
-        var html = "<li class='ui-state-default drag_li basemap_layer' id='"+id+"_drag'  >"
+        var download_link = false//filter_manager.get_download_link(item)
+        //var dcat_bbox = item.dcat_bbox
+        //
+        var html = "<li class='ui-state-default drag_li basemap_layer' onmouseover='filter_manager.show_highlight("+section_id+",\""+item_id+"\",true);' onmouseout='map_manager.hide_highlight_feature();' id='"+id+"_drag'  >"
         html+="<div class='left-div-map'>"
         html+="<div class='grip'><i class='bi bi-grip-vertical'></i></div>"
 
         html +="<div class='item_title item_title_wide font-weight-bold'>"+title+"</span></div>"
-
+    
 
         html+="<div class='left-div-map-buttons'>"
         html +="<button type='button' id='"+id+"_toggle' class='btn btn-danger "+id+"_toggle' onclick='layer_manager.add_layer_toggle(\""+section_id+"\",\""+item_id+"\")'>"+LANG.RESULT.REMOVE+"</button>"
@@ -807,6 +807,12 @@ class Layer_Manager {
          //temp add service options
          layer_obj.service= {options:{url:url}}
          geo.on('click', function(e) { $this.layer_click(e,unique_id) });
+
+         geo.on('dblclick', function (e) {
+            L.DomEvent.stopPropagation(e);
+            L.DomEvent.preventDefault(e);
+            layer_manager.add_layer_toggle(0,e.target.options.pane)
+         });
 
          geo.on('mouseover', function (e) {
            filter_manager.show_highlight(0,e.target.options.pane);
