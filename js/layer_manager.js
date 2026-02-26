@@ -247,8 +247,8 @@ class Layer_Manager {
         }
         var download_link = false//filter_manager.get_download_link(resource)
         //var dcat_bbox = resource.dcat_bbox
-
-        var html = "<li class='ui-state-default drag_li basemap_layer' id='"+id+"_drag'  onmouseover='filter_manager.show_highlight("+section_id+",\""+item_id+"\");' onmouseout='map_manager.hide_highlight_feature();'>"
+        //onmouseover='filter_manager.show_highlight("+section_id+",\""+item_id+"\");' onmouseout='map_manager.hide_highlight_feature();'
+        var html = "<li class='ui-state-default drag_li basemap_layer' id='"+id+"_drag'  >"
         html+="<div class='left-div-map'>"
         html+="<div class='grip'><i class='bi bi-grip-vertical'></i></div>"
 
@@ -847,7 +847,7 @@ class Layer_Manager {
           filter_manager.select_item(section_id,e.layer.feature.properties.id)
 
        }else{
-          filter_manager.show_layers(section_id,item.parent_id)
+          filter_manager.show_layers(section_id,item.parent_id,e.layer.feature.properties.id)
        }
        //filter_manager.select_item(0,e.layer.feature.properties.id)
 //        try{
@@ -1023,6 +1023,10 @@ class Layer_Manager {
     // Create cluster group ONCE
     if (!section.clustered_points) {
         section.clustered_points = L.markerClusterGroup({
+          maxClusterRadius: 40,
+          spiderfyOnMaxZoom: true,
+          showCoverageOnHover: false,
+          zoomToBoundsOnClick: false,
           iconCreateFunction: function (cluster) {
             return L.divIcon({
               html: `<div><span>${cluster.getChildCount()}</span></div>`,
@@ -1030,6 +1034,9 @@ class Layer_Manager {
               iconSize: L.point(40, 40)
             });
           }
+        });
+        section.clustered_points.on('clusterclick', function (a) {
+          a.layer.spiderfy();
         });
         layer_obj.addLayer(section.clustered_points);
     }

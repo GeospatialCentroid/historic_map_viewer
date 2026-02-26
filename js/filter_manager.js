@@ -974,7 +974,7 @@ class Filter_Manager {
     }
 
     //
-     show_layers(section_id,item_id){
+     show_layers(section_id,item_id,_child_id){
          // create a panel allowing the individual layers to be added
         // the thumbnail should be shown along with the name
         var $this=this;
@@ -994,12 +994,12 @@ class Filter_Manager {
             var thumb_url=child[section.image_col]
             var iiif_url = child["IIIF"];
 
-            html += '<li class="list-group-item list-group-item-action" onmouseover="filter_manager.show_highlight('+section_id+',\''+item.child_ids[i]+'\');" onmouseout="map_manager.hide_highlight_feature();">'
+            html += '<li id="'+item.child_ids[i]+'_item" class="list-group-item list-group-item-action" onmouseover="filter_manager.show_highlight('+section_id+',\''+item.child_ids[i]+'\');" onmouseout="map_manager.hide_highlight_feature();">'
 
             html+='<div class="breakable">'+child[section.title_col]+"</div>";// add the title column
             html+='<div class="details-buttons">'+this.get_add_button(section_id,item.child_ids[i])
-             html+='<button type="button" class="btn btn-primary" onclick="filter_manager.download_item(\''+child[section.download_col]+'\')">'+LANG.RESULT.DOWNLOAD+'</button>'
-             html+="</div>";
+            html+='<button type="button" class="btn btn-primary" onclick="filter_manager.download_item(\''+child[section.download_col]+'\')">'+LANG.RESULT.DOWNLOAD+'</button>'
+            html+="</div>";
             html+='<div class="item_thumb_container"><img class="item_thumb" src="'+thumb_url+'"></div>'
             html+='<a href="javascript:void(0);" onclick="image_manager.show_image(\''+iiif_url+'\',\''+child[section.title_col]+'\',\''+child["Reference URL"]+'\');">'+LANG.DETAILS.IMAGE_VIEW+'</a>'+"<br/>";
 
@@ -1008,6 +1008,21 @@ class Filter_Manager {
         html+="</ul>";
         $("#layers_view").html(html)
         $this.section_manager.slide_position("layers");
+        if(_child_id){
+            // scroll to child position
+            setTimeout($this.scroll_to_element_in_container("#layers_wrapper", "#"+_child_id+'_item'), 500);
+
+        }
+    }
+    scroll_to_element_in_container(_container, _target) {
+      var container = $(_container);
+      var target = $(_target);
+      if (container.length && target.length) {
+        // the target element's top position relative to the document
+        // minus the container's top position relative to the document
+        var scrollToPos = target.offset().top - container.offset().top + container.scrollTop();
+        container.animate({ scrollTop: scrollToPos}, 2000);
+      }
     }
     //
     get_item(_id,item_id){

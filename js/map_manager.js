@@ -5,7 +5,6 @@ class Map_Manager {
         this[p]=properties[p]
     }
     if (this.params){
-        console.log(Map_Manager,this.params)
         if (this.params.hasOwnProperty('z')){
             this.z = Number(this.params['z'])
         }
@@ -18,7 +17,7 @@ class Map_Manager {
     }else{
         this.params={}
     }
-     this.map = L.map('map',{doubleClickZoom: false}).setView([this.lat, this.lng], this.z);
+     this.map = L.map('map',{doubleClickZoom: true}).setView([this.lat, this.lng], this.z);
 
 
   }
