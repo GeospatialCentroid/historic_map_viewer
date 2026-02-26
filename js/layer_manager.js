@@ -253,7 +253,8 @@ class Layer_Manager {
         html+="<div class='grip'><i class='bi bi-grip-vertical'></i></div>"
 
         html +="<div class='item_title item_title_wide font-weight-bold'>"+title+"</span></div>"
-    
+        html+="<div class='item_text_sm'>Date:<b> "+item[section.date_col]+"</b></div>"
+
 
         html+="<div class='left-div-map-buttons'>"
         html +="<button type='button' id='"+id+"_toggle' class='btn btn-danger "+id+"_toggle' onclick='layer_manager.add_layer_toggle(\""+section_id+"\",\""+item_id+"\")'>"+LANG.RESULT.REMOVE+"</button>"
