@@ -133,6 +133,7 @@ warning: #ff1b28
 #nav_wrapper{
     height:30px;
     margin-bottom: 5px;
+     position: relative;
 }
 #nav{
     padding:3px;
@@ -366,7 +367,9 @@ a.disabled {
 .total_results{
     font-size: .75rem;
     font-weight: bold;
-    float:right;
+     position: absolute;
+  bottom: 0;
+  right: 0;
     margin-right:3px;
 }
 .total_showing{

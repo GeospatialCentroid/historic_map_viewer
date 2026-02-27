@@ -557,7 +557,6 @@ class Section_Manager {
              // Make ALL panels inert
         document.querySelectorAll("#panels .panel").forEach(p => {
             p.setAttribute("inert", "");
-            p.setAttribute("aria-hidden", "true");
         });
 
            $("#panels").animate({ scrollLeft: pos }, 500, function() {
@@ -571,9 +570,7 @@ class Section_Manager {
             const active_panel = document.getElementById(panel_name+"_wrapper");
              if (active_panel) {
                 active_panel.removeAttribute("inert");
-                active_panel.removeAttribute("aria-hidden");
-
-                
+                 
                 // const focusable = active_panel.querySelector(
                 //     "input, button, select, textarea, [tabindex]:not([tabindex='-1'])"
                 // );

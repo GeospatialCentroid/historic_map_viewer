@@ -80,15 +80,24 @@ class Filter_Manager {
        }
        $("#list_sort").html(html)
 
+       if(this.params && Object.keys(this.params[0]).length!=0){
+       setTimeout(() => { 
+        this.set_filters();
+        this.filter();
+
+       } , "500");
+       }
+        
+
     }
     update_bounds_search(){
         if ($('#filter_bounds_checkbox').is(':checked')){
             var b =layer_manager.map.getBounds()
             //search lower-left corner as the start of the range and the upper-right corner as the end of the range
-            filter_manager.add_filter("bounds",[b._southWest.lat.toFixed(3),b._southWest.lng.toFixed(3),b._northEast.lat.toFixed(3),b._northEast.lng.toFixed(3)])
+            filter_manager.add_filter("Bounds",[b._southWest.lat.toFixed(3),b._southWest.lng.toFixed(3),b._northEast.lat.toFixed(3),b._northEast.lng.toFixed(3)])
         }else{
            //Remove bound filter
-           this.remove_filter('bounds')
+           this.remove_filter('Bounds')
         }
         this.filter()
     }
@@ -124,7 +133,7 @@ class Filter_Manager {
          $("#filter_start_date").val(values[0])
          $("#filter_end_date").val(values[1])
 
-        $("#filter_date .filter_slider_box").slider({
+        $("#Date__Search_slider .filter_slider_box").slider({
             range: true,
             min: values[0],
             max: values[1],
@@ -291,6 +300,56 @@ class Filter_Manager {
 
        })
     }
+    set_filters(){
+        var select_item =true
+        //loop over all the set url params and set the form
+        
+            Object.entries(this.params[0]).forEach(([a, val]) => {
+
+                console.log(a, val)
+                
+                var id = a.replaceAll(" ", "__");
+                this.set_filter(id,val)
+                // make exception for page
+                if (a=='p'){
+                    this.filters[id]=val
+                    this.page_num=Number(val)
+                    select_item =false
+                }else{
+                    this.add_filter(a,val)
+                }
+        });
+
+        //this.filter(select_item)
+        if(!select_item){
+            //use the page_num to go to the param page
+            this.go_to_page(0)
+        }
+
+    }
+    set_filter(id,list){
+     
+     if(id=='Bounds'){
+        $("#filter_bounds_checkbox").prop("checked", true);
+     }else if(list.length>1 && $.isNumeric(list[0])){
+        //check if numeric
+        $("#"+id+'_slider .filter_slider_box').each(function(){
+            $(this).slider( 'values', [ list[0], list[1] ] );
+            //set handle values
+            $("#"+$(this).attr("id")+"_handle0").text(list[0])
+            $("#"+$(this).attr("id")+"_handle1").text(list[1])
+
+            $("#filter_start_date").val(list[0])
+            $("#filter_end_date").val(list[1])
+            $("#filter_date_checkbox").prop("checked", true);
+        });
+
+     }else{
+        list.forEach(function(val) {
+            $("#" + id + " input[type='checkbox'][value='" + val + "']").prop("checked", true);
+        });
+     }
+  }
       reset_filter(id){
         // take the id (maybe dropdown or slider) and remove the selection
         //TODO - make this more specific to variable type (i.e numeric vs categorical)
@@ -341,10 +400,10 @@ class Filter_Manager {
                             meets_criteria=false
                         }
 
-                    }else if (a=='bounds'){
+                    }else if (a=='Bounds'){
                          var bounds_col=this.section_manager.json_data[i].geojson_col
                          if(obj?.[bounds_col]){
-                             // try{
+                             try{
                                   const geojson = JSON.parse(obj[bounds_col]);
                                   const poly1 = turf.polygon(geojson.features[0].geometry.coordinates);
                                   const b = layer_manager.map.getBounds()
@@ -361,9 +420,9 @@ class Filter_Manager {
                               if (!turf.booleanIntersects(poly1, poly2)){
                                 meets_criteria=false
                               }
-//                              }catch(e){
-//
-//                              }e
+                             }catch(e){
+
+                             }
                         }else{
                              // no coordinates
                              meets_criteria=false
@@ -404,12 +463,10 @@ class Filter_Manager {
 
         this.params=[this.filters]
         console_log( "params were set",this.filters)
-//        this.set_filters();
+          
 //        this.save_filter_params()
 //
 //        this.add_filter_watcher();
-
-        //this.slide_position("results");
         // keep track of the subset for sorting
          this.subset_data=subset
          this.show_sorted_results(subset)
@@ -747,10 +804,11 @@ class Filter_Manager {
 //			"LARGEST":			{"name": "Area: largest", "search": "geom_area desc"}
 
         this.show_results(sorted_data)
+        if(sorted_data.length>0){
+            var section_id= sorted_data[0].section_id
 
-        var section_id= sorted_data[0].section_id
-
-        this.show_items(section_id,sorted_data)
+            this.show_items(section_id,sorted_data)
+        }
 
     }
     show_items(section_id,data){
