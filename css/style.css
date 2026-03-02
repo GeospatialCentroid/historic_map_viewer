@@ -47,7 +47,7 @@ display:inline;
 
 #content{
     width:100%;
-    background-color: #999;
+    /* background-color: #999; */
     display:none;
 }
 #header {
@@ -428,6 +428,13 @@ a.disabled {
     overflow: hidden;
     white-space: nowrap;
 }
+.item_title_map {
+
+   overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+}
 .item_thumb_container{
       text-align: center;
     margin-bottom: 10px;
@@ -496,8 +503,8 @@ a.disabled {
     overflow: auto;
 }
 .leaflet-popup-content-wrapper{
-    width:300px;
-     min-height: 240px;
+    width:250px;
+     /* min-height: 240px; */
 }
 .popup_image{
      width:180px;
@@ -1377,4 +1384,9 @@ a[aria-disabled="true"] {
 .readonly_input{
     width:100%;
 
+}
+.popup_title{
+    font-weight: bold;
+    font-size: .9rem;
+   
 }

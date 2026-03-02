@@ -393,7 +393,7 @@ function run_resize_do(){
 //        .col-md-: Desktops (≥992px)
 //        .col-lg-: Desktops (≥1200px)
 
-
+       
        if (window_width >768){
 
             // hide the scroll bars
@@ -405,10 +405,14 @@ function run_resize_do(){
             $("#data_table_wrapper").width(window_width-$("#side_bar").width()-1)
 
             map_manager.map.scrollWheelZoom.enable();
-            $("#side_bar").show();
+              $("#side_bar").height("100%");
+              $("#map_wrapper").height("100%")
+              $("#map_panel_wrapper").height("100%")
        }else{
              //mobile view
-
+             $("#side_bar").height("50%");
+             $("#map_panel_wrapper").height("40%")
+              $("#map_wrapper").height("50%")
              // scroll as needed
              $('html, body').css({
                 overflow: 'auto',
@@ -420,8 +424,10 @@ function run_resize_do(){
             $("#data_table_wrapper").width(window_width)
 
             map_manager.map.scrollWheelZoom.disable();
-             //$("#side_bar").hide();
+           
        }
+        map_manager.update_map_size();
+      
         //final sets
         $("#panels").width($("#side_bar").width())
         $(".panel").width($("#side_bar").width())

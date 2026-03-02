@@ -252,7 +252,7 @@ class Layer_Manager {
         html+="<div class='left-div-map'>"
         html+="<div class='grip'><i class='bi bi-grip-vertical'></i></div>"
 
-        html +="<div class='item_title item_title_wide font-weight-bold'>"+title+"</span></div>"
+        html +="<div class='item_title item_title_map font-weight-bold'>"+title+"</span></div>"
         html+="<div class='item_text_sm'>Date:<b> "+item[section.date_col]+"</b></div>"
 
 
@@ -803,11 +803,18 @@ class Layer_Manager {
          geo =L.geoJSON(feature, {pane: _resource_id, style: style,
             pointToLayer: function(feature, latlng) {
                 return L.marker(latlng, {  icon: map_manager.get_marker_icon(extra)});
-            },
+            },onEachFeature: function(feature, layer){
+                     var html = `<div class="popup_title">${feature.properties.title}</div>`
+                     html+= `<img class="item_thumb" src="${feature.properties.thumb_url}" style="max-height:100px;"/><br/>`
+                    html+=`<a href='javascript:void(0);' onclick="layer_manager.layer_click(0,'${feature.properties.id}')" >${LANG.MAP.ADDITIONAL_INFO}</a>`
+                 layer.bindPopup(html).openPopup();
+             }
         })
          //temp add service options
          layer_obj.service= {options:{url:url}}
-         geo.on('click', function(e) { $this.layer_click(e,unique_id) });
+         geo.on('click', function(e) { 
+            console.log(e)
+          });
 
          geo.on('dblclick', function (e) {
             L.DomEvent.stopPropagation(e);
@@ -847,14 +854,14 @@ class Layer_Manager {
        console.log(e)
        //todo store section_id as part of item
        var section_id=0
-       var item= filter_manager.get_item(section_id,e.layer.feature.properties.id);
+       var item= filter_manager.get_item(section_id,_resource_id);
        // if there is a parent id - we should select it instead
       if(typeof(item.parent_id) =="undefined" || item.parent_id==""){
          //console.log(item.parent_id)
-          filter_manager.select_item(section_id,e.layer.feature.properties.id)
+          filter_manager.select_item(section_id,_resource_id)
 
        }else{
-          filter_manager.show_layers(section_id,item.parent_id,e.layer.feature.properties.id)
+          filter_manager.show_layers(section_id,item.parent_id,_resource_id)
        }
        //filter_manager.select_item(0,e.layer.feature.properties.id)
 //        try{

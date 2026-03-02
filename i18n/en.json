@@ -177,6 +177,7 @@
 		"OF": "of",
 		"FOUND": "Found",
 		"SHOW_IN_TABLE": "Show in Table"
+		
 	},
 	"TAB_TITLES": {
 		"BROWSE_TAB": 	"Search",
@@ -198,7 +199,8 @@
 		"OUTLINE_COLOR": "Line",
 		"Fill_COLOR": "Fill",
 		"MARKER_TOGGLE": "Map Points in View",
-		"BASEMAP_TEXT": "Base Map Options"
+		"BASEMAP_TEXT": "Base Map Options",
+		"ADDITIONAL_INFO": "See Additional information"
 	},
 	"BASEMAP": {
 		"TITLE": "Basemap",
