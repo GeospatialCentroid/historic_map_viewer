@@ -355,12 +355,17 @@ class Filter_Manager {
         //TODO - make this more specific to variable type (i.e numeric vs categorical)
 
         $("#"+id+" input").prop('checked', false);
+        console.log("reset filter ",id,id=="Date__Search")
+        if(id=="Date__Search"){
+            //excelption for custom date search
+             $("#filter_date_checkbox").prop('checked', false);
+        }
+       //console.log("reset filter ",id)
+        // $("#"+id+'_slider').each(function(){
+        //   var options = $(this).slider( 'option' );
 
-        $("#"+id+'_slider').each(function(){
-          var options = $(this).slider( 'option' );
-
-          $(this).slider( 'values', [ options.min, options.max ] );
-        });
+        //   $(this).slider( 'values', [ options.min, options.max ] );
+        // });
 }
      remove_filter(_id){
         var id = _id.replaceAll("__", " ");
