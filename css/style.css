@@ -1388,5 +1388,5 @@ a[aria-disabled="true"] {
 .popup_title{
     font-weight: bold;
     font-size: .9rem;
-   
+   max-width: 230px;
 }
