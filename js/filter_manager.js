@@ -1169,7 +1169,13 @@ class Filter_Manager {
             }
         }
         if(item?.[section.map_tiles_col]){
-            html+="<div class='meta-item'><span class='fw-bold'>"+LANG.DETAILS.MAP_TILES+"</span> "+"<br/>"
+            html+="<div class='meta-item'><span class='fw-bold'>"+LANG.DETAILS.MAP_TILES+"</span> "
+            html+=`<a href="https://github.com/GeospatialCentroid/historic_map_explorer/blob/main/add_tile_map_qgis.md" target="_blank">
+            <img src="images/qgis-svgrepo-com.svg" alt="QGIS instructions" style="width: 15px; height: 15px; vertical-align: middle;">
+            </a>`
+            html+=`<a href="https://github.com/GeospatialCentroid/historic_map_explorer/blob/main/add_tile_map_agol.md" target="_blank">
+            <img src="images/arcgis-online-svgrepo-com.svg" alt="AGOL instructions" style="width: 15px; height: 15px; vertical-align: middle;">
+            </a><br/>`
             html+='<input class="readonly_input" type="text" value='+item[section.map_tiles_col]+'>'
             html+="</div>"
         }
