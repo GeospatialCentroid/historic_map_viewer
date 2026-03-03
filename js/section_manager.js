@@ -535,7 +535,7 @@ class Section_Manager {
                     break;
               case 'details':
                     pos=width*3
-                    nav_text=LANG.NAV.BACK_BROWSE+" <i class='bi bi-chevron-left'></i>"
+                    nav_text=LANG.NAV.BACK_RESULTS+" <i class='bi bi-chevron-left'></i>"
                     $("#nav").show();
                     break;
               case 'layers':

@@ -115,8 +115,10 @@ class Layer_Manager {
     }else{
         $("#"+id+"_toggle").addClass("progress-bar-striped progress-bar-animated")
 
+        var item = filter_manager.get_item(section_id,item_id);
+        console.log(item, "is the items")
         //layer_manager.toggle_layer section_id,item_id,type,drawing_info,url,z,item_ids
-        layer_manager.toggle_layer(section_id,item_id,'AllMaps')//,false,false,this.layers_list.length)//,,false,match.URL)
+        layer_manager.toggle_layer(section_id,item_id,item.type)//,false,false,this.layers_list.length)//,,false,match.URL)
          var layer =  this.get_layer_obj(section_id+"_"+item_id)
          this.map.addLayer(layer.layer_obj)
     }
