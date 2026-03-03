@@ -524,8 +524,9 @@ class Section_Manager {
         var width=$("#side_bar").width()
          var nav_text=""
          this.panel_name=panel_name
-         delete filter_manager.display_resource_id;
-
+         if (panel_name!="details"){
+             delete filter_manager.display_resource_id;
+         }
 
          switch(panel_name) {
               case 'results':
@@ -583,7 +584,7 @@ class Section_Manager {
 
              $("#nav").html(nav_text)
 
-             $("#search_tab").trigger("click")
+             //$("#search_tab").trigger("click")
     }
     go_back(){
 

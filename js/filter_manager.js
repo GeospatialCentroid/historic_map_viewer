@@ -256,7 +256,7 @@ class Filter_Manager {
         var text_val=""
         //for number range use dash - separator
         if (value != null) {
-            if ($.isNumeric(value[0]) && value.length <= 2) {
+            if ($.isNumeric(value[0]) && value.length <= 2 && _id != LANG.SEARCH.CHIP_SUBMIT_BUT_LABEL ) {
                 text_val = value[0] + " - " + value[1];
             } else {
                 // use labels for display if provided
@@ -331,6 +331,8 @@ class Filter_Manager {
      
      if(id=='Bounds'){
         $("#filter_bounds_checkbox").prop("checked", true);
+     }else if(id == LANG.SEARCH.CHIP_SUBMIT_BUT_LABEL){
+        $("#search").val(list[0])
      }else if(list.length>1 && $.isNumeric(list[0])){
         //check if numeric
         $("#"+id+'_slider .filter_slider_box').each(function(){
@@ -355,10 +357,12 @@ class Filter_Manager {
         //TODO - make this more specific to variable type (i.e numeric vs categorical)
 
         $("#"+id+" input").prop('checked', false);
-        console.log("reset filter ",id,id=="Date__Search")
         if(id=="Date__Search"){
             //excelption for custom date search
              $("#filter_date_checkbox").prop('checked', false);
+        }else if(id=="Bounds"){
+            //exception for custom bounds search
+             $("#filter_bounds_checkbox").prop('checked', false);
         }
        //console.log("reset filter ",id)
         // $("#"+id+'_slider').each(function(){

@@ -28,20 +28,25 @@ function setup_params(){
      usp = new URLSearchParams(window.location.search.substring(1).replaceAll("~", "'").replaceAll("+", " "))
 
     if (window.location.search.substring(1)!="" && $.isEmptyObject(params)){
+        // filters
        if (usp.get('f')!=null){
             params['f'] = rison.decode("!("+usp.get("f")+")")
         }
+        // map position and zoom
         if (usp.get('e')!=null){
             params['e'] =  rison.decode(usp.get('e'))
         }
-
+        // layers to add to the map
         if (usp.get('l')!=null && usp.get('l')!="!()"){
             params['l'] =  rison.decode(usp.get('l'))
         }
+        // permalink to a specific item
         if (usp.get('p')!=null ){
             params['p'] =  usp.get('p')
         }
-
+         if (usp.get('t')!=null ){
+            params['t'] =  usp.get('t')
+        }
         // debug mode
         if (usp.get('d')!=null){
            DEBUGMODE=true
@@ -204,11 +209,11 @@ function save_params(){
         p+="&l="+rison.encode(layer_manager.layers_list)
     }
 
-    //p+='&t='+$("#tabs").find(".active").attr("id")
-//    if(typeof(filter_manager.panel_name)!="undefined"){
-//        // add the panel if available
-//        p+="/"+filter_manager.panel_name;
-//    }
+    p+='&t='+$("#tabs").find(".active").attr("id")
+   if(typeof(filter_manager.panel_name)!="undefined"){
+       // add the panel if available
+       p+="/"+filter_manager.panel_name;
+   }
 
     if(typeof(filter_manager.display_resource_id)!="undefined"){
         // add the display_resource_id if available
@@ -250,8 +255,10 @@ function init_tabs(){
          $(".tab_panel").hide()
          // show only this one by assuming it's name from the button
          var tab_panel_name = $(this).attr("id").substring(0,$(this).attr("id").indexOf("_"))+"_panel_wrapper"
-
          $("#"+tab_panel_name).show()
+         if(tab_panel_name=="search_panel_wrapper"){
+            section_manager.slide_position(filter_manager.panel_name)
+         }
          save_params()
 
     });
@@ -438,7 +445,7 @@ function run_resize_do(){
          $("#panels").stop(true, true)
          // if we are on the search tab, make sure the viewable panel stays when adjusted
 
-        console.log($("#tabs").find(".active").attr("id"))
+        
         if("search_tab"==$("#tabs").find(".active").attr("id")){
             section_manager.slide_position(section_manager.panel_name)
         }
