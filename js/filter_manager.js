@@ -802,15 +802,13 @@ class Filter_Manager {
               sorted_data.reverse()
            }
         }else if (["LARGEST","SMALLEST"].includes(sort_option)) {
-            sort_col = "Area"
-           // TITLE_ASC
-           sorted_data= sorted_data.sort((a,b) => (a[sort_col] > b[sort_col] ) ? 1 : ((b[sort_col]  > a[sort_col] ) ? -1 : 0))
-           if (sort_option=='SMALLEST'){
-              sorted_data.reverse()
-           }
+            sort_col = "area"
+            // TITLE_ASC
+            sorted_data = sorted_data.sort((a, b) => Number(a[sort_col]) - Number(b[sort_col]))
+            if (sort_option=='LARGEST'){
+                sorted_data.reverse()
+            }
         }
-//			"SMALLEST":			{"name": "Area: smallest", "search": "geom_area asc"},
-//			"LARGEST":			{"name": "Area: largest", "search": "geom_area desc"}
 
         this.show_results(sorted_data)
         if(sorted_data.length>0){
@@ -1001,7 +999,8 @@ class Filter_Manager {
 
                  item_html+='<a href="#" onclick="filter_manager.select_item('+section_id+',\''+item._id+'\')">'+item[section.title_col]+'</a><br/>'
                  item_html+="<div class='item_text_sm'>Creator:<b> "+item[section.creator_col]+"</b></div>"
-                 item_html+="<div class='item_text_sm'>Date:<b> "+item[section.date_col]+"</b></div><div class=\"results-buttons\">"
+                 item_html+="<div class='item_text_sm'>Date:<b> "+item[section.date_col]+"<b></div><div class=\"results-buttons\">"
+
                  item_html+=this.get_add_button(section_id,item._id)
                  // if the record has no children
                  if(item.child_ids.length==0){
@@ -1009,9 +1008,7 @@ class Filter_Manager {
 
                  }
                  item_html+='<button type="button" class="btn btn-success" onclick="filter_manager.select_item('+section_id+',\''+item._id+'\')">'+LANG.RESULT.DETAILS+'</button>'
-
                  item_html+="</div>";
-
                  item_html+="</li>";
 
                 // skip adding the parent if it has no children

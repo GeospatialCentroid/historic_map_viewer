@@ -143,8 +143,9 @@
 			"OLDEST":			{"name": "Publish date: oldest", "search": "gbl_mdModified_dt asc"},
 			"NEWEST":			{"name": "Publish date: newest", "search": "gbl_mdModified_dt desc"},
 			"TITLE_ASC":  		{"name": "Alphabetical (A-Z)", "search": "dct_title_s asc"},
-			"TITLE_DESC":  		{"name": "Alphabetical (Z-A)", "search": "dct_title_s desc"}
-
+			"TITLE_DESC":  		{"name": "Alphabetical (Z-A)", "search": "dct_title_s desc"},
+			"SMALLEST":			{"name": "Area: smallest", "search": "geom_area asc"},
+			"LARGEST":			{"name": "Area: largest", "search": "geom_area desc"}
 
 		},
 		"BLANK": "(blank)"

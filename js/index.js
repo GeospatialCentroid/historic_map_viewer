@@ -209,7 +209,10 @@ function save_params(){
         p+="&l="+rison.encode(layer_manager.layers_list)
     }
 
-    p+='&t='+$("#tabs").find(".active").attr("id")
+    if($("#tabs").find(".active").attr("id")){
+        p+='&t='+$("#tabs").find(".active").attr("id")
+    }
+    
    if(typeof(filter_manager.panel_name)!="undefined"){
        // add the panel if available
        p+="/"+filter_manager.panel_name;
@@ -249,15 +252,15 @@ function init_tabs(){
     $("#map_tab .label").text(LANG.TAB_TITLES.MAP_TAB)
     $("#download_tab").text(LANG.TAB_TITLES.DOWNLOAD_TAB)
     $(".tab_but").click(function() {
-        $(".tab_but").removeClass('btn-primary').removeClass('active').addClass('btn-secondary');
-        $(this).removeClass('btn-secondary').addClass('btn-primary').addClass('active');
+        $(".tab_but").removeClass('active')
+        $(this).addClass('active');
         // hide all tab_panels
          $(".tab_panel").hide()
          // show only this one by assuming it's name from the button
          var tab_panel_name = $(this).attr("id").substring(0,$(this).attr("id").indexOf("_"))+"_panel_wrapper"
          $("#"+tab_panel_name).show()
          if(tab_panel_name=="search_panel_wrapper"){
-            section_manager.slide_position(filter_manager.panel_name)
+            section_manager.slide_position(section_manager.panel_name)
          }
          save_params()
 

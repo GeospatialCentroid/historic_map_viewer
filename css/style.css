@@ -1390,3 +1390,21 @@ a[aria-disabled="true"] {
     font-size: .9rem;
    max-width: 230px;
 }
+/* Default: single line with ellipsis */
+.leaflet-control-attribution {
+  display: block;
+  max-width: calc(100vw - 360px);  /* responsive to viewport  minus size of side bar*/
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* On hover: expand and wrap */
+.leaflet-control-attribution:hover {
+  white-space: normal;
+  overflow: visible;
+}
+/* push up scale control to avoid overlap with attribution */
+.leaflet-bottom .leaflet-control-scale {
+    margin-bottom: 20px;
+}

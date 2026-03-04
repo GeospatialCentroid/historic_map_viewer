@@ -524,6 +524,8 @@ class Section_Manager {
         var width=$("#side_bar").width()
          var nav_text=""
          this.panel_name=panel_name
+
+         // for permalink purposes, we want to remove the resource id when we move away from the details page
          if (panel_name!="details"){
              delete filter_manager.display_resource_id;
          }
@@ -584,7 +586,17 @@ class Section_Manager {
 
              $("#nav").html(nav_text)
 
-             //$("#search_tab").trigger("click")
+            this.trigger_search_tab()
+    }
+     trigger_search_tab() {
+        if (this.searchTabLocked) return;
+
+        this.searchTabLocked = true;
+        $("#search_tab").trigger("click");
+
+        setTimeout(() => {
+            this.searchTabLocked = false;
+        }, 1000);
     }
     go_back(){
 

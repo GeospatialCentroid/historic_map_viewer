@@ -116,7 +116,6 @@ class Layer_Manager {
         $("#"+id+"_toggle").addClass("progress-bar-striped progress-bar-animated")
 
         var item = filter_manager.get_item(section_id,item_id);
-        console.log(item, "is the items")
         //layer_manager.toggle_layer section_id,item_id,type,drawing_info,url,z,item_ids
         layer_manager.toggle_layer(section_id,item_id,item.type)//,false,false,this.layers_list.length)//,,false,match.URL)
          var layer =  this.get_layer_obj(section_id+"_"+item_id)
@@ -424,8 +423,8 @@ class Layer_Manager {
   get_slider_html(elm_id,title){
   if(!title){
     title=LANG.MAP.TRANSPARENCY
-  }
-    return "<div class='slider_box'> <label class='lil' for='"+elm_id+"_slider' >"+title+"</label><div id='"+elm_id+"_slider'></div></div>"
+  }//for='"+elm_id+"_slider'
+    return "<div class='slider_box'> <label class='lil'  >"+title+"</label><div id='"+elm_id+"_slider'></div></div>"
   }
   make_slider(elm_id,value){
 
@@ -857,6 +856,7 @@ class Layer_Manager {
        //todo store section_id as part of item
        var section_id=0
        var item= filter_manager.get_item(section_id,_resource_id);
+       console_log(item,"is the item clicked")
        // if there is a parent id - we should select it instead
       if(typeof(item.parent_id) =="undefined" || item.parent_id==""){
          //console.log(item.parent_id)
@@ -1247,7 +1247,7 @@ class Layer_Manager {
         save_params()
     }
     layer_list_change(){
-        console.log("layer_list_change")
+        console_log("layer_list_change")
 
         //update the table manager dropdown
        // table_manager.show_layer_select()
