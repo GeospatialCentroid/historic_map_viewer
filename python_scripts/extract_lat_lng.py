@@ -3,51 +3,39 @@
 """
 extract_lat_lng_featurecollection.py
 
-A command-line utility to extract latitude and longitude from a GeoJSON column in a CSV.
-Supports GeoJSON FeatureCollections with one or more Features. For Point geometries,
-returns the point coordinates; for other geometries, returns the centroid coordinates.
+Extract latitude, longitude, and area (km²) from a GeoJSON FeatureCollection
+stored in a CSV column.
+
+- Uses first feature in the FeatureCollection
+- Returns centroid for non-point geometries
+- Preserves existing values if lat/lng/area already exist
 
 Usage:
-    python extract_lat_lng_featurecollection.py CSV_FILE GEOJSON_COL LAT_COL LNG_COL [--inplace]
+python extract_lat_lng_featurecollection.py CSV_FILE GEOJSON_COL LAT_COL LNG_COL AREA_COL [--inplace]
 
-Positional arguments:
-    CSV_FILE      Path to the CSV file
-    GEOJSON_COL   Name of the column containing GeoJSON FeatureCollection
-    LAT_COL       Name of the latitude column to create
-    LNG_COL       Name of the longitude column to create
-
-Optional arguments:
-    --inplace     Update the source CSV file instead of creating a new one
-
-Dependencies:
-    pandas, shapely
-
-Example call
-python python_scripts/extract_lat_lng.py "data/Historic Maps.csv" geojson latitude longitude  area --inplace
-
+Example:
+python python_scripts/extract_lat_lng.py "data/Historic Maps.csv" geojson latitude longitude area --inplace
 """
 
-#!/usr/bin/env python3
-
 import argparse
-import pandas as pd
 import json
+import pandas as pd
 from shapely.geometry import shape
 from shapely.ops import transform
 from pyproj import Transformer
 
 
+transformer = Transformer.from_crs("EPSG:4326", "EPSG:3857", always_xy=True)
+
+
 def extract_geometry_info(geojson_str):
-    """
-    Extract latitude, longitude, and area (km²) from a GeoJSON FeatureCollection string.
-    - Uses first feature.
-    - Returns centroid for non-point geometries.
-    - Area returned in square kilometers.
-    """
+    print("Extracting geometry info from GeoJSON:", geojson_str[:100], "...")
+    """Return (lat, lng, area_km2) from GeoJSON FeatureCollection."""
     try:
         geojson_obj = json.loads(geojson_str)
+
         if geojson_obj.get("type") != "FeatureCollection":
-            raise ValueError("Expected a FeatureCollection")
+            return None, None, None
 
         features = geojson_obj.get("features", [])
         if not features:
@@ -57,76 +45,67 @@ def extract_geometry_info(geojson_str):
         if geom.is_empty:
             return None, None, None
 
-        # Extract centroid or point coords
         if geom.geom_type == "Point":
-            lat, lng = geom.y, geom.x
-            area_km2 = 0.0
-        else:
-            centroid = geom.centroid
-            lat, lng = centroid.y, centroid.x
+            return geom.y, geom.x, 0.0
 
-            # Reproject to Web Mercator (meters)
-            transformer = Transformer.from_crs(
-                "EPSG:4326", "EPSG:3857", always_xy=True
-            )
-            projected_geom = transform(transformer.transform, geom)
+        centroid = geom.centroid
+        projected = transform(transformer.transform, geom)
+        area_km2 = projected.area / 1_000_000
 
-            area_m2 = projected_geom.area
-            area_km2 = area_m2 / 1_000_000
-
-        return lat, lng, area_km2
+        return centroid.y, centroid.x, area_km2
 
     except Exception as e:
-        print(f"Warning: failed to parse GeoJSON: {e}")
+        print(f"Error processing row: {e} , {geojson_col}: {geojson_str}")
         return None, None, None
+
+
+def process_row(row, geojson_col, lat_col, lng_col, area_col):
+    """Only compute values if they are missing."""
+    if pd.notna(row[lat_col]) and pd.notna(row[lng_col]) and pd.notna(row[area_col]):
+        return row[[lat_col, lng_col, area_col]]
+
+    lat, lng, area = extract_geometry_info(row[geojson_col])
+    return pd.Series([lat, lng, area], index=[lat_col, lng_col, area_col])
 
 
 def main():
     parser = argparse.ArgumentParser(
         description="Extract lat/lng and area (km²) from GeoJSON FeatureCollection column in a CSV."
     )
-    parser.add_argument("csv_file", help="Path to the CSV file")
-    parser.add_argument("geojson_col", help="Name of the column containing GeoJSON")
-    parser.add_argument("lat_col", help="Name of the latitude column to create")
-    parser.add_argument("lng_col", help="Name of the longitude column to create")
-    parser.add_argument("area_col", help="Name of the area (km²) column to create")
-    parser.add_argument(
-        "--inplace",
-        action="store_true",
-        help="If set, updates the source CSV file instead of creating a new one",
-    )
-    parser.add_argument(
-        "--start-row",
-        type=int,
-        default=0,
-        help="Row index to start processing from (0-based index). Default is 0."
-    )
+
+    parser.add_argument("csv_file")
+    parser.add_argument("geojson_col")
+    parser.add_argument("lat_col")
+    parser.add_argument("lng_col")
+    parser.add_argument("area_col")
+
+    parser.add_argument("--inplace", action="store_true")
+    parser.add_argument("--start_row", type=int, default=0)
 
     args = parser.parse_args()
 
     df = pd.read_csv(args.csv_file)
 
-    latitudes = []
-    longitudes = []
-    areas = []
+    # Create columns if missing
+    # for col in [args.lat_col, args.lng_col, args.area_col]:
+    #     if col not in df.columns:
+    #         df[col] = None
 
-    for i, geojson_str in enumerate(df[args.geojson_col]):
-        if i < args.start_row:
-            latitudes.append(None)
-            longitudes.append(None)
-            areas.append(None)
-            continue
+    # Process only rows after start_row
+    subset = df.iloc[args.start_row:]
+    print( f"Processing {len(subset)} rows starting from index {args.start_row}...")
+    results = subset.apply(
+        process_row,
+        axis=1,
+        geojson_col=args.geojson_col,
+        lat_col=args.lat_col,
+        lng_col=args.lng_col,
+        area_col=args.area_col,
+    )
 
-        lat, lng, area = extract_geometry_info(geojson_str)
-        latitudes.append(lat)
-        longitudes.append(lng)
-        areas.append(area)
+    df.loc[subset.index, [args.lat_col, args.lng_col, args.area_col]] = results
 
-    df[args.lat_col] = latitudes
-    df[args.lng_col] = longitudes
-    df[args.area_col] = areas
-
-    output_file = args.csv_file if args.inplace else f"processed_{args.csv_file}"
+    output_file = args.csv_file if args.inplace else f"{args.csv_file}_processed.csv"
     df.to_csv(output_file, index=False)
 
     print(f"CSV saved as: {output_file}")
@@ -134,4 +113,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

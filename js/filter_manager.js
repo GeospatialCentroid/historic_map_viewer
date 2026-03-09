@@ -776,7 +776,7 @@ class Filter_Manager {
         this.sort_data(this.subset_data)
     }
     sort_data(data,sort_col){
-        console.log("sort_data")
+        console_log("sort_data")
         if(!sort_col){
             // use the default if none is provided
             sort_col="_sort_col"
@@ -999,7 +999,7 @@ class Filter_Manager {
 
                  item_html+='<a href="#" onclick="filter_manager.select_item('+section_id+',\''+item._id+'\')">'+item[section.title_col]+'</a><br/>'
                  item_html+="<div class='item_text_sm'>Creator:<b> "+item[section.creator_col]+"</b></div>"
-                 item_html+="<div class='item_text_sm'>Date:<b> "+item[section.date_col]+"<b></div><div class=\"results-buttons\">"
+                 item_html+="<div class='item_text_sm'>Date:<b> "+item[section.date_col]+"</b></div><div class=\"results-buttons\">"
 
                  item_html+=this.get_add_button(section_id,item._id)
                  // if the record has no children

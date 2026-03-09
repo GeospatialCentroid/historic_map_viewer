@@ -95,7 +95,7 @@ Adds a new geojson column to the CSV by retrieving or generating GeoJSON annotat
 python python_scripts/bounds_inject.py \
   -source_file "data/Historic Maps.csv" \
   -column_name "Georeference Annotation" \
-  -column_extension "geojson" \
+  -column_extension ".geojson" \
   -new_column "geojson"
 ```
 

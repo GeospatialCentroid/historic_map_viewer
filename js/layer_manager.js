@@ -806,7 +806,7 @@ class Layer_Manager {
                 return L.marker(latlng, {  icon: map_manager.get_marker_icon(extra)});
             },onEachFeature: function(feature, layer){
                      var html = `<div class="popup_title">${feature.properties.title}</div>`
-                     html+= `<img class="item_thumb" src="${feature.properties.thumb_url}" style="max-height:100px;"/><br/>`
+                     html+= `<img class="item_thumb" src="${feature.properties.thumb_url}" style="height:100px;object-fit: cover;"/><br/>`
                     html+=`<a href='javascript:void(0);' onclick="layer_manager.layer_click(0,'${feature.properties.id}')" >${LANG.MAP.ADDITIONAL_INFO}</a>`
                  layer.bindPopup(html).openPopup();
              }

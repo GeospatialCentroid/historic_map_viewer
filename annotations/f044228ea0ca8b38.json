@@ -1,0 +1,147 @@
+{
+  "id": "https://annotations.allmaps.org/images/f044228ea0ca8b38",
+  "type": "AnnotationPage",
+  "@context": "http://www.w3.org/ns/anno.jsonld",
+  "items": [
+    {
+      "id": "https://annotations.allmaps.org/maps/c59e13460794c1bc",
+      "type": "Annotation",
+      "@context": [
+        "http://iiif.io/api/extension/georef/1/context.json",
+        "http://iiif.io/api/presentation/3/context.json"
+      ],
+      "created": "2026-03-09T19:16:35.155Z",
+      "modified": "2026-03-09T19:16:35.155Z",
+      "motivation": "georeferencing",
+      "target": {
+        "type": "SpecificResource",
+        "source": {
+          "id": "https://tile.loc.gov/image-services/iiif/service:gmd:gmd431m:g4314m:g4314fm:g009961906:00996_1906-0016",
+          "type": "ImageService2",
+          "height": 7650,
+          "width": 6450,
+          "partOf": [
+            {
+              "id": "https://tile.loc.gov/image-services/iiif/service:gmd:gmd431m:g4314m:g4314fm:g009961906:00996_1906-0016",
+              "type": "Canvas",
+              "label": {
+                "none": [
+                  "Page 16"
+                ]
+              },
+              "partOf": [
+                {
+                  "id": "https://www.loc.gov/item/sanborn00996_005/manifest.json",
+                  "type": "Manifest",
+                  "label": {
+                    "none": [
+                      "Sanborn Fire Insurance Map from Fort Collins, Larimer County, Colorado."
+                    ]
+                  }
+                }
+              ]
+            }
+          ],
+          "provider": [
+            {
+              "type": "Organization",
+              "label": {
+                "none": [
+                  "Library of Congress"
+                ]
+              },
+              "homepage": [
+                {
+                  "id": "https://www.loc.gov/maps/"
+                }
+              ]
+            }
+          ]
+        },
+        "selector": {
+          "type": "SvgSelector",
+          "value": "<svg width=\"6450\" height=\"7650\"><polygon points=\"0,0 0,7650 6450,7650 6450,0\" /></svg>"
+        }
+      },
+      "body": {
+        "type": "FeatureCollection",
+        "transformation": {
+          "type": "polynomial",
+          "options": {
+            "order": 1
+          }
+        },
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {
+              "resourceCoords": [
+                3448,
+                486
+              ]
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -105.0788979,
+                40.5780893
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "resourceCoords": [
+                5923,
+                7230
+              ]
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -105.0771141,
+                40.5737327
+              ]
+            }
+          },
+          {
+            "type": "Feature",
+            "properties": {
+              "resourceCoords": [
+                5880,
+                493
+              ]
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -105.0771208,
+                40.5780785
+              ]
+            }
+          }
+        ],
+        "_allmaps": {
+          "id": "https://annotations.allmaps.org/maps/c59e13460794c1bc",
+          "version": "https://annotations.allmaps.org/maps/c59e13460794c1bc@fe12dcccb100a3c1",
+          "image": {
+            "id": "https://annotations.allmaps.org/images/f044228ea0ca8b38",
+            "version": "https://annotations.allmaps.org/images/f044228ea0ca8b38@1063d1a471599712",
+            "canvases": [
+              {
+                "id": "https://annotations.allmaps.org/canvases/f044228ea0ca8b38",
+                "manifests": [
+                  {
+                    "id": "https://annotations.allmaps.org/manifests/eeea076468473593"
+                  }
+                ]
+              }
+            ]
+          },
+          "scale": 15.021085,
+          "area": 218684.77
+        }
+      }
+    }
+  ]
+}
