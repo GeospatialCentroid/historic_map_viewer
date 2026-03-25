@@ -37,6 +37,8 @@ class Map_Manager {
     this.map.on('moveend', function (e) {
         $this.update_map_pos()
     });
+    
+    
 
     //this.add_legend()
 
@@ -53,12 +55,23 @@ class Map_Manager {
     });
 
    map_manager.map.on('warpedmapadded', (event) => {
-        // when the layer is added, update the associated buttons
-        const layers = event.target._layers;
-        const layer_ids = Object.keys(layers).map(k => parseInt(k));
-        const new_layer_id = Math.max(...layer_ids);
-        const but_id = "item_"+layers[new_layer_id].id
-
+    // when the layer is added, update the associated buttons
+    // reconstruct the original string from the event object
+    const reconstructedString = Object.entries(event)
+    .filter(([key, value]) => !isNaN(key) && typeof value === 'string' && value.length === 1)
+    .sort((a, b) => Number(a[0]) - Number(b[0]))
+    .map(([key, value]) => value)
+    .join('');
+    
+    const entry = layer_manager.warpedLayerIndex[reconstructedString];
+  
+    if (!entry) {
+        console.warn("No metadata for warped map:", annotationUrl);
+        return;
+    }
+    const section_id = entry.section_id;
+    const item_id = entry.item_id;
+    const but_id = `item_${section_id}_${item_id}`;
       if (but_id) {
         const $button = $("." + but_id + "_toggle");
         $button.removeClass("progress-bar-striped progress-bar-animated");
@@ -66,19 +79,65 @@ class Map_Manager {
         $button.html(LANG.RESULT.REMOVE);
         $("." + but_id + "_zoom").show();
 
-        // update parent
-        var id_parts = but_id.replaceAll("item_","").split("_");
-        var section_id= id_parts[0]
-        var item_id=id_parts[1]
-        var item = filter_manager.get_item(section_id,item_id);
-        filter_manager.update_parent_but(section_id, item.parent_id);
-      }
-
+        if(typeof section_id !== "undefined" && typeof item_id !== "undefined" ){
+            var item = filter_manager.get_item(section_id,item_id);
+            filter_manager.update_parent_but(section_id, item.parent_id);
+            var hitbox_layer = map_manager.add_hitbox_layer(item);
+            entry.layer_obj.hitbox_layer = hitbox_layer;//keep track for later removal
+      
+        }else{
+            console_log(but_id,"Could not find section_id and item_id for hitbox layer",section_id,item_id)
+        }
+    }
 
     });
-
+    map_manager.map.on('layerremove', (e) => {
+        //when a layer is removed, also remove the hitbox layer if it exists
+        if (e?.layer?.hitbox_layer) {
+            map_manager.map.removeLayer(e.layer.hitbox_layer);
+            this.hide_highlight_feature();
+            //also close the popup if the layer is removes
+            if(this.popup){
+                this.popup.remove()
+                this.popup=null
+            }
+        }
+        
+    });
 
   }
+  add_hitbox_layer(resource_obj) {
+    const $this = this;
+
+    const hitbox = L.geoJSON(resource_obj.geojson, {
+        style: {
+            opacity: 0,
+            fillOpacity: 0,
+            weight: 0
+        },
+        interactive: true
+    });
+
+    hitbox.on('mouseover', function (e) {
+        $this.map.getContainer().style.cursor = 'pointer';
+       // Not working - $this.show_highlight_geo_json(resource_obj.geojson, true);
+    });
+
+    hitbox.on('mouseout', function (e) {
+        $this.map.getContainer().style.cursor = '';
+        $this.hide_highlight_feature();
+    });
+
+    hitbox.on('click', function (e) {
+       var latlng = map_manager.map.mouseEventToLatLng(e.originalEvent)
+        $this.click_lat_lng = L.latLng(latlng.lat,latlng.lng);
+        $this.popup_show(resource_obj);
+    });
+
+    hitbox.addTo(this.map);
+
+    return hitbox;
+}
 
      update_map_pos(no_save){
         var c = this.map.getCenter()
@@ -112,23 +171,27 @@ class Map_Manager {
 
     }
 
- popup_show(feature){
+ popup_show(_resource_obj){
+        var item_id=_resource_obj.id
+        var section_id=_resource_obj.section_id
         var $this=this
-
-        var html = '<div id="popup_content">'
-            html+='<h6>'+feature.properties.title+'</h6>'
-            html+='<a href="javascript:void(0);" onclick="filter_manger.show_image(\''+feature.properties.iiif+'\',\''+feature.properties.attribution+'\',\''+feature.properties.info_page+'\')" ><img class="center" src="'+feature.properties.thumb_url+'" alt="'+feature.properties.title+'"></a> '
-           //html+='<a href="javascript:void(0);" onclick="image_manager.show_image(\''+feature.properties.iiif+'\',\''+feature.properties.attribution+'\',\''+feature.properties.info_page+'\')" ><img class="center" src="'+feature.properties.thumb_url+'" alt="'+feature.properties.title+'"></a> '
-
-          html+='</div>'
+        var id = "item_"+section_id+"_"+item_id
+        // get the existing slider values
+        var t = $("." + id+'_slider').slider("value");
+        var c = $("." + id+'_color_remove'+'_slider').slider("value");
+        var html = layer_manager.get_layer_html(section_id,item_id,"basemap_layer")
+        $this.show_highlight_geo_json(_resource_obj.geojson, false);
 
         this.popup= L.popup(this.popup_options)
             .setLatLng(this.click_lat_lng)
             .setContent(html)
             .openOn(this.map)
-//            .on("remove", function () {
-//                 $this.show_highlight_geo_json()
-//              });
+           .on("remove", function () {
+                $this.show_highlight_geo_json()
+             });
+       // create and set slider values
+        layer_manager.make_slider(id+'_slider',t)
+        layer_manager.make_remove_color_slider(id+'_color_remove'+'_slider',c)
 
      }
       show_highlight_geo_json(geo_json,_no_fill){
@@ -139,6 +202,7 @@ class Map_Manager {
         this.hide_highlight_feature();
 
         if (geo_json?.geometry && geo_json.geometry.type =="Point" || geo_json?.type=="MultiPoint"){
+
             //special treatment for points
             this.highlighted_feature = L.geoJSON(geo_json, {
               pointToLayer: function (feature, latlng) {
@@ -187,31 +251,7 @@ class Map_Manager {
           html: '<span class="marker" '+extra+'/>'
         })
     }
-    // township search
 
-//    parse_township_section_geojson(data){
-//        var feature = L.geoJson(JSON.parse(data))//.addTo(map_manager.map);
-//        map_manager.map.fitBounds(feature.getBounds());
-//        map_manager.create_marker(feature.getBounds().getCenter())
-//        //show success
-//        $("#bearing").removeClass("option_error")
-//        $("#bearing").addClass("option_valid")
-//    }
-//    create_marker(lat_lng){
-//        if(click_marker){
-//            this.map.removeLayer(click_marker);
-//        }
-//        click_marker = new L.marker(lat_lng).addTo(this.map);
-//        var lat = lat_lng["lat"].toFixed(7);
-//        var lng = lat_lng["lng"].toFixed(7);
-//        var html="<table id='lat_lng_table'><tr><td>"+lat+"</td><td>"+lng+"</td></tr></table>"
-//        html+="<a href='#' onclick='copyElementToClipboard(\"lat_lng_table\");'>copy</a>"
-//
-//        var popup = L.popup().setContent(html);
-//
-//        click_marker.bindPopup(popup).openPopup();
-//
-//    }
     show_layer_select(_layer_id){
         var trigger_map_click=false
         // triggered when there is an update

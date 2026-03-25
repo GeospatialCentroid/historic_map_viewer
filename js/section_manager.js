@@ -129,8 +129,7 @@ class Section_Manager {
          // add ref to the app settings
          var col_settings= section_manager.data[_slot]
 
-         //
-//         console.log("we have this many maps ",data.length)
+        //         console.log("we have this many maps ",data.length)
          for (var i=0; i<data.length;i++){
 
             if(data[i][col_settings.annotation_col]!=""){
@@ -211,7 +210,9 @@ class Section_Manager {
                     var obj = all_data[j]
 
                     obj.section_id=i// create a reference to the section for mix and match filtering
-
+                    if( obj?.["geojson"]){
+                        obj.geojson = JSON.parse(obj["geojson"])
+                    }
                     //keep track of parent record we're a child of
                     obj.record_section_id=false;
                     // if the record is a child, attempt to find it's parent and transfer the values

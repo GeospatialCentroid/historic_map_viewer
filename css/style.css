@@ -503,8 +503,8 @@ a.disabled {
     overflow: auto;
 }
 .leaflet-popup-content-wrapper{
-    width:250px;
-     /* min-height: 240px; */
+     /*width:250px;
+     min-height: 240px; */
 }
 .popup_image{
      width:180px;
@@ -1407,4 +1407,15 @@ a[aria-disabled="true"] {
 /* push up scale control to avoid overlap with attribution */
 .leaflet-bottom .leaflet-control-scale {
     margin-bottom: 20px;
+}
+
+.leaflet-popup-content .basemap_layer{
+    height:110px;
+  
+}
+.leaflet-popup-content{
+      width: 345px;
+}
+.dropdown-item{
+    margin-bottom: 3px;
 }

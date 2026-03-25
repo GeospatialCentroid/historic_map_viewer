@@ -219,7 +219,6 @@ class Layer_Manager {
     }
 
     this.add_layer(section_id,item_id,type,drawing_info,url,z,item_ids)
-
     if(type!="csv_geojson"){
         $this.add_to_map_tab(section_id,item_id,z);
         return
@@ -236,9 +235,27 @@ class Layer_Manager {
   add_to_map_tab(section_id,item_id,_z){
         var $this = this;
 
-        var item = filter_manager.get_item(section_id,item_id);
+       
 
-        // reference using the parent and child id joined by an "_"
+        var html=this.get_layer_html(section_id,item_id,"ui-state-default drag_li basemap_layer")
+
+        // add item to the beginning
+        $("#sortable_layers").prepend(html)
+        $("#sortable_layers" ).trigger("resize");
+
+        var id = "item_"+section_id+"_"+item_id
+//        // add interactivity
+//        this.make_color_palette(id+'_line_color',"color")
+//        this.make_color_palette(id+'_fill_color',"fillColor")
+
+        this.make_slider(id+'_slider',100)
+        this.make_remove_color_slider(id+'_color_remove'+'_slider',0)
+
+
+  }
+  get_layer_html(section_id,item_id,_class){
+        var item = filter_manager.get_item(section_id,item_id);
+         // reference using the parent and child id joined by an "_"
         var id = "item_"+section_id+"_"+item_id
         var section=section_manager.get_section_details(section_id)
         var title = item[section["title_col"]]
@@ -249,7 +266,7 @@ class Layer_Manager {
         var download_link = false//filter_manager.get_download_link(item)
         //var dcat_bbox = item.dcat_bbox
         //
-        var html = "<li class='ui-state-default drag_li basemap_layer' onmouseover='filter_manager.show_highlight("+section_id+",\""+item_id+"\",true);' onmouseout='map_manager.hide_highlight_feature();' id='"+id+"_drag'  >"
+        var html = "<li class=' "+_class+"' onmouseover='filter_manager.show_highlight("+section_id+",\""+item_id+"\",true);' onmouseout='map_manager.hide_highlight_feature();' id='"+id+"_drag'  >"
         html+="<div class='left-div-map'>"
         html+="<div class='grip'><i class='bi bi-grip-vertical'></i></div>"
 
@@ -289,22 +306,8 @@ class Layer_Manager {
         html+='</div>'
         html+=this.get_split_cell_control(section_id,item_id)
         html +='</li>'
-
-        // add item to the beginning
-        $("#sortable_layers").prepend(html)
-        $("#sortable_layers" ).trigger("resize");
-
-
-//        // add interactivity
-//        this.make_color_palette(id+'_line_color',"color")
-//        this.make_color_palette(id+'_fill_color',"fillColor")
-
-        this.make_slider(id+'_slider',100)
-        this.make_remove_color_slider(id+'_color_remove'+'_slider',0)
-
-
+        return html;
   }
-
 
   get_split_cell_control(section_id,item_id){
     return '<table class="split_table"><tr><td class="split_left split_cell" onclick="layer_manager.split_map(this,\''+section_id+'\',\''+item_id+'\',\'left\')"></td><td class="split_middle"></td><td class="split_right split_cell" onclick="layer_manager.split_map(this,\''+section_id+'\',\''+item_id+'\',\'right\')"></td></tr></table>'
@@ -421,81 +424,104 @@ class Layer_Manager {
 
 
   get_slider_html(elm_id,title){
-  if(!title){
-    title=LANG.MAP.TRANSPARENCY
-  }//for='"+elm_id+"_slider'
-    return "<div class='slider_box'> <label class='lil'  >"+title+"</label><div id='"+elm_id+"_slider'></div></div>"
+    if(!title){
+        title=LANG.MAP.TRANSPARENCY
+    }
+    return "<div class='slider_box'> <label class='lil'>"+title+"</label><div class='"+elm_id+"_slider'></div></div>"
   }
   make_slider(elm_id,value){
 
     var $this = this
-    $("#"+elm_id).slider({
+    $("."+elm_id).slider({
             min: 0,
             max: 100,
             value:value,
             range: "min",
-            change: function( event, ui ) {
-                 var ext ="_slider"
-                 var id = $(this).attr('id')
-                 var _id= id.substring(0,id.length-ext.length).replaceAll("item_","")
-
-                 var layer =  $this.get_layer_obj(_id)
-                 var type = layer.type
-                 var val =ui.value/100
-                 var set_opacity=["Map Service","Raster Layer","tms","","mapserver","mapservice","iiif","AllMaps"]
-                 if($.inArray(type,set_opacity)>-1){
-                    layer.layer_obj.setOpacity(val)
-                 }else if($.inArray(type,["esriPMS","esriSMS"])>-1){
-                       $("._marker_class"+_id).css({"opacity":val})
-                 }else if($.inArray(type,["basemap"])>-1){
-                    layer.setOpacity(val)
-                 }else if($.inArray(type,["GeoJSON"])>-1){
-                    layer.layer_obj.eachLayer(function (layer) {
-                        layer.setStyle({
-                            opacity: val,
-                            fillOpacity: val
-                          })
-                    });
-                 }else{
-                    layer.layer_obj.setStyle({
-                    opacity: val,
-                    fillOpacity: val
-                  })
-
-                 }
-                 //analytics_manager.track_event("map_tab","transparency_slider","layer_id",_id,3)
-              }
+            slide: function(event, ui) {
+                layer_manager.updateLayerOpacity(this, ui, event);
+            },
+            // 'change' handles clicks on the slider bar or programmatic sets
+            change: function(event, ui) {
+                 layer_manager.updateLayerOpacity(this, ui, event);
+            }
 
          });
   }
+  //
+    updateLayerOpacity(sliderEl, ui, event) {
+        var $thisSlider = $(sliderEl);
+        var ext = "_slider";
+        var id = $thisSlider.attr('class').split(' ')[0];
+        var _id = id.substring(0, id.length - ext.length).replaceAll("item_", "");
+
+        // --- SYNC LOGIC ---
+        // If the event has an 'originalEvent', it was moved by a human.
+        // We now update all other sliders that share this same class.
+        if (event && event.originalEvent) {
+            $("." + id).not($thisSlider).slider("value", ui.value);
+        }
+        // ------------------
+
+        var layer = this.get_layer_obj(_id);
+        if (!layer) return;
+
+        var type = layer.type;
+        var val = ui.value / 100;
+        var set_opacity = ["Map Service", "Raster Layer", "tms", "", "mapserver", "mapservice", "iiif", "AllMaps"];
+
+        if ($.inArray(type, set_opacity) > -1) {
+            layer.layer_obj.setOpacity(val);
+        } else if ($.inArray(type, ["esriPMS", "esriSMS"]) > -1) {
+            $("._marker_class" + _id).css({ "opacity": val });
+        } else if ($.inArray(type, ["basemap"]) > -1) {
+            layer.setOpacity(val);
+        } else if ($.inArray(type, ["GeoJSON"]) > -1) {
+            layer.layer_obj.eachLayer(function(l) {
+                l.setStyle({ opacity: val, fillOpacity: val });
+            });
+        } else {
+            layer.layer_obj.setStyle({ opacity: val, fillOpacity: val });
+        }
+    }
     make_remove_color_slider(elm_id,value){
         var $this = this
-        $("#"+elm_id).slider({
+        $("."+elm_id).slider({
             min: 0,
             max: 1,
             step: 0.01,
             value:value,
             range: "min",
             change: function(event, ui) {
-                var ext = "_color_remove_slider";
-                var id = $(this).attr('id');
-                var _id = id.substring(0, id.length - ext.length).replaceAll("item_", "");
-
-                var linear = ui.value;
-                var threshold = Math.pow(linear, 3); // nonlinear ramp
-
-                var layer = $this.get_layer_obj(_id);
-
-                layer.layer_obj.setRemoveColor({
-                    hexColor: layer.dominant_color,
-                    threshold: threshold,
-                    hardness: 0.8,
-                });
+                layer_manager.updateLayerOpacity(this, ui, event);
+            },
+            slide: function(event, ui) {
+                 layer_manager.updateLayerColorRemove(this, ui, event);
             }
 
     })
     }
+     updateLayerColorRemove(sliderEl, ui, event){
+         var $thisSlider = $(sliderEl);
+        var ext = "_color_remove_slider";
+        var id = $thisSlider.attr('class').split(' ')[0];
+        var _id = id.substring(0, id.length - ext.length).replaceAll("item_", "");
 
+        var linear = ui.value;
+        var threshold = Math.pow(linear, 3); // nonlinear ramp
+
+        if (event && event.originalEvent) {
+            //sync logic - update all other sliders that share this same class
+            $("." + id).not($thisSlider).slider("value", ui.value);
+        }
+        var layer = this.get_layer_obj(_id);
+
+        layer.layer_obj.setRemoveColor({
+            hexColor: layer.dominant_color,
+            threshold: threshold,
+            hardness: 0.8,
+        });
+
+     }
 
     get_service_method(r){
         for (var i=0;i<this.service_method.length;i++){
@@ -511,8 +537,6 @@ class Layer_Manager {
     // create layer at pane
 
     var resource = filter_manager.get_item(section_id,item_id); //section_manager.get_match(_resource_id)
-    console_log("The url is",url)
-
     var layer_options = this.get_layer_options(section_id,item_id,url,_drawing_info)
 
     //create a pane for the resource
@@ -586,20 +610,32 @@ class Layer_Manager {
          map_manager.image_map.attributionControl.addAttribution(this.get_attribution(resource));
         return
     }else if(service_method._method=="AllMaps"){
-        console.log("Load the ",section_id,item_id)
         var section = section_manager.get_section_details(section_id);
 //        var layer_obj = new Allmaps.WarpedMapLayer(
 //          resource[section.annotation_col],{ pane: `item_${section_id}_${item_id}`}
 //        );
 
          // if loading the annotation from a relative path
-        var layer_obj =new Allmaps.WarpedMapLayer(window.location.origin+"/"+window.location.pathname+"/"+resource[section.annotation_col],{pane: `item_${section_id}_${item_id}`})
-        console.log(window.location.origin+"/"+window.location.pathname+"/"+resource[section.annotation_col])
+
+       // create an index for warped layers for easy access when capturing the load event
+        this.warpedLayerIndex = this.warpedLayerIndex || {};
+
+        const url = window.location.origin + "/" + window.location.pathname + "/" + resource[section.annotation_col];
+        var layer_obj = new Allmaps.WarpedMapLayer(url, {pane: `item_${section_id}_${item_id}`});
+
+        // store metadata by URL
+        //console.log("Storing metadata for warped layer:", resource.geojson.features[0].properties.id);
+        this.warpedLayerIndex[resource.geojson.features[0].properties.id] = {
+            section_id,
+            item_id,
+            resource_obj: resource,
+            layer_obj
+        };
+        // console.log(window.location.origin+"/"+window.location.pathname+"/"+resource[section.annotation_col])
         getDominantColorFromWarpedLayer(resource[section.image_col])
         .then(dominant => {
            layer.dominant_color=dominant
         });
-
 
     }else if(service_method._method=="" || service_method._method==null){
         //todo - get this from the service
@@ -805,17 +841,31 @@ class Layer_Manager {
             pointToLayer: function(feature, latlng) {
                 return L.marker(latlng, {  icon: map_manager.get_marker_icon(extra)});
             },onEachFeature: function(feature, layer){
-                     var html = `<div class="popup_title">${feature.properties.title}</div>`
-                     html+= `<img class="item_thumb" src="${feature.properties.thumb_url}" style="height:100px;object-fit: cover;"/><br/>`
-                    html+=`<a href='javascript:void(0);' onclick="layer_manager.layer_click(0,'${feature.properties.id}')" >${LANG.MAP.ADDITIONAL_INFO}</a>`
-                 layer.bindPopup(html).openPopup();
+                            
+                layer.on('click', function (e) {
+                     var text = LANG.RESULT.ADD
+                    var _class ="btn-primary"
+                   var p = e.target.feature.properties
+                    if(layer_manager.is_on_map(0+"_"+p.id)){
+                        _class ="btn-danger"
+                        text = LANG.RESULT.REMOVE
+                    }
+
+                     var html = `<div class="popup_title">${p.title}</div>`
+                     html+= `<div style="text-align: center;"><img class="item_thumb" src="${p.thumb_url}" style="height:100px;object-fit: cover;display: inline-block;"/></div>`
+                     html+=`<button type="button" id="item_0_${p.id}_toggle" class="btn ${_class} item_0_${p.id}_toggle" onclick="layer_manager.add_layer_toggle(0,'${p.id}')">${text}</button>`
+                     html+=`<button type="button" class="btn btn-primary" style='display:none;' onclick="layer_manager.zoom_layer('0','${p.id}')">Zoom</button>`
+                     html+=`<button type="button" class="btn btn-success" onclick="filter_manager.select_item(0,'${p.id}')">Details</button>`
+        
+                    L.popup()
+                        .setLatLng(e.latlng)
+                        .setContent(html)
+                        .openOn(map_manager.map);
+                });
              }
         })
          //temp add service options
          layer_obj.service= {options:{url:url}}
-         geo.on('click', function(e) { 
-            console.log(e)
-          });
 
          geo.on('dblclick', function (e) {
             L.DomEvent.stopPropagation(e);
@@ -1196,7 +1246,7 @@ class Layer_Manager {
         html+= '<ul id="basemap_layer_dropdown" class="dropdown-menu" style="max-height:250px;overflow:scroll;" aria-labelledby="basemap_layer_but">'
         for(var b in basemaps){
 
-            html+= '<li value="'+b+'"><div><a class="dropdown-item"><img alt="'+basemaps[b].title+'" class="thumbnail" src="'+basemaps[b].image+'"/></a><span>'+basemaps[b].title+'</span></div></li>'
+            html+= '<li value="'+b+'"><div><span>'+basemaps[b].title+'</span><a class="dropdown-item"><img alt="'+basemaps[b].title+'" class="thumbnail" src="'+basemaps[b].image+'"/></a></div></li>'
         }
         html+='</ul></div>'
         return html

@@ -1211,8 +1211,8 @@ class Filter_Manager {
    show_highlight(section_id,item_id,_no_fill){
         var item= this.get_item(section_id,item_id)
         var section=section_manager.get_section_details(section_id)
-        if(item[section.geojson_col]!=""){
-            map_manager.show_highlight_geo_json(JSON.parse(item[section.geojson_col]),_no_fill);
+        if(item?.[section.geojson_col]){
+            map_manager.show_highlight_geo_json(item[section.geojson_col],_no_fill);
         }
    }
    get_checkbox_label(checkbox){
