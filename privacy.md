@@ -50,4 +50,4 @@ You can prevent Google Analytics from recognizing you on return visits to this s
 6\. Contact Us
 --------------
 
-If you have questions about this Privacy Policy, please contact the **Geospatial Centroid** via our [gis_help@colostate.edu.](mailto:gis_help@colostate.edu).
+If you have questions about this Privacy Policy, please contact the **Geospatial Centroid** at [gis_help@colostate.edu.](mailto:gis_help@colostate.edu).
