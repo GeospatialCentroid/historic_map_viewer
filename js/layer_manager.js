@@ -128,7 +128,7 @@ class Layer_Manager {
     var layer_id=_layer_id.replace("item_","")
     var layer =  this.get_layer_obj(layer_id)
 
-    console.log("remove_feature_layer",layer_id,layer)
+    console_log("remove_feature_layer",layer_id,layer)
     this.map.removeLayer(layer.layer_obj);
 
     $("."+_layer_id+"_toggle").removeClass("active")
@@ -202,7 +202,7 @@ class Layer_Manager {
   }
 
   toggle_layer(section_id,item_id,type,drawing_info,url,z,item_ids){
-
+    analytics_manager.track_event("map_tab","show_layer","layer_id",`${section_id}_${item_id}`)
     var but_id = "item_"+section_id+"_"+item_id;
     var pane="item_"+section_id+"_"+item_id;
     var $this = layer_manager;
@@ -405,8 +405,7 @@ class Layer_Manager {
 
     this.toggle_split_control();
 
-    console.log(this.split_left_layers, "split_left_layers");
-    analytics_manager.track_event("map_tab", "split_view", "layer_id", _resource_id);
+    analytics_manager.track_event("map_tab", "split_view", "layer_id", `${section_id}_${item_id}`);
 }
   toggle_split_control(){
     if (this.split_right_layers.length>0 || this.split_left_layers.length>0 ){
@@ -445,6 +444,7 @@ class Layer_Manager {
                 }
 
             }
+
             analytics_manager.track_event("map_tab","change_"+_attr,"layer_id",_id)
 
         })

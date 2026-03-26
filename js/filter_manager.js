@@ -629,8 +629,7 @@ class Filter_Manager {
                      this.catalog[a] = this.catalog[a].filter(item => item !== null);
                      var min = Math.min.apply(Math, this.catalog[a]);
                      var max = Math.max.apply(Math, this.catalog[a]);
-                      console.log("date slider ",a,min,max)
-                    console.log(this.catalog[a])
+
                      $("#filters").append(this.get_range_slider(a,min,max))
                      //to allow  fine-tuning - add min and max values
                      var ext="_slider"
@@ -998,9 +997,10 @@ class Filter_Manager {
                  var item_html = '<li class="list-group-item list-group-item-action" onmouseover="filter_manager.show_highlight('+section_id+',\''+item._id+'\');" onmouseout="map_manager.hide_highlight_feature();">'
 
                  item_html+='<a href="#" onclick="filter_manager.select_item('+section_id+',\''+item._id+'\')">'+item[section.title_col]+'</a><br/>'
-                 item_html+="<div class='item_text_sm'>Creator:<b> "+item[section.creator_col]+"</b></div>"
                  item_html+="<div class='item_text_sm'>Date:<b> "+item[section.date_col]+"</b></div><div class=\"results-buttons\">"
 
+                 item_html+="<div class='item_text_sm'>Creator:<b> "+item[section.creator_col]+"</b></div>"
+                 
                  item_html+=this.get_add_button(section_id,item._id)
                  // if the record has no children
                  if(item.child_ids.length==0){
@@ -1130,7 +1130,7 @@ class Filter_Manager {
 
     }
     select_item(section_id,item_id){
-     //analytics_manager.track_event("side_bar","show_details","layer_id",_resource_id)
+        analytics_manager.track_event("side_bar","show_details","layer_id",`${section_id}_${item_id}`)
         // use the id of the csv
          var item= this.get_item(section_id,item_id)
          var section=section_manager.get_section_details(section_id)
@@ -1228,6 +1228,9 @@ class Filter_Manager {
 }
 
     download_item(URl){
+
+         analytics_manager.track_event("search_tab", "download", "url", URl);
+
         var link = document.createElement('a');
         link.href = URl;
         link.download = URl;

@@ -203,6 +203,8 @@ class Map_Manager {
             $("." + id + "_right").addClass("split_cell_active");
         }
 
+        analytics_manager.track_event("web_map","click","layer_id",`${section_id}_${item_id}`)
+
      }
       show_highlight_geo_json(geo_json,_no_fill){
         let fill_opacity=.5
@@ -345,7 +347,7 @@ class Map_Manager {
         }
 
 
-        //analytics_manager.track_event("web_map","click","layer_id",this.get_selected_layer()?.id)
+       // analytics_manager.track_event("web_map","click","layer_id",this.get_selected_layer()?.id)
         //start by using the first loaded layer
         var layer = this.get_selected_layer()
         console_log("Get selected layer",layer)

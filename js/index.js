@@ -61,6 +61,9 @@ $( function() {
     });
   //  $(".hidden_controls").hide();
 
+  // check google analytics cookie and update button text
+  updateButtonText();
+
 });
 
 function initialize_interface() {
@@ -498,3 +501,38 @@ function show_results(){
 function show_browse(){
     section_manager.slide_position();
 }
+
+// Google analytics
+
+const GA_MEASUREMENT_ID = 'G-L3PW9NF74Q';
+const disableStr = 'ga-disable-' + GA_MEASUREMENT_ID;
+
+// Initial check: if the cookie exists, disable tracking immediately
+if (document.cookie.indexOf(disableStr + '=true') > -1) {
+  window[disableStr] = true;
+}
+
+function toggleGaTracking() {
+  const isCurrentlyDisabled = window[disableStr] === true;
+  if (isCurrentlyDisabled) {
+    // RE-ENABLE: Remove the cookie and set global property to false
+    document.cookie = disableStr + '=false; expires=Thu, 31 Dec 2099 23:59:59 UTC; path=/';
+    window[disableStr] = false;
+  } else {
+    // DISABLE: Set the cookie and set global property to true
+    document.cookie = disableStr + '=true; expires=Thu, 31 Dec 2099 23:59:59 UTC; path=/';
+    window[disableStr] = true;
+  }
+  
+  // Refresh the button text to show the new state
+  updateButtonText();
+}
+
+function updateButtonText() {
+  const btn = document.getElementById('ga-toggle-btn');
+  if (window[disableStr] === true) {
+    btn.innerHTML = 'Privacy Toggle: On';
+  } else {
+    btn.innerHTML = 'Privacy Toggle: Off';
+  }
+} 

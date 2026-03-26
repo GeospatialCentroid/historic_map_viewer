@@ -12,8 +12,8 @@
 
     <script src="js/plugins/leaflet/leaflet.js" ></script>
 
-<!--    <script src="js/plugins/allmaps/allmaps-leaflet-1.9.umd.js"></script>-->
-<script src="https://cdn.jsdelivr.net/npm/@allmaps/leaflet/dist/bundled/allmaps-leaflet-1.9.umd.js"></script>
+ <script src="js/plugins/allmaps/allmaps-leaflet-1.9.umd.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/@allmaps/leaflet/dist/bundled/allmaps-leaflet-1.9.umd.js"></script> -->
     <link rel="stylesheet" href="js/plugins/leaflet/MarkerCluster.css" />
 	<link rel="stylesheet" href="js/plugins/leaflet/MarkerCluster.Default.css" />
      <script src="js/plugins/leaflet/leaflet.markercluster-src.js" ></script>
@@ -75,7 +75,7 @@
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
 
-          gtag('config', 'G-L3PW9NF74Q');
+          gtag('config', 'G-L3PW9NF74Q', { 'anonymize_ip': true });
         </script>
 
   </head>
@@ -353,9 +353,24 @@
     </div>
   </div>
 </div>
-<div id="footer" class="org_text">Developed by: <a href="https://gis.colostate.edu/" target="_blank">The Geospatial Centroid</a></div>
-
-
+<div id="footer">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://github.com/GeospatialCentroid/historic_map_explorer/blob/main/privacy.md" style="text-decoration: none; color: #1e4d2b; font-weight: bold;">
+            Privacy & Analytics
+        </a>
+        <button id="ga-toggle-btn" class="btn btn-secondary" onclick="toggleGaTracking()">
+            Checking status...
+        </button>
+    </div>
+    <span class="org_text">
+        Developed by: 
+        <a href="https://gis.colostate.edu/" target="_blank">
+            The Geospatial Centroid
+        </a>
+    </span>
+    
+</div>
 
     <div class="modal fade custom-modal" id="model_data_form" tabindex="-1" aria-labelledby="data_form_label" aria-hidden="true" data-bs-backdrop="false">
       <div class="modal-dialog">

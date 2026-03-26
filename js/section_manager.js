@@ -281,7 +281,7 @@ class Section_Manager {
                 filter_manager.create_filter_values(section,section.all_data,filter_cols,section?.year_start_col,section?.year_end_col);
 
                 if(section?.year_start_col){
-                     console.log(section?.year_start_col, "is the start col", "Get all the dates")
+                     console_log(section?.year_start_col, "is the start col", "Get all the dates")
 
 
                     filter_manager.show_date_search(section?.year_start_col,section.all_data)
@@ -374,7 +374,7 @@ class Section_Manager {
 
     convert_csv_to_geojson(section,_data,title_col){
         // inject easily accessible values
-        console.log(section)
+        console_log(section)
         var temp_data=[]
         field_data_post_url = section.post_url
          for (var i=0;i<_data.length;i++){
