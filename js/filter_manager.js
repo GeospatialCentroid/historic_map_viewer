@@ -996,10 +996,10 @@ class Filter_Manager {
                 // show the item in the results
                  var item_html = '<li class="list-group-item list-group-item-action" onmouseover="filter_manager.show_highlight('+section_id+',\''+item._id+'\');" onmouseout="map_manager.hide_highlight_feature();">'
 
-                 item_html+='<a href="#" onclick="filter_manager.select_item('+section_id+',\''+item._id+'\')">'+item[section.title_col]+'</a><br/>'
-                 item_html+="<div class='item_text_sm'>Date:<b> "+item[section.date_col]+"</b></div><div class=\"results-buttons\">"
+                 item_html+='<a href="#" class="two-line-ellipsis" onclick="filter_manager.select_item('+section_id+',\''+item._id+'\')">'+item[section.title_col]+'</a>'
+                 item_html+="<div class='item_text_sm'>Date:<b> "+item[section.date_col]+"</b></div>"
 
-                 item_html+="<div class='item_text_sm'>Creator:<b> "+item[section.creator_col]+"</b></div>"
+                 item_html+="<div class='item_text_sm'>Creator:<b> "+item[section.creator_col]+"</b></div> <div class=\"results-buttons\">"
                  
                  item_html+=this.get_add_button(section_id,item._id)
                  // if the record has no children

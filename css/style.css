@@ -621,10 +621,10 @@ a.disabled {
 }
 
 .results-buttons{
-    position: absolute;
     bottom: 2px;
     right:0px;
-    height:26px;
+    display: flex;
+    justify-content: flex-end; 
 }
 #details_view{
     position: relative;
@@ -1433,4 +1433,12 @@ a[aria-disabled="true"] {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+}
+
+.two-line-ellipsis {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
