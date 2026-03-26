@@ -253,16 +253,30 @@ class Layer_Manager {
 
 
   }
+  get_layer_header_html(item,limit_text=true){
+      var section=section_manager.get_section_details(item.section_id);
+        var title = item[section["title_col"]]
+        var title_limit=19
+        var _class=""
+        if( limit_text ){
+            if(title.length>title_limit){
+                title = title.substring(0,title_limit)+"..."
+            }
+        _class="item_title_map"
+        }
+
+    var  html =`<div class='item_title {_class} font-weight-bold '>${title}</span></div>`
+    if(item[section.date_col] !== ""){
+     html+="<div class='item_text_sm'>Date:<b> "+item[section.date_col]+"</b></div>"
+    }
+     return html;
+
+  }
   get_layer_html(section_id,item_id,_class){
         var item = filter_manager.get_item(section_id,item_id);
          // reference using the parent and child id joined by an "_"
         var id = "item_"+section_id+"_"+item_id
-        var section=section_manager.get_section_details(section_id)
-        var title = item[section["title_col"]]
-        var title_limit=25
-        if(title.length>title_limit){
-            title = title.substring(0,title_limit)+"..."
-        }
+      
         var download_link = false//filter_manager.get_download_link(item)
         //var dcat_bbox = item.dcat_bbox
         //
@@ -270,8 +284,7 @@ class Layer_Manager {
         html+="<div class='left-div-map'>"
         html+="<div class='grip'><i class='bi bi-grip-vertical'></i></div>"
 
-        html +="<div class='item_title item_title_map font-weight-bold'>"+title+"</span></div>"
-        html+="<div class='item_text_sm'>Date:<b> "+item[section.date_col]+"</b></div>"
+       html+=this.get_layer_header_html(item) 
 
 
         html+="<div class='left-div-map-buttons'>"
@@ -309,74 +322,92 @@ class Layer_Manager {
         return html;
   }
 
-  get_split_cell_control(section_id,item_id){
-    return '<table class="split_table"><tr><td class="split_left split_cell" onclick="layer_manager.split_map(this,\''+section_id+'\',\''+item_id+'\',\'left\')"></td><td class="split_middle"></td><td class="split_right split_cell" onclick="layer_manager.split_map(this,\''+section_id+'\',\''+item_id+'\',\'right\')"></td></tr></table>'
-  }
-  split_map(elm,section_id,item_id, side){
-    var _resource_id="item_"+section_id+"_"+item_id
+  get_split_cell_control(section_id, item_id) {
+  const baseClass = `item_${section_id}_${item_id}`;
 
-    // only allow one left and one right layer - for now!
-    // need to check if _resource_id is currently in use
-    if(side=="right" && this.split_left_layers[0]==_resource_id){
-        // reset right
-        $("#"+_resource_id+"_drag .split_left").removeClass("split_cell_active")
-        this.split_left_layers=[]
-        this.side_by_side.setLeftLayers([])
+  return `
+    <table class="split_table">
+      <tr>
+        <td 
+          class="split_left split_cell ${baseClass}_left"
+          onclick="layer_manager.split_map(this,'${section_id}','${item_id}','left')">
+        </td>
+        <td class="split_middle"></td>
+        <td 
+          class="split_right split_cell ${baseClass}_right"
+          onclick="layer_manager.split_map(this,'${section_id}','${item_id}','right')">
+        </td>
+      </tr>
+    </table>
+  `;
+}
+  split_map(elm, section_id, item_id, side) {
+    var _resource_id = "item_" + section_id + "_" + item_id;
+
+    // reset conflicts
+    if (side == "right" && this.split_left_layers[0] == _resource_id) {
+        $("." + _resource_id + "_left").removeClass("split_cell_active");
+        this.split_left_layers = [];
+        this.side_by_side.setLeftLayers([]);
     }
-    if(side=="left" && this.split_right_layers[0]==_resource_id){
-        // reset left
-        $("#"+_resource_id+"_drag .split_right").removeClass("split_cell_active")
-        this.split_right_layers=[]
-        this.side_by_side.setRightLayers([])
+
+    if (side == "left" && this.split_right_layers[0] == _resource_id) {
+        $("." + _resource_id + "_right").removeClass("split_cell_active");
+        this.split_right_layers = [];
+        this.side_by_side.setRightLayers([]);
     }
 
-    var layer_obj =  this.get_layer_obj(section_id+"_"+item_id).layer_obj
-    if (side=="right"){
+    var layer_obj = this.get_layer_obj(section_id + "_" + item_id).layer_obj;
 
-        if (this.split_right_layers.length>0){
-            // remove button active state
-            $("#"+this.split_right_layers[0]+"_drag .split_right").removeClass("split_cell_active")
-            // reset the clipped area of the right layer
-//            try{
-//               this.side_by_side._rightLayer.getContainer().style.clip = ''
-//            }catch(e){
-                this.side_by_side._rightLayer.getPane().style.clip = ''
-//            }
+    if (side == "right") {
 
-            this.side_by_side.setRightLayers([])
+        if (this.split_right_layers.length > 0) {
+            // remove ALL right-side active states globally
+            $("." + this.split_right_layers[0] + "_right")
+                .removeClass("split_cell_active");
 
-            if(this.split_right_layers[0]==_resource_id){
-              // deselect if current already exists on right
-               this.split_right_layers=[]
-               this.toggle_split_control()
-               return
+            this.side_by_side._rightLayer.getPane().style.clip = '';
+            this.side_by_side.setRightLayers([]);
+
+            if (this.split_right_layers[0] == _resource_id) {
+                this.split_right_layers = [];
+                this.toggle_split_control();
+                return;
             }
         }
-        this.split_right_layers=[_resource_id]
-        this.side_by_side.setRightLayers([ layer_obj])
-    }else{
 
-        if (this.split_left_layers.length>0){
-            $("#"+this.split_left_layers[0]+"_drag .split_left").removeClass("split_cell_active")
-            // reset the clipped area of the left layer
-            this.side_by_side._leftLayer.getPane().style.clip = ''
-            this.side_by_side.setLeftLayers([])
-            if(this.split_left_layers[0]==_resource_id){
-               // deselect if current already exists on left
-               this.split_left_layers=[]
-               this.toggle_split_control()
-               return
+        this.split_right_layers = [_resource_id];
+        this.side_by_side.setRightLayers([layer_obj]);
+
+    } else {
+
+        if (this.split_left_layers.length > 0) {
+            $("." + this.split_left_layers[0] + "_left")
+                .removeClass("split_cell_active");
+
+            this.side_by_side._leftLayer.getPane().style.clip = '';
+            this.side_by_side.setLeftLayers([]);
+
+            if (this.split_left_layers[0] == _resource_id) {
+                this.split_left_layers = [];
+                this.toggle_split_control();
+                return;
             }
         }
-        this.split_left_layers=[_resource_id]
-        this.side_by_side.setLeftLayers([ layer_obj])
+
+        this.split_left_layers = [_resource_id];
+        this.side_by_side.setLeftLayers([layer_obj]);
     }
-    $(elm).addClass("split_cell_active");
-    //and show/hide the control
-    this.toggle_split_control()
-    console.log(this.split_left_layers,"split_left_layers")
-    analytics_manager.track_event("map_tab","split_view","layer_id",_resource_id)
-  }
+
+    // ✅ Activate ALL matching UI elements (sidebar + popup + anywhere)
+    $("." + _resource_id + "_" + side)
+        .addClass("split_cell_active");
+
+    this.toggle_split_control();
+
+    console.log(this.split_left_layers, "split_left_layers");
+    analytics_manager.track_event("map_tab", "split_view", "layer_id", _resource_id);
+}
   toggle_split_control(){
     if (this.split_right_layers.length>0 || this.split_left_layers.length>0 ){
         $(".leaflet-sbs").show();
@@ -688,7 +719,7 @@ class Layer_Manager {
 
     try{
         layer_obj.on('click', function (e) {
-            console.log(e)
+            console_log(e)
 
            // $this.layer_click(e,_resource_id);
 
@@ -851,7 +882,8 @@ class Layer_Manager {
                         text = LANG.RESULT.REMOVE
                     }
 
-                     var html = `<div class="popup_title">${p.title}</div>`
+                     var html =  $this.get_layer_header_html(p,false)
+
                      html+= `<div style="text-align: center;"><img class="item_thumb" src="${p.thumb_url}" style="height:100px;object-fit: cover;display: inline-block;"/></div>`
                      html+=`<button type="button" id="item_0_${p.id}_toggle" class="btn ${_class} item_0_${p.id}_toggle" onclick="layer_manager.add_layer_toggle(0,'${p.id}')">${text}</button>`
                      html+=`<button type="button" class="btn btn-primary" style='display:none;' onclick="layer_manager.zoom_layer('0','${p.id}')">Zoom</button>`
@@ -1222,7 +1254,8 @@ class Layer_Manager {
             }
             var val = $(this).attr('value');
             $this.basemap_layer= L.tileLayer(LANG.BASEMAP.BASEMAP_OPTIONS[val].url, {
-                maxZoom: 19,
+                maxZoom: 21,       // The map can zoom this far
+                maxNativeZoom: 19,
                 attribution: LANG.BASEMAP.BASEMAP_OPTIONS[val].attribution,
                 pane:"basemap"
             }).addTo($this.map);

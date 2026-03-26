@@ -17,7 +17,7 @@ class Map_Manager {
     }else{
         this.params={}
     }
-     this.map = L.map('map',{doubleClickZoom: true}).setView([this.lat, this.lng], this.z);
+     this.map = L.map('map',{doubleClickZoom: true,maxZoom: 21,}).setView([this.lat, this.lng], this.z);
 
 
   }
@@ -95,11 +95,11 @@ class Map_Manager {
         //when a layer is removed, also remove the hitbox layer if it exists
         if (e?.layer?.hitbox_layer) {
             map_manager.map.removeLayer(e.layer.hitbox_layer);
-            this.hide_highlight_feature();
+            map_manager.hide_highlight_feature();
             //also close the popup if the layer is removes
-            if(this.popup){
-                this.popup.remove()
-                this.popup=null
+            if(map_manager.popup){
+                map_manager.popup.remove()
+                map_manager.popup=null
             }
         }
         
@@ -120,7 +120,7 @@ class Map_Manager {
 
     hitbox.on('mouseover', function (e) {
         $this.map.getContainer().style.cursor = 'pointer';
-       // Not working - $this.show_highlight_geo_json(resource_obj.geojson, true);
+       $this.show_highlight_geo_json(resource_obj.geojson, true);
     });
 
     hitbox.on('mouseout', function (e) {
@@ -175,12 +175,15 @@ class Map_Manager {
         var item_id=_resource_obj.id
         var section_id=_resource_obj.section_id
         var $this=this
-        var id = "item_"+section_id+"_"+item_id
+       const id = `item_${section_id}_${item_id}`;
         // get the existing slider values
         var t = $("." + id+'_slider').slider("value");
         var c = $("." + id+'_color_remove'+'_slider').slider("value");
         var html = layer_manager.get_layer_html(section_id,item_id,"basemap_layer")
-        $this.show_highlight_geo_json(_resource_obj.geojson, false);
+        
+
+
+        
 
         this.popup= L.popup(this.popup_options)
             .setLatLng(this.click_lat_lng)
@@ -192,6 +195,13 @@ class Map_Manager {
        // create and set slider values
         layer_manager.make_slider(id+'_slider',t)
         layer_manager.make_remove_color_slider(id+'_color_remove'+'_slider',c)
+        //sync the split control
+        if (layer_manager.split_left_layers.includes(id)) {
+            $("." + id + "_left").addClass("split_cell_active");
+        }
+        if (layer_manager.split_right_layers.includes(id)) {
+            $("." + id + "_right").addClass("split_cell_active");
+        }
 
      }
       show_highlight_geo_json(geo_json,_no_fill){
@@ -205,12 +215,15 @@ class Map_Manager {
 
             //special treatment for points
             this.highlighted_feature = L.geoJSON(geo_json, {
+                interactive: false, 
               pointToLayer: function (feature, latlng) {
                         return L.marker(latlng, {icon: $this.get_marker_icon()});
+                        interactive: false 
                 }
             }).addTo(this.map);
         }else{
             this.highlighted_feature =  L.geoJSON(geo_json,{
+                interactive: false ,
                 style: function (feature) {
                     return {color: "#fff",fillColor:"#fff",fillOpacity:fill_opacity};
                 }

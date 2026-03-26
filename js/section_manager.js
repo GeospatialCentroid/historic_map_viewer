@@ -197,6 +197,7 @@ class Section_Manager {
          if(all_data_loaded){
 
             for (var i=0;i<section.data.length;i++){
+                $this.json_data[i].id=i;// keep track of the section id for reference later
                 $this.join_data($this.json_data[i])
 
 
@@ -218,7 +219,7 @@ class Section_Manager {
                     // if the record is a child, attempt to find it's parent and transfer the values
                     all_data[j]=section_manager.add_parent_id(obj,all_data,section.unique_id_col)
                 }
-                // store the oarenst for easy access.
+                // store the parents for easy access.
                 section.parents = {};
                 const remaining = [];
 
@@ -242,7 +243,7 @@ class Section_Manager {
     }
 
       join_data(section){
-        console.log("join_data")
+        console_log("join_data")
         // lets start by storing the first loaded data file in the top spot
         section.all_data= $.csv.toObjects(section.data[0].data)//todo if the first loaded data is geojson, we'll want to convert it to a flat json structure for searching
         //takes one or more data files and joins them on a key
@@ -373,48 +374,51 @@ class Section_Manager {
 
     convert_csv_to_geojson(section,_data,title_col){
         // inject easily accessible values
+        console.log(section)
         var temp_data=[]
         field_data_post_url = section.post_url
          for (var i=0;i<_data.length;i++){
-
-            _data[i]["_id"]=_data[i][section.unique_id_col]//IMPORTANT for controlling visibility
-             _data[i]._sort_col= _data[i][title_col]
+            let obj=  _data[i]
+            obj["_id"]=obj[section.unique_id_col]//IMPORTANT for controlling visibility
+             obj._sort_col= obj[title_col]
              //todo make these more dynamic
              var obj_props={
-                "id":_data[i][section.unique_id_col],
-               "title":_data[i][section.title_col],
-                "info_page":_data[i][section.ref_url],
-                "thumb_url":_data[i][section.image_col],
+                "id":obj[section.unique_id_col],
+                [section.title_col]:obj[section.title_col],
+                 [section.date_col]:obj[section.date_col],
+                "info_page":obj[section.ref_url],
+                "thumb_url":obj[section.image_col],
+                "section_id":section.id,//needed to later access the date column
                 //section.base_url+_data[i][section.collection_col]+"/id/"+_data[i][section.id_col]+"/thumbnail",
 
-                "iiif":_data[i][section.iiif_base_url],
-                "attribution":_data[i][section.title_col],
+                "iiif":obj[section.iiif_base_url],
+                "attribution":obj[section.title_col],
              }
-              if(transcription_mode){
-                 if(_data[i].data){
-                    obj_props["has_data"]= true
-                    _data[i]["has_data"]= "Yes"
-                 }else{
-                  _data[i]["has_data"]= ""
-                 }
-            }
+            //   if(transcription_mode){
+            //      if(_data[i].data){
+            //         obj_props["has_data"]= true
+            //         _data[i]["has_data"]= "Yes"
+            //      }else{
+            //       _data[i]["has_data"]= ""
+            //      }
+            // }
             // only adda feature value if the coordinates are set
-            if( Number(_data[i].longitude) !=0 && Number(_data[i].latitude) !=0){
-                 _data[i]["feature"]={}
-                 _data[i]["feature"]["features"] =[
+            if( Number(obj.longitude) !=0 && Number(obj.latitude) !=0){
+                 obj["feature"]={}
+                 obj["feature"]["features"] =[
                     {
                       "type": "Feature",
                       "properties": obj_props,
                       "geometry": {
                         "coordinates": [
-                             Number(_data[i].longitude),
-                             Number(_data[i].latitude),
+                             Number(obj.longitude),
+                             Number(obj.latitude),
                         ],
                         "type": "Point"
                       }
                     }]
                     }
-            temp_data.push(_data[i])
+            temp_data.push(obj)
 
          }
         return temp_data

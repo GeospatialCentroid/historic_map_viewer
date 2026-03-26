@@ -413,7 +413,7 @@ class Filter_Manager {
                          var bounds_col=this.section_manager.json_data[i].geojson_col
                          if(obj?.[bounds_col]){
                              try{
-                                  const geojson = JSON.parse(obj[bounds_col]);
+                                  const geojson = obj[bounds_col];
                                   const poly1 = turf.polygon(geojson.features[0].geometry.coordinates);
                                   const b = layer_manager.map.getBounds()
                                   const sw = b.getSouthWest();
