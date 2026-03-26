@@ -265,7 +265,7 @@ class Layer_Manager {
         _class="item_title_map"
         }
 
-    var  html =`<div class='item_title {_class} font-weight-bold '>${title}</span></div>`
+    var  html =`<div class='item_title ${_class} font-weight-bold '>${title}</span></div>`
     if(item[section.date_col] !== ""){
      html+="<div class='item_text_sm'>Date:<b> "+item[section.date_col]+"</b></div>"
     }
