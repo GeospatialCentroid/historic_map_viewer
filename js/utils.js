@@ -161,8 +161,7 @@ class Analytics_Manager {
         this.sent_events=[]
     }
     track_event(category,action,label,value,delay){
-        console_log("track event")
-        return
+        
         // not the delay prevents the same event from being submitted with a certain number of seconds
         var trigger=true
         if (delay){

@@ -409,29 +409,20 @@ function run_resize_do(){
        
        if (window_width >768){
 
-            // hide the scroll bars
-            $('html, body').css({
-                overflow: 'hidden',
-                height: '100%'
-            });
+
             $("#map_wrapper").width(window_width-$("#side_bar").width()-1)
             $("#data_table_wrapper").width(window_width-$("#side_bar").width()-1)
 
             map_manager.map.scrollWheelZoom.enable();
-              $("#side_bar").height("100%");
-              $("#map_wrapper").height("100%")
-              $("#map_panel_wrapper").height("100%")
+
        }else{
              //mobile view
-             $("#side_bar").height("50%");
-             $("#map_panel_wrapper").height("40%")
-              $("#map_wrapper").height("50%")
-             // scroll as needed
-             $('html, body').css({
-                overflow: 'auto',
-                height: 'auto'
-            });
 
+            // fill available height for the panel 
+            var mapTop = $("#map_wrapper").offset().top;
+            var panelTop = $(".panel").offset().top;
+            // Apply the height
+            $(".panel").css({"height": mapTop - panelTop + "px",});
             // drop the map down for mobile
             $("#map_wrapper").width(window_width)
             $("#data_table_wrapper").width(window_width)

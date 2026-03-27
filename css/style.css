@@ -1,9 +1,4 @@
 
-html, body {
-   height: 100%;
-   overflow: hidden;
-}
-
 
 body {
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
@@ -121,12 +116,6 @@ warning: #ff1b28
     height:100%;
     float:left;
     width:100%;
-}
-@media (min-width: 768px) {
-    #side_bar{
-     width:360px;
-
-    }
 }
 
 
@@ -261,15 +250,19 @@ a.disabled {
 
 }
 #map_panel_wrapper{
-    clip-path: polygon(0 0, 600px 0%, 600px 100%, 0% 100%);
+    /* clip-path: polygon(0 0, 600px 0%, 600px 100%, 0% 100%); */
     z-index:2000000;
     position:absolute;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
 }
 
 #map_panel_scroll{
     width:10px;
     float:left;
 }
+
 #map_panel_scroll_content{
     width:10px;
 }
@@ -545,16 +538,21 @@ a.disabled {
     list-style-type: none;
     margin: 0;
     padding: 0;
-    width: 100%; }
+    width: 100%; 
+    overflow: visible;      /* Ensure nothing is hidden */
+}
 
-    #sortable_layers li {
+#sortable_layers li {
     margin: 0 3px 3px 3px;
     padding: 0.4em;
     padding-left: 1.5em;
     padding-right: 1.5em;
     padding-top:10px;
     height: 100px;
-
+    
+    width: 99%;
+    
+    box-sizing: border-box;
 }
 .basemap_layer{
     display: flex;
@@ -1442,3 +1440,62 @@ a[aria-disabled="true"] {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  #footer {
+    align-items: center;    /* Centers the text */
+    text-align: center;
+    padding: 20px 10px;     /* Adds breathing room on the sides */
+    position: relative;
+    height: 30px;
+  }
+
+
+    html{
+       overflow-x: hidden !important;
+       height: 100%;
+    }
+
+    #side_bar {
+    height: 80%;
+    }
+
+    #map_wrapper {
+        height: 50%;
+    }
+
+    #map_panel_wrapper {
+        height: 40%;
+        width: 100%;
+    }
+
+    /* Container Widths */
+    #map_panel {
+        width: 100%;
+    }
+    
+}
+/* media query for larger screens */
+@media (min-width: 768px) {
+    #side_bar{
+     width:360px;
+
+    }
+
+    #side_bar,
+    #map_wrapper,
+    #map_panel_wrapper {
+        height: 100%;
+    }
+
+        #map_panel,
+        #map_panel_wrapper {
+        width: auto;
+    }
+     html, body {
+        height: 100%;
+        overflow: hidden;
+    }
+}
+
+
