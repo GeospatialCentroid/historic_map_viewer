@@ -1066,6 +1066,7 @@ class Filter_Manager {
 
             html+='<div class="details-buttons">'+this.get_add_button(section_id,item.child_ids[i])
             html+='<button type="button" class="btn btn-primary" onclick="filter_manager.download_item(\''+child[section.download_col]+'\')">'+LANG.RESULT.DOWNLOAD+'</button>'
+            html+='<button type="button" class="btn btn-success" onclick="filter_manager.select_item('+section_id+',\''+item.child_ids[i]+'\',true);" >Details</button>'
             html+="</div>";
             html+='<div class="item_thumb_container"><img class="item_thumb" src="'+thumb_url+'"></div>'
             html+='<a href="javascript:void(0);" onclick="image_manager.show_image(\''+iiif_url+'\',\''+child[section.title_col]+'\',\''+child["Reference URL"]+'\');">'+LANG.DETAILS.IMAGE_VIEW+'</a>'+"<br/>";
@@ -1129,19 +1130,28 @@ class Filter_Manager {
         return section_manager.get_section_details(_id).parents[item_id]
 
     }
-    select_item(section_id,item_id){
+    select_item(section_id,item_id,is_child){
         analytics_manager.track_event("side_bar","show_details","layer_id",`${section_id}_${item_id}`)
         // use the id of the csv
          var item= this.get_item(section_id,item_id)
          var section=section_manager.get_section_details(section_id)
+        
+        // allow for parent level records
+        // and child level records
+        // todo - in the case of child records, we should populate the parent and layers panels
+        var pos = "details";
+        if( is_child){
+            pos="child";
+        }
         //
-        this.show_details(item,section)
-        section_manager.slide_position("details")
+        this.show_details(item,section,pos+'_view')
+       
+        section_manager.slide_position(pos)
          this.display_resource_id = section_id+"_"+item_id;
          save_params()
     }
 
-    show_details(item,section){
+    show_details(item,section,_elm){
         // @param match: a json object with details (including a page path to load 'path_col')
         //create html details to show
         var html="";
@@ -1206,7 +1216,8 @@ class Filter_Manager {
 //            html+=this.table_manager.get_combined_table_html(this.table_data_col,table_data)
 //
 //        }
-        $("#details_view").html(html)
+
+        $("#"+_elm).html(html)
     }
    show_highlight(section_id,item_id,_no_fill){
         var item= this.get_item(section_id,item_id)

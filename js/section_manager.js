@@ -551,10 +551,10 @@ class Section_Manager {
                     nav_text=LANG.NAV.BACK_RESULTS+" <i class='bi bi-chevron-left'></i>"
                     $("#nav").show();
                     break;
-//              case 'sub_details':
-//                    pos=width*4
-//                    nav_text=LANG.NAV.BACK_LAYERS+" <i class='bi bi-chevron-left'></i>"
-//                    break;
+             case 'child':
+                   pos=width*5
+                   nav_text=LANG.NAV.BACK_LAYERS+" <i class='bi bi-chevron-left'></i>"
+                   break;
               default:
                 //show the browse
                 nav_text="<i class='bi bi-chevron-right'></i> "+LANG.NAV.BACK_RESULTS
@@ -615,7 +615,7 @@ class Section_Manager {
             go_to_panel = "results"
         }else if(this.panel_name == 'layers'){
             go_to_panel = "results"
-        }else if(this.panel_name == 'sub_details'){
+        }else if(this.panel_name == 'child'){
             go_to_panel = "layers"
         }else{
             go_to_panel = "results"

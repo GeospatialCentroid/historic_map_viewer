@@ -45,13 +45,7 @@ display:inline;
     /* background-color: #999; */
     display:none;
 }
-#header {
-  height: 22px;
-  background-color: #FFF;
-}
-.logo{
-    height: 20px;
-}
+
 
 a {
     color: #008FB3;
@@ -1439,7 +1433,22 @@ a[aria-disabled="true"] {
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+
 }
+#header {
+  height: 22px;
+  background-color: #FFF;
+  display: flex;
+    align-items: center;
+}
+.logo{
+    height: 80px;
+     width: auto;
+     box-sizing: border-box;
+    object-fit: contain;
+}
+
+
 /* Responsive adjustments for smaller screens */
 @media (max-width: 768px) {
   #footer {
