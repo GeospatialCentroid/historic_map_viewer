@@ -1499,8 +1499,9 @@ a[aria-disabled="true"] {
 
         #map_panel,
         #map_panel_wrapper {
-        width: auto;
-    }
+        width: 100%;
+        position: relative;
+        }
      html, body {
         height: 100%;
         overflow: hidden;
