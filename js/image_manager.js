@@ -15,6 +15,15 @@ class Image_Manager {
 
         this.image_map._resetView(this.image_map.getCenter(), this.image_map.getZoom());
         this.add_close_control()
+        $(".leaflet-close-but").attr("tabindex", "0");
+        $(document).on('keydown', '.leaflet-close-but', function(e) {
+            // Check if the key pressed is Enter (13) or Space (32)
+            if (e.which === 13 || e.which === 32) {
+                $(this).click(); 
+                e.preventDefault(); // Prevents page jumping when hitting Space
+            }
+        });
+
         this.add_load_control()
 
         //add resize control

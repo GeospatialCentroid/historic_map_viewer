@@ -87,6 +87,21 @@ class Filter_Manager {
 
        } , "500");
        }
+    // add 'enter' key support for bootstap - default is just space bar
+    $(document).on('keydown', '.form-check-input', function(e) {
+            // Check if the key pressed is Enter (13) or Space (32)
+            if (e.which === 13) {
+                $(this).click(); 
+                e.preventDefault(); // Prevents page jumping when hitting Space
+            }
+        });
+        $(document).on('keydown', '.chip_x', function(e) {
+            // Check if the key pressed is Enter (13) or Space (32)
+            if (e.which === 13 || e.which === 32 ) {
+                $(this).click(); 
+                e.preventDefault(); // Prevents page jumping when hitting Space
+            }
+        });
         
 
     }
@@ -280,7 +295,7 @@ class Filter_Manager {
         var id =_id+ext
 
         //create a list of selected filters to easily keep track
-        var html="<div class='chip blue lighten-4' id='"+id+"'><span class='chip-text'>"+text+"</span><a class='bi bi-x btn chip_x' ></a></div>"
+        var html=`<div class='chip blue lighten-4' id='${id}' ><span class='chip-text'>${text}</span><a class='bi bi-x btn chip_x' tabindex="0" role="button" aria-label="Remove filter"></a></div>`
         //if exists update it
         if($( "#"+id ).length) {
             $( "#"+id +" span").html(text)

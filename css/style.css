@@ -1449,6 +1449,32 @@ a[aria-disabled="true"] {
 }
 
 
+.btn:focus, .chip_x:focus,
+.chip_x:focus-visible {
+    /* Remove the 'filled' look and the double outline */
+
+    box-shadow: none !important;
+    /*  Kill all default browser and Bootstrap shadows/outlines */
+    outline: none !important;
+    box-shadow: none !important;
+    text-decoration: none !important;
+
+    /* Apply exactly ONE clean outline */
+    /* Using 2px solid with an offset to prevent 'doubling' */
+    outline: 2px solid #006271 !important; 
+    outline-offset: 1px;
+    
+    /* 3. Ensure it looks like a tight square/circle around the X */
+    display: inline-block;
+    border-radius: 4px;
+}
+.chip_x:focus-visible {
+    background-color: transparent !important;
+}
+/* Optional: If using Chrome/Safari, prevent the outline from looking 'doubled' */
+.form-check-input:focus:not(:focus-visible) {
+    outline: none;
+}
 /* Responsive adjustments for smaller screens */
 @media (max-width: 768px) {
   #footer {

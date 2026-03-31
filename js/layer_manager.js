@@ -83,6 +83,17 @@ class Layer_Manager {
        $("#map_panel_scroll").scrollTop(scrollTop-Math.round(delta));
     });
 
+        $(document).on('keydown', '.leaflet-marker-icon', function(e) {
+        // 13 is 'Enter', 32 is 'Space'
+        if (e.which === 13 || e.which === 32) {
+            // Trigger the Leaflet 'click' event
+            $(this).trigger('click');
+            
+            // Prevent page from scrolling down if 'Space' is pressed
+            e.preventDefault();
+        }
+    });
+
   }
   update_layer_order(){
     //based on the sortable
@@ -870,10 +881,13 @@ class Layer_Manager {
         feature.id= feature.features[0].id
          geo =L.geoJSON(feature, {pane: _resource_id, style: style,
             pointToLayer: function(feature, latlng) {
-                return L.marker(latlng, {  icon: map_manager.get_marker_icon(extra)});
+                return L.marker(latlng, {  icon: map_manager.get_marker_icon(extra),keyboard: true});
             },onEachFeature: function(feature, layer){
-                            
+                             
                 layer.on('click', function (e) {
+                    //keep track of who was clicked
+                    console.log(e)
+                    layer_manager.lastFocusedMarker=e.target
                      var text = LANG.RESULT.ADD
                     var _class ="btn-primary"
                    var p = e.target.feature.properties
@@ -889,10 +903,17 @@ class Layer_Manager {
                      html+=`<button type="button" class="btn btn-primary" style='display:none;' onclick="layer_manager.zoom_layer('0','${p.id}')">Zoom</button>`
                      html+=`<button type="button" class="btn btn-success" onclick="filter_manager.select_item(0,'${p.id}')">Details</button>`
         
-                    L.popup()
+                    var popup = L.popup()
                         .setLatLng(e.latlng)
                         .setContent(html)
                         .openOn(map_manager.map);
+
+                    popup.on('remove', function () {
+                        if (layer_manager.lastFocusedMarker?._icon) {
+                            layer_manager.lastFocusedMarker._icon.focus();
+                            layer_manager.lastFocusedMarker = null;
+                        }
+                    });
                 });
              }
         })
