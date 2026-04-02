@@ -1481,7 +1481,7 @@ a[aria-disabled="true"] {
     box-shadow: none !important;
 }
 
-/* 2. Make the background light only when actively clicked */
+/* Make the background light only when actively clicked */
 #header a:active{
     background-color: rgba(255, 255, 255, 0.2) !important;
     /* Optional: helps the 'light' color show up on dark buttons */

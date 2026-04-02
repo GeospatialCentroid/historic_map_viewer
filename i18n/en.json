@@ -200,6 +200,7 @@
 		"OUTLINE_COLOR": "Line",
 		"Fill_COLOR": "Fill",
 		"MARKER_TOGGLE": "Map Points in View",
+		"LAYERS_OUTLINE_TOGGLE": "Map Outline in View",
 		"BASEMAP_TEXT": "Base Map Options",
 		"ADDITIONAL_INFO": "See Additional information"
 	},

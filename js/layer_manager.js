@@ -890,17 +890,19 @@ class Layer_Manager {
                     layer_manager.lastFocusedMarker=e.target
                      var text = LANG.RESULT.ADD
                     var _class ="btn-primary"
+                    var display = "none"
                    var p = e.target.feature.properties
                     if(layer_manager.is_on_map(0+"_"+p.id)){
                         _class ="btn-danger"
                         text = LANG.RESULT.REMOVE
+                        display="auto";
                     }
 
                      var html =  $this.get_layer_header_html(p,false)
 
                      html+= `<div style="text-align: center;"><img class="item_thumb" src="${p.thumb_url}" style="height:100px;object-fit: cover;display: inline-block;"/></div>`
                      html+=`<button type="button" id="item_0_${p.id}_toggle" class="btn ${_class} item_0_${p.id}_toggle" onclick="layer_manager.add_layer_toggle(0,'${p.id}')">${text}</button>`
-                     html+=`<button type="button" class="btn btn-primary" style='display:none;' onclick="layer_manager.zoom_layer('0','${p.id}')">Zoom</button>`
+                     html+=`<button type="button" class="btn btn-primary item_0_${p.id}_zoom" style='display:${display};' onclick="layer_manager.zoom_layer('0','${p.id}')">Zoom</button>`
                      html+=`<button type="button" class="btn btn-success" onclick="filter_manager.select_item(0,'${p.id}')">Details</button>`
         
                     var popup = L.popup()
@@ -1131,7 +1133,7 @@ class Layer_Manager {
   }
  show_csv_geojson_data(layer_obj, section_id, id, item_ids) {
     var $this = this;
-
+    var layer_polys=[];// store an array of the layer polygons for use in creating an outline
     if (!$this.map.hasLayer(layer_obj)) {
         layer_obj.addTo($this.map);
     }
@@ -1177,6 +1179,12 @@ class Layer_Manager {
 
         var item_index = data.findIndex(item => item.id === item_id);
         if (item_index === -1) continue;
+
+            if(typeof(data[item_index].geojson)!="undefined"){
+                layer_polys.push(data[item_index].geojson)
+            }
+            
+
         var geo = $this.create_geo_feature(
             data[item_index].feature,
             item_id,
@@ -1206,8 +1214,57 @@ class Layer_Manager {
 
     // Associate data for map click access
     layer_obj.data = data;
-}
 
+    //show a map oultine
+    this.updateMapOutline(layer_polys);
+}
+   updateMapOutline(collectionArray) {
+    if (!collectionArray || collectionArray.length === 0) {
+        if (layer_manager.outlineLayer) map_manager.map.removeLayer(layer_manager.outlineLayer);
+        return;
+    }
+    // turn the array of FeatureCollections into a flat array of Features
+    const allFeatures = collectionArray.flatMap(fc => fc.features);
+
+    
+    const validPolygons = allFeatures.filter(f => {
+            return f && 
+                   f.geometry && 
+                   (f.geometry.type === 'Polygon' || f.geometry.type === 'MultiPolygon');
+        });
+
+    if (validPolygons.length === 0) return;
+
+    const mergedShape = validPolygons.reduce((acc, feature) => {
+            if (!acc) return feature;
+
+            // 'Cleaning' the geometry with buffer(0) is crucial for 
+            // Allmaps data to prevent topology errors.
+            const poly1 = turf.buffer(acc, 0);
+            const poly2 = turf.buffer(feature, 0);
+
+            // Using the 2-argument syntax (safest for Turf v6)
+            return turf.union(poly1, poly2);
+        }, null);
+
+    // Remove the old layer if it exists
+    if (layer_manager.outlineLayer) {
+        map_manager.map.removeLayer(layer_manager.outlineLayer);
+    }
+
+    // Create the new outline layer
+    // We style it with fillOpacity: 0 to only show the border
+    layer_manager.outlineLayer = L.geoJSON(mergedShape, {
+        style: {
+        color: "rgba(0, 143, 179, .7)", 
+        weight: 3,         
+        opacity: 1,        
+        fillOpacity: 0,     
+        dashArray: "5, 10"  
+        }
+    }).addTo(map_manager.map);
+
+}
     //
     get_layer_select_html(_layer_id,_change_event,is_table,omit_selected){
         console_log("todo get_layer_select_html")

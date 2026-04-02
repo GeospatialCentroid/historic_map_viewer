@@ -44,14 +44,22 @@ class Map_Manager {
 
     L.control.layer_list({ position: 'bottomleft' }).addTo( this.map);
     var html=  "<label for='toggle_marker_checkbox'>"+LANG.MAP.MARKER_TOGGLE+"</lable> <input id='toggle_marker_checkbox' class='form-check-input' type='checkbox' checked/>"
+    html+="<br/><label for='toggle_outline_checkbox'>"+LANG.MAP.LAYERS_OUTLINE_TOGGLE+"</lable> <input id='toggle_outline_checkbox' class='form-check-input' type='checkbox' checked/>"
     $("#layer_list_title").html(html)
+    //
     $('#toggle_marker_checkbox').change(function() {
         if(this.checked) {
              section_manager.json_data[0].clustered_points.addTo(map_manager.map);
         }else{
              map_manager.map.removeLayer(section_manager.json_data[0].clustered_points);
         }
-
+    });
+     $('#toggle_outline_checkbox').change(function() {
+        if(this.checked) {
+            layer_manager.outlineLayer.addTo(map_manager.map);
+        }else{
+            map_manager.map.removeLayer(layer_manager.outlineLayer);
+        }
     });
 
    map_manager.map.on('warpedmapadded', (event) => {
@@ -72,13 +80,13 @@ class Map_Manager {
     const section_id = entry.section_id;
     const item_id = entry.item_id;
     const but_id = `item_${section_id}_${item_id}`;
-      if (but_id) {
+    console.log(but_id)
         const $button = $("." + but_id + "_toggle");
         $button.removeClass("progress-bar-striped progress-bar-animated");
         layer_manager.layer_load_complete($button);
         $button.html(LANG.RESULT.REMOVE);
         $("." + but_id + "_zoom").show();
-
+        console.log("show","." + but_id + "_zoom")
         if(typeof section_id !== "undefined" && typeof item_id !== "undefined" ){
             var item = filter_manager.get_item(section_id,item_id);
             filter_manager.update_parent_but(section_id, item.parent_id);
@@ -88,7 +96,7 @@ class Map_Manager {
         }else{
             console_log(but_id,"Could not find section_id and item_id for hitbox layer",section_id,item_id)
         }
-    }
+
 
     });
     map_manager.map.on('layerremove', (e) => {

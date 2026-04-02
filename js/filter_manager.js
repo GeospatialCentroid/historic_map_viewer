@@ -852,8 +852,9 @@ class Filter_Manager {
               setTimeout(() => {
 
 
-                     layer_manager.map.fitBounds( section_manager.json_data[section_id].clustered_points.getBounds());
-                       $(window).resize(run_resize)
+                    // layer_manager.map.fitBounds( section_manager.json_data[section_id].clustered_points.getBounds());
+                     map_manager.map.fitBounds(map_manager.outlineLayer.getBounds());  
+                    $(window).resize(run_resize)
 
                     }, 2000);
              }
