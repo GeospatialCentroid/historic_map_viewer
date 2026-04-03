@@ -38,7 +38,14 @@ class Map_Manager {
         $this.update_map_pos()
     });
     this.map.on('click', function(e) {
-        filter_manager.handle_point_search(e.latlng);
+        if (e.originalEvent.target.classList.contains('leaflet-interactive')) {
+        // The user clicked a marker or a polygon hitbox
+            return; 
+        }
+        //if(filter_manager.mode=="place"){
+           filter_manager.handle_point_search(e.latlng);  
+       // }
+       
     });
     
 
@@ -154,6 +161,8 @@ class Map_Manager {
     });
 
     hitbox.on('click', function (e) {
+
+        L.DomEvent.stopPropagation(e);
        var latlng = map_manager.map.mouseEventToLatLng(e.originalEvent)
         $this.click_lat_lng = L.latLng(latlng.lat,latlng.lng);
         $this.popup_show(resource_obj);

@@ -219,7 +219,8 @@ class Filter_Manager {
             map_manager.map_zoom_event(bounds)
 
             map_manager.show_copy_link(b[2],b[0],b[3],b[1])
-
+            // so search by point
+           //filter_manager.handle_point_search(e.latlng.getCenter()); 
   }
     update_results_info(num){
 
@@ -342,7 +343,7 @@ class Filter_Manager {
         
             Object.entries(this.params[0]).forEach(([a, val]) => {
 
-                console.log(a, val)
+                console_log(a, val)
                 
                 var id = a.replaceAll(" ", "__");
                 this.set_filter(id,val)

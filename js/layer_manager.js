@@ -1202,6 +1202,7 @@ class Layer_Manager {
     this.updateMapOutline(layer_polys);
 }
    updateMapOutline(collectionArray) {
+    // Note: this script is pretty taxing consider an alternate why to show the parimeter
     if (!collectionArray || collectionArray.length === 0) {
         if (layer_manager.outlineLayer) map_manager.map.removeLayer(layer_manager.outlineLayer);
         return;
@@ -1238,6 +1239,7 @@ class Layer_Manager {
     // Create the new outline layer
     // We style it with fillOpacity: 0 to only show the border
     layer_manager.outlineLayer = L.geoJSON(mergedShape, {
+        interactive: false,
         style: {
         color: "rgba(0, 143, 179, .7)", 
         weight: 3,         
