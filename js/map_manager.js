@@ -37,7 +37,9 @@ class Map_Manager {
     this.map.on('moveend', function (e) {
         $this.update_map_pos()
     });
-    
+    this.map.on('click', function(e) {
+        filter_manager.handle_point_search(e.latlng);
+    });
     
 
     //this.add_legend()
@@ -126,7 +128,7 @@ class Map_Manager {
         }
     }catch(e){
         //no popup found
-        console.log(`item_${section_id}_${item_id}_popup not found`)
+        //console.log(`item_${section_id}_${item_id}_popup not found`)
     }
   }
   add_hitbox_layer(resource_obj) {
@@ -195,7 +197,6 @@ class Map_Manager {
     }
 
  popup_show(item){
-        console.log(item)
         var item_id=item.id
         var section_id=item.section_id
         var section = section_manager.json_data[section_id];
@@ -211,7 +212,6 @@ class Map_Manager {
         if(layer_manager.is_on_map(section_id+"_"+item_id)){
             _class += " layer-active" // mix-in showing layer controls
         }
-        console.log(_class,"popup_show")
         var html = layer_manager.get_layer_html(section_id,item_id,_class,extra,"_popup")
 
         this.popup= L.popup(this.popup_options)
@@ -222,7 +222,7 @@ class Map_Manager {
                 $this.show_highlight_geo_json()
              });
         // add active class if the layer is visible  
-       // create and set slider values
+        // create and set slider values
         layer_manager.make_slider(id+'_slider',t)
         layer_manager.make_remove_color_slider(id+'_color_remove'+'_slider',c)
         //sync the split control

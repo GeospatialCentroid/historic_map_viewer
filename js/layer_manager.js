@@ -230,7 +230,7 @@ class Layer_Manager {
         var parent_id=resource.parent_id
         var section = section_manager.get_section_details(section_id)
     }catch(e){
-        console.log("unable to get section details")
+        console_log("unable to get section details")
     }
 
     this.add_layer(section_id,item_id,type,drawing_info,url,z,item_ids)
@@ -1246,7 +1246,16 @@ class Layer_Manager {
         dashArray: "5, 10"  
         }
     }).addTo(map_manager.map);
+    if (!$('#filter_bounds_checkbox').is(':checked')){
+           if(typeof params['e'] == "undefined"){
+              setTimeout(() => {
+                // layer_manager.map.fitBounds( section_manager.json_data[section_id].clustered_points.getBounds());
+                map_manager.map.fitBounds(layer_manager.outlineLayer.getBounds());  
+                $(window).resize(run_resize)
 
+                }, 2000);
+             }
+         }
 }
     //
     get_layer_select_html(_layer_id,_change_event,is_table,omit_selected){

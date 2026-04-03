@@ -419,7 +419,7 @@ a.disabled {
     font-size: 130%;
 }
 .item_text_sm{
-    font-size: 80%;
+    font-size: 90%;
     text-overflow: ellipsis;
     max-width:340px;
     overflow: hidden;
@@ -1442,7 +1442,7 @@ a[aria-disabled="true"] {
 #header {
   height: 22px;
   background-color: #FFF;
-  display: flex;
+
     align-items: center;
 }
 .logo{

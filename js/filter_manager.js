@@ -105,6 +105,28 @@ class Filter_Manager {
         
 
     }
+    handle_point_search(latlng) {
+        const lat = latlng.lat;
+        const lng = latlng.lng;
+
+        if(layer_manager.point_marker){
+            layer_manager.map.removeLayer(layer_manager.point_marker);
+        }
+
+        layer_manager.point_marker = L.marker([lat, lng]).addTo(layer_manager.map);
+
+ 
+        // Add as a filter
+        this.add_filter("Point", [`${lat.toFixed(4)}, ${lng.toFixed(4)}`]);
+
+        this.filter();
+    }
+    clear_spatial_filters(){
+        if(layer_manager.point_marker){
+            layer_manager.map.removeLayer(layer_manager.point_marker);
+            layer_manager.point_marker = null;
+        }
+    }
     update_bounds_search(){
         if ($('#filter_bounds_checkbox').is(':checked')){
             var b =layer_manager.map.getBounds()
@@ -124,7 +146,6 @@ class Filter_Manager {
             if(all_data[i][col][0] != null && all_data[i][col][0]!='' && String(all_data[i][col][0]).length>1){
                dates = dates.concat(all_data[i][col])
             }
-
         }
 
         dates= dates.sort();
@@ -391,6 +412,10 @@ class Filter_Manager {
         delete this.filters[id]
         //remove filter selection
         this.remove_filter_selection(_id)
+
+        if(id === "Point"){
+            this.clear_spatial_filters();
+        }
     }
     remove_filter_selection(_id){
        $("#"+_id+"__chip").remove()
@@ -451,7 +476,24 @@ class Filter_Manager {
                              // no coordinates
                              meets_criteria=false
                         }
+                     }else if (a=='Point'){
+                        var bounds_col=this.section_manager.json_data[i].geojson_col;
 
+                        if(obj?.[bounds_col]){
+                         try{
+                                const geojson = obj[bounds_col];
+                                const poly = turf.polygon(geojson.features[0].geometry.coordinates);
+
+                                const b = this.filters[a][0].split(",");
+                                if (!turf.booleanPointInPolygon(turf.point([b[1],b[0]]),poly)){
+                                    meets_criteria=false;
+                                }
+                            }catch(e){
+                                meets_criteria=false;
+                            }
+                        }else{
+                            meets_criteria=false;
+                        }
                     }else if (a!='p'){
                         if ($.isNumeric(this.filters[a][0])){
                             //we are dealing with a numbers - check range
@@ -847,18 +889,7 @@ class Filter_Manager {
             }
 
         layer_manager.toggle_layer(section_id,-1,"csv_geojson",false,false,-1,item_ids)
-         if (!$('#filter_bounds_checkbox').is(':checked')){
-           if(typeof params['e'] == "undefined"){
-              setTimeout(() => {
-
-
-                    // layer_manager.map.fitBounds( section_manager.json_data[section_id].clustered_points.getBounds());
-                     map_manager.map.fitBounds(map_manager.outlineLayer.getBounds());  
-                    $(window).resize(run_resize)
-
-                    }, 2000);
-             }
-         }
+         
    }
 
     zoom_item(_id,item_id){
