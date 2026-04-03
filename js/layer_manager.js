@@ -156,6 +156,8 @@ class Layer_Manager {
                break
             }
       }
+   
+
     this.update_layer_count();
     this.set_layers_list();
     this.layer_list_change();
@@ -176,6 +178,8 @@ class Layer_Manager {
     var section_id= id_parts[0]
     var item_id=id_parts[1]
     var item = filter_manager.get_item(section_id,item_id);
+
+     map_manager.update_popup(section_id,item_id)
     // slight delay to account of removing layer
     setTimeout(
         filter_manager.update_parent_but(section_id,item.parent_id)
@@ -245,11 +249,8 @@ class Layer_Manager {
   }
   add_to_map_tab(section_id,item_id,_z){
         var $this = this;
-
-       
-
-        var html=this.get_layer_html(section_id,item_id,"ui-state-default drag_li basemap_layer")
-
+        var item = filter_manager.get_item(section_id,item_id)
+        var html=this.get_layer_html(section_id,item_id,"ui-state-default drag_li basemap_layer","","_drag")
         // add item to the beginning
         $("#sortable_layers").prepend(html)
         $("#sortable_layers" ).trigger("resize");
@@ -267,14 +268,9 @@ class Layer_Manager {
   get_layer_header_html(item,limit_text=true){
       var section=section_manager.get_section_details(item.section_id);
         var title = item[section["title_col"]]
-        var title_limit=19
+
         var _class=""
-        if( limit_text ){
-            if(title.length>title_limit){
-                title = title.substring(0,title_limit)+"..."
-            }
-        _class="item_title_map"
-        }
+        
 
     var  html =`<div class='item_title ${_class} font-weight-bold '>${title}</span></div>`
     if(item[section.date_col] !== ""){
@@ -283,26 +279,35 @@ class Layer_Manager {
      return html;
 
   }
-  get_layer_html(section_id,item_id,_class){
+  get_layer_html(section_id,item_id,_class,_extra,elm_suffix){
         var item = filter_manager.get_item(section_id,item_id);
          // reference using the parent and child id joined by an "_"
         var id = "item_"+section_id+"_"+item_id
+        var elm_id=id+elm_suffix
+
+        //make the add button toggle between 'romove'
+        var text = LANG.RESULT.ADD
+        var add_class ="btn-primary"
+        if(layer_manager.is_on_map(section_id+"_"+item_id)){
+            add_class ="btn-danger"
+            text = LANG.RESULT.REMOVE
+        }
       
         var download_link = false//filter_manager.get_download_link(item)
         //var dcat_bbox = item.dcat_bbox
         //
-        var html = "<li class=' "+_class+"' onmouseover='filter_manager.show_highlight("+section_id+",\""+item_id+"\",true);' onmouseout='map_manager.hide_highlight_feature();' id='"+id+"_drag'  >"
+        var html = "<li class=' "+_class+"' onmouseover='filter_manager.show_highlight("+section_id+",\""+item_id+"\",true);' onmouseout='map_manager.hide_highlight_feature();' id='"+elm_id+"'  >"
         html+="<div class='left-div-map'>"
         html+="<div class='grip'><i class='bi bi-grip-vertical'></i></div>"
-
-       html+=this.get_layer_header_html(item) 
+        html+=this.get_layer_header_html(item)
+        html+=_extra
 
 
         html+="<div class='left-div-map-buttons'>"
-        html +="<button type='button' id='"+id+"_toggle' class='btn btn-danger "+id+"_toggle' onclick='layer_manager.add_layer_toggle(\""+section_id+"\",\""+item_id+"\")'>"+LANG.RESULT.REMOVE+"</button>"
-        //
-        html +="<button type='button' class='btn btn-primary' onclick='layer_manager.zoom_layer(\""+section_id+"\",\""+item_id+"\")'>"+LANG.RESULT.ZOOM+"</button>"
-        if(download_link){
+        html+=`<button type="button" id="${id}_toggle" class="btn ${add_class} ${id}_toggle" onclick="layer_manager.add_layer_toggle(0,'${item_id}')">${text}</button>`
+
+        html+=`<button type="button" class="btn btn-primary item_zoom" onclick="layer_manager.zoom_layer('0','${item_id}')">Zoom</button>`
+         if(download_link){
               html +=download_link;
          }
         html +="<button type='button' class='btn btn-primary' onclick='filter_manager.select_item(\""+section_id+"\",\""+item_id+"\")'>"+LANG.RESULT.DETAILS+"</button>"
@@ -886,36 +891,14 @@ class Layer_Manager {
                              
                 layer.on('click', function (e) {
                     //keep track of who was clicked
+
+
                     console.log(e)
+                    map_manager.click_lat_lng=e.latlng; //track where the user clicked to position the popup
                     layer_manager.lastFocusedMarker=e.target
-                     var text = LANG.RESULT.ADD
-                    var _class ="btn-primary"
-                    var display = "none"
-                   var p = e.target.feature.properties
-                    if(layer_manager.is_on_map(0+"_"+p.id)){
-                        _class ="btn-danger"
-                        text = LANG.RESULT.REMOVE
-                        display="auto";
-                    }
-
-                     var html =  $this.get_layer_header_html(p,false)
-
-                     html+= `<div style="text-align: center;"><img class="item_thumb" src="${p.thumb_url}" style="height:100px;object-fit: cover;display: inline-block;"/></div>`
-                     html+=`<button type="button" id="item_0_${p.id}_toggle" class="btn ${_class} item_0_${p.id}_toggle" onclick="layer_manager.add_layer_toggle(0,'${p.id}')">${text}</button>`
-                     html+=`<button type="button" class="btn btn-primary item_0_${p.id}_zoom" style='display:${display};' onclick="layer_manager.zoom_layer('0','${p.id}')">Zoom</button>`
-                     html+=`<button type="button" class="btn btn-success" onclick="filter_manager.select_item(0,'${p.id}')">Details</button>`
-        
-                    var popup = L.popup()
-                        .setLatLng(e.latlng)
-                        .setContent(html)
-                        .openOn(map_manager.map);
-
-                    popup.on('remove', function () {
-                        if (layer_manager.lastFocusedMarker?._icon) {
-                            layer_manager.lastFocusedMarker._icon.focus();
-                            layer_manager.lastFocusedMarker = null;
-                        }
-                    });
+                    var p = e.target.feature.properties
+                    var item = filter_manager.get_item(p.section_id,p.id);
+                    map_manager.popup_show(item);
                 });
              }
         })

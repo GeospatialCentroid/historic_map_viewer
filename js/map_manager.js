@@ -80,24 +80,23 @@ class Map_Manager {
     const section_id = entry.section_id;
     const item_id = entry.item_id;
     const but_id = `item_${section_id}_${item_id}`;
-    console.log(but_id)
-        const $button = $("." + but_id + "_toggle");
-        $button.removeClass("progress-bar-striped progress-bar-animated");
-        layer_manager.layer_load_complete($button);
-        $button.html(LANG.RESULT.REMOVE);
-        $("." + but_id + "_zoom").show();
-        console.log("show","." + but_id + "_zoom")
-        if(typeof section_id !== "undefined" && typeof item_id !== "undefined" ){
-            var item = filter_manager.get_item(section_id,item_id);
-            filter_manager.update_parent_but(section_id, item.parent_id);
-            var hitbox_layer = map_manager.add_hitbox_layer(item);
-            entry.layer_obj.hitbox_layer = hitbox_layer;//keep track for later removal
-      
-        }else{
-            console_log(but_id,"Could not find section_id and item_id for hitbox layer",section_id,item_id)
-        }
+    
+    const $button = $("." + but_id + "_toggle");
+    $button.removeClass("progress-bar-striped progress-bar-animated");
+    layer_manager.layer_load_complete($button);
+    $button.html(LANG.RESULT.REMOVE);
+    $("." + but_id + "_zoom").show();
+    if(typeof section_id !== "undefined" && typeof item_id !== "undefined" ){
+        var item = filter_manager.get_item(section_id,item_id);
+        filter_manager.update_parent_but(section_id, item.parent_id);
+        var hitbox_layer = map_manager.add_hitbox_layer(item);
+        entry.layer_obj.hitbox_layer = hitbox_layer;//keep track for later removal
+    
+    }else{
+        console_log(but_id,"Could not find section_id and item_id for hitbox layer",section_id,item_id)
+    }
 
-
+     map_manager.update_popup(section_id,item_id);
     });
     map_manager.map.on('layerremove', (e) => {
         //when a layer is removed, also remove the hitbox layer if it exists
@@ -105,14 +104,30 @@ class Map_Manager {
             map_manager.map.removeLayer(e.layer.hitbox_layer);
             map_manager.hide_highlight_feature();
             //also close the popup if the layer is removes
-            if(map_manager.popup){
-                map_manager.popup.remove()
-                map_manager.popup=null
-            }
+            // if(map_manager.popup){
+            //     map_manager.popup.remove()
+            //     map_manager.popup=null
+            // }
         }
         
     });
 
+  }
+  update_popup(section_id,item_id){
+    //update the popup if it's visible
+    try{
+        const el = document.getElementById(`item_${section_id}_${item_id}_popup`);
+        if (el.classList.contains("popup_info") ){
+            if(layer_manager.is_on_map(section_id+"_"+item_id)){
+                el.classList.add("layer-active");
+            }else{
+                 el.classList.remove("layer-active");
+            }
+        }
+    }catch(e){
+        //no popup found
+        console.log(`item_${section_id}_${item_id}_popup not found`)
+    }
   }
   add_hitbox_layer(resource_obj) {
     const $this = this;
@@ -179,19 +194,25 @@ class Map_Manager {
 
     }
 
- popup_show(_resource_obj){
-        var item_id=_resource_obj.id
-        var section_id=_resource_obj.section_id
+ popup_show(item){
+        console.log(item)
+        var item_id=item.id
+        var section_id=item.section_id
+        var section = section_manager.json_data[section_id];
         var $this=this
-       const id = `item_${section_id}_${item_id}`;
+        const id = `item_${section_id}_${item_id}`;
         // get the existing slider values
         var t = $("." + id+'_slider').slider("value");
         var c = $("." + id+'_color_remove'+'_slider').slider("value");
-        var html = layer_manager.get_layer_html(section_id,item_id,"basemap_layer")
-        
+        var extra = `<div class="item_thumb_container"><img class="item_thumb" src="${item[section['image_col']]}" /></div>`
 
-
-        
+        // adjust the popup details depending on layer visibility
+        var _class = "popup_info"; //base class
+        if(layer_manager.is_on_map(section_id+"_"+item_id)){
+            _class += " layer-active" // mix-in showing layer controls
+        }
+        console.log(_class,"popup_show")
+        var html = layer_manager.get_layer_html(section_id,item_id,_class,extra,"_popup")
 
         this.popup= L.popup(this.popup_options)
             .setLatLng(this.click_lat_lng)
@@ -200,6 +221,7 @@ class Map_Manager {
            .on("remove", function () {
                 $this.show_highlight_geo_json()
              });
+        // add active class if the layer is visible  
        // create and set slider values
         layer_manager.make_slider(id+'_slider',t)
         layer_manager.make_remove_color_slider(id+'_color_remove'+'_slider',c)

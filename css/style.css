@@ -392,12 +392,22 @@ a.disabled {
     margin-left: 10px;
       margin-right: 10px;
 }
-.item_title {
+.drag_li .item_title {
 
   font-size: 16px;
   font-weight: 600;
   word-break: break-word;
   text-overflow: ellipsis;
+
+
+    display: block;           /* Required for the properties below to work */
+    white-space: nowrap;      /* Prevents the text from wrapping to a second line */
+    overflow: hidden;         /* Hides the text that overflows the container */
+    text-overflow: ellipsis;  /* Adds the '...' at the end */
+    
+    /* Optional: Ensure it doesn't push against other elements */
+    max-width: 100%;          
+}
 
 }
 .item_title_wide {
@@ -415,13 +425,7 @@ a.disabled {
     overflow: hidden;
     white-space: nowrap;
 }
-.item_title_map {
 
-   overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-
-}
 .item_thumb_container{
       text-align: center;
     margin-bottom: 10px;
@@ -1487,6 +1491,124 @@ a[aria-disabled="true"] {
     /* Optional: helps the 'light' color show up on dark buttons */
     transition: background-color 0.1s ease;
 }
+
+.font-weight-bold{
+    font-weight: bolder;
+    font-size:medium;
+
+}
+/* making the popup dynamic based on layer visibility*/
+.popup_info{
+     list-style-type: none;
+}
+.popup_info .grip {
+  display: none;
+}
+.popup_info .item_thumb {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 10px 0px 30px;
+    max-height: 130px;   /* adjust as needed */
+    width: auto;
+    max-width: 100%;
+    object-fit: contain; /* keeps aspect ratio */
+    margin-left: auto;
+    margin-right: auto;
+}
+.popup_info .left-div-map-buttons{
+    position: static;
+}
+/* -------when layer is hidden------- */
+
+.popup_info .left-div-map {
+  width: 100%;
+}
+
+.popup_info .item_thumb_container {
+  display: block;
+}
+.popup_info .stacked-div-map,
+.popup_info .split_table, 
+.popup_info .item_zoom {
+  display: none;
+}
+
+.popup_info .item_title {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+  margin-right: 10px;
+}
+
+
+/* ------when layer is visible-------- */
+.popup_info.layer-active {
+    display: flex;
+    flex-direction: row; /* Side-by-side */
+    gap: 12px;           /* Space between image and controls */
+    padding: 5px;
+    align-items: flex-start;
+    min-width: 280px;    /* Prevents the popup from feeling cramped */
+}
+
+.popup_info.layer-active .left-div-map {
+  width: 55%;
+}
+
+.popup_info.layer-active .stacked-div-map,
+.popup_info.layer-active .item_zoom {
+  display: block;
+}
+.popup_info.layer-active .split_table{
+    display:inline-table;
+}
+
+
+.popup_info.layer-active .item_thumb_container {
+  display: none;
+}
+
+.popup_info.layer-active .item_title {
+    /*shorten the title to all space for controls*/
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.popup_info.layer-active .left-div-map-buttons {
+    display: flex;            /* Enables flexbox */
+    flex-direction: row;      /* Forces items into a horizontal line */
+    flex-wrap: nowrap;        /* Prevents buttons from jumping to a new line */
+    justify-content: flex-start; /* Aligns them to the left */
+    margin-top: 40px;         /* Optional: adds space above the button row */
+}
+
+/* Ensure the buttons themselves don't stretch strangely */
+.popup_info.layer-active .left-div-map-buttons .btn {
+    flex: 0 1 auto;           /* Allows buttons to size based on their text */
+    white-space: nowrap;      /* Keeps the button text (like "Remove") on one line */
+}
+/* ------\-------- */
+
+
+
+
+/* .left-div-map-buttons {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.left-div-map {
+  display: flex;
+  flex-direction: column;
+} */
+
+
+
+
+
 
 /* Responsive adjustments for smaller screens */
 @media (max-width: 768px) {
