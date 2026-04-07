@@ -426,6 +426,7 @@ function run_resize() {
         if("search_tab"==$("#tabs").find(".active").attr("id")){
             section_manager.slide_position(section_manager.panel_name)
         }
+        $("#sidebar_toggle").show()
  }
 
 function update_map_size(){
@@ -455,6 +456,8 @@ function update_side_bar_icon(no_resize) {
   if(!no_resize){
      run_resize()
   }
+  // hide while moving
+  $("#sidebar_toggle").hide()
  
 }
 
