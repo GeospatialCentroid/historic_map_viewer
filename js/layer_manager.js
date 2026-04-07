@@ -891,9 +891,7 @@ class Layer_Manager {
                              
                 layer.on('click', function (e) {
                     //keep track of who was clicked
-
-
-                    console.log(e)
+                    console_log(e)
                     map_manager.click_lat_lng=e.latlng; //track where the user clicked to position the popup
                     layer_manager.lastFocusedMarker=e.target
                     var p = e.target.feature.properties
@@ -991,7 +989,7 @@ class Layer_Manager {
         var  $this = this
         $("#image_map").width("75%")
         $("#image_map").show();
-        map_manager.update_map_size()
+        update_map_size();
 
         // remove existing layers
         for (var i in $this.image_layers){

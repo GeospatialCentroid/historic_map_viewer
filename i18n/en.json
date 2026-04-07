@@ -202,7 +202,8 @@
 		"MARKER_TOGGLE": "Map Points in View",
 		"LAYERS_OUTLINE_TOGGLE": "Map Outline in View",
 		"BASEMAP_TEXT": "Base Map Options",
-		"ADDITIONAL_INFO": "See Additional information"
+		"ADDITIONAL_INFO": "See Additional information",
+		"MAP_SEARCH": "Search Here"
 	},
 	"BASEMAP": {
 		"TITLE": "Basemap",

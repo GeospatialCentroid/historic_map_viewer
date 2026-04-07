@@ -42,9 +42,16 @@ class Map_Manager {
         // The user clicked a marker or a polygon hitbox
             return; 
         }
-        //if(filter_manager.mode=="place"){
-           filter_manager.handle_point_search(e.latlng);  
-       // }
+        var text = LANG.MAP.MAP_SEARCH;
+        var html=`<button type="button" id="" class="btn btn-primary compressed" onclick="filter_manager.handle_point_search(${e.latlng.lat},${e.latlng.lng});">${text}</button>`
+
+
+        $this.popup= L.popup($this.popup_options)
+        .setLatLng(e.latlng)
+        .setContent(html)
+        .openOn($this.map)
+
+      
        
     });
     
@@ -278,13 +285,7 @@ class Map_Manager {
             delete this.highlighted_feature;
         }
     }
-      update_map_size(){
-        // make the map fill the difference
-        var window_width=$( "#map_wrapper" ).width()
-        $("#map").width(window_width-$("#image_map").width()-2)
-        this.map.invalidateSize(true)
-        image_manager.image_map.invalidateSize(true)
-    }
+      
      highlight_marker(_id){
         var markers = section_manager.json_data[0].geojson_markers
         for(var i=0;i<markers.length;i++){

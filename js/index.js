@@ -169,6 +169,7 @@ function after_filters(){
 
 
     init_tabs();
+    update_side_bar_icon();
     setTimeout(() =>{
 
         if ( params['l']){
@@ -332,7 +333,6 @@ var timeout_resizer;
 function run_resize() {
     if(timeout_resizer){
         clearTimeout(timeout_resizer)
-        clearTimeout(timeout_resizer)
     }
     timeout_resizer= setTimeout(function(){
         run_resize_do()
@@ -340,7 +340,8 @@ function run_resize() {
     },200)
  }
  $(window).resize(run_resize)
-function run_resize_do(){
+ 
+ function run_resize_do(){
          // leave on the dynamic links - turn off the hrefs
          $("#browse_panel .card-body a").attr('href', "javascript: void(0)");
 
@@ -361,9 +362,15 @@ function run_resize_do(){
             });
         }
         $("#content").show();
-        map_manager.map.invalidateSize()
+       
 
-        image_manager.image_map.invalidateSize()
+        setTimeout(() => {
+        map_manager.map.invalidateSize();
+        image_manager.image_map.invalidateSize();
+        }, 300);
+
+
+        
 }
 
  function window_resize_do(){
@@ -371,86 +378,99 @@ function run_resize_do(){
          if( $("#data_table_wrapper").is(":visible")){
            data_table_height= $("#data_table_wrapper").height()
         }
+
         var header_height=$("#header").outerHeight()+100;
         var footer_height=15//$("#footer").height()
         var window_height= window.innerHeight
-        var window_width=window.innerWidth
-        var minus_height=header_height+footer_height
-//        console.log(window.innerHeight,"CONTENT HEIGHT",window_height,minus_height,header_height,footer_height)
-       $("#content").height(window_height-minus_height+80)
+        var minus_height=header_height+footer_height+$("#filter_box").outerHeight(true)
 
 
-       //this gets out of hand with too many results
-       var scroll_height=window_height-minus_height-$("#side_header").outerHeight()
-       if(scroll_height>800){
-        scroll_height=800;
-       }
-       //-$("#tabs").outerHeight()-$("#nav_wrapper").outerHeight()
-       $("#panels").height(scroll_height)
-       $(".panel").height(scroll_height);
-
-       if(!show_hidden_controls){
-            $(".filter_list").height(scroll_height-40);
-        }else{
-            $(".filter_list").height(200);
-        }
-
-//        $("#map_panel_wrapper").height(window_height-$("#tabs").height()-minus_height)
-//        $("#map_panel_scroll").height(window_height-$("#tabs").height()-minus_height)
-
-            //
-//       $("#tab_panels").css({'top' : ($("#tabs").height()+header_height) + 'px'});
-
-//       .col-xs-: Phones (<768px)
-//        .col-sm-: Tablets (≥768px)
-//        .col-md-: Desktops (≥992px)
-//        .col-lg-: Desktops (≥1200px)
-
-       
-       if (window_width >768){
-
-
-            $("#map_wrapper").width(window_width-$("#side_bar").width()-1)
-            $("#data_table_wrapper").width(window_width-$("#side_bar").width()-1)
+       var extra = 0;
+       if (window.innerWidth >768){
+            // desktop view
+            //$("#data_table_wrapper").width(window_width-side_bar_width-1)
 
             map_manager.map.scrollWheelZoom.enable();
-
+            $("#sidebar_toggle").css({top: 45 });
+            
        }else{
              //mobile view
+            $("#sidebar_toggle").css({top: $("#map_wrapper").offset().top+5 });
 
-            // fill available height for the panel 
-            var mapTop = $("#map_wrapper").offset().top;
-            var panelTop = $(".panel").offset().top;
-            // Apply the height
-            $(".panel").css({"height": mapTop - panelTop + "px",});
-            // drop the map down for mobile
-            $("#map_wrapper").width(window_width)
-            $("#data_table_wrapper").width(window_width)
+            //this only needs to be done the first time the site is loaded
+            setTimeout(() => {
+                $("#sidebar_toggle").css({
+                top: $("#map_wrapper").offset().top + 5
+                });
+            }, 1000);
+            // $("#data_table_wrapper").width(window_width)
 
             map_manager.map.scrollWheelZoom.disable();
-           
+            extra = $("#map_wrapper").outerHeight(true)-28
+ 
        }
-        map_manager.update_map_size();
-      
+      $(".scroll_wrapper").css({ "max-height":(window_height-minus_height-extra-140)+"px"});
+      $("#results_scroll").css({ "max-height":(window_height-minus_height-extra-158)+"px"})
+
+       update_map_size();
+       update_side_bar_icon(true);
         //final sets
         $("#panels").width($("#side_bar").width())
         $(".panel").width($("#side_bar").width())
         if(map_manager){
             map_manager.map.invalidateSize()
         }
-        // slide to position
+        // slide to position top
          $("#panels").stop(true, true)
          // if we are on the search tab, make sure the viewable panel stays when adjusted
-
-        
         if("search_tab"==$("#tabs").find(".active").attr("id")){
             section_manager.slide_position(section_manager.panel_name)
         }
-
-        $("#results_scroll").css({"height":scroll_height-$("#filter_area").height()})
-
-
  }
+
+function update_map_size(){
+
+    map_manager.map.invalidateSize(true)
+    image_manager.image_map.invalidateSize(true)
+}
+
+function update_side_bar_icon(no_resize) {
+    //Side bar show hide
+    const toggleBtn = document.getElementById("sidebar_toggle");
+    const sidebar = document.getElementById("side_bar");  
+    const isMobile = window.innerWidth <= 768;
+    const isCollapsed = sidebar.classList.contains("collapsed");
+    const icon = toggleBtn.querySelector("i");
+
+  if (isMobile) {
+    icon.className = isCollapsed
+      ? "bi bi-caret-down-fill collapsed"
+      : "bi bi-caret-up-fill";
+  } else {
+    icon.className = isCollapsed
+      ? "bi bi-caret-right-fill collapsed"
+      : "bi bi-caret-left-fill";
+  }
+ 
+  if(!no_resize){
+     run_resize()
+  }
+ 
+}
+
+
+
+function updateButtonText() {
+  const btn = document.getElementById('ga-toggle-btn');
+  if (window[disableStr] === true) {
+    btn.innerHTML = 'Privacy Toggle: On';
+  } else {
+    btn.innerHTML = 'Privacy Toggle: Off';
+  }
+} 
+
+
+
 
 function startHistoricMapTour() {
   const intro = introJs();
@@ -515,15 +535,8 @@ function toggleGaTracking() {
     window[disableStr] = true;
   }
   
-  // Refresh the button text to show the new state
-  updateButtonText();
+
 }
 
-function updateButtonText() {
-  const btn = document.getElementById('ga-toggle-btn');
-  if (window[disableStr] === true) {
-    btn.innerHTML = 'Privacy Toggle: On';
-  } else {
-    btn.innerHTML = 'Privacy Toggle: Off';
-  }
-} 
+
+

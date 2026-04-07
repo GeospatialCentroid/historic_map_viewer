@@ -20,23 +20,29 @@ display:inline;
     display:none;
 }
 
-#map_wrapper{
-    float:left;
-     position: relative;
-      height: 100%;
-}
-.map{
-    float:left;
-    width: 50%;
-    height: 100%;
-}
-#map {
-     width: 100%;
+#map_wrapper {
+ flex-grow: 1;         /* Fill remaining space */
+  position: relative;   /* Important for Leaflet/OpenLayers maps */
+
+  /*use flex to have #map fill the remaining spaece when image_map is visiable */
+
+   display: flex;
+  flex-direction: row;
+  align-items: stretch;
+
 }
 #image_map {
    width: 0%;
    border-right: 1px solid grey;
    display:none;
+   flex-shrink: 0;
+}
+.map{
+    height: 100%;
+}
+#map {
+     width: 100%;
+     flex-grow: 1;   
 }
 
 
@@ -44,6 +50,7 @@ display:inline;
     width:100%;
     /* background-color: #999; */
     display:none;
+    overflow: hidden;
 }
 
 
@@ -98,20 +105,30 @@ a {
     border-color:#105456;
 }
 
-/*
-warning: #ff1b28
-*/
-
-
-#side_bar{
-    background-color: #0000FF;
-    background-color: #FFFFFF;
-
-    height:100%;
-    float:left;
-    width:100%;
+#app_container {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex-direction: row;
+  align-items: stretch;
 }
 
+#side_bar{
+    background-color: #FFFFFF;
+    height:100%;
+    width:100%;
+    flex-shrink: 0;
+    position: relative;
+    /* Base sidebar animation */
+    /* transition: transform 0.3s ease; */
+    
+}
+
+/* DESKTOP (default) */
+#side_bar.collapsed {
+  /* transform: translateX(-100%); */
+  width: 0;
+}
 
 #nav_wrapper{
     height:30px;
@@ -141,7 +158,6 @@ warning: #ff1b28
 }
 
 #search_but{
-
     height:38px;
     margin:0px;
 }
@@ -149,24 +165,21 @@ warning: #ff1b28
     margin-bottom:5px;
 }
 
-
 #panels{
     width:360px;
     overflow-x: hidden;
     overflow-y: hidden;
-
-    background-color: #ff0000;
-     background-color: #fff;
-     padding:0px;
-     display:none;
-
+    background-color: #fff;
+    padding:0px;
+    display:none;
  }
  .border_top{
      border-top: 1px solid #999;
  }
  #panel_scroll{
-    width:5000px;
-    /*height:100%;*/
+    width:5000px;/* A really wide div containing many panels */
+
+    overflow-x: auto;
 
  }
 .scroll_wrapper{
@@ -174,13 +187,16 @@ warning: #ff1b28
 }
  .panel{
     width:360px;
-
     float: left;
+    background-color: #fff;
+    height:100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    /* overflow: hidden; */
+    min-height: 0;
+}
 
-     background-color: #00ffff;
-     background-color: #fff;
-     height:100%;
- }
 
 .card-body {
     padding: 0px;
@@ -194,7 +210,6 @@ warning: #ff1b28
      font-size: 1rem;
      weight:bold;
      border: 0;
-
 }
 .small{
      font-size: .65rem;
@@ -203,10 +218,8 @@ warning: #ff1b28
 }
 #tab_panels{
       display:none;
-
       z-index:10;
       height:100%;
-
  }
 
 
@@ -216,9 +229,15 @@ warning: #ff1b28
 
 }
 #results_scroll{
-     border: 1px solid rgba(0,0,0,.15);
-     max-height:800px;
-     width:100%;
+    border: 1px solid rgba(0,0,0,.15);
+   
+    width:100%;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    min-height: 0;
+    flex-grow: 1;
+    
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling for iOS */
 }
 
 #results_scroll .content_right{
@@ -314,9 +333,9 @@ a.disabled {
     background-color: #e4e4e4;
 }
 
-#layers_wrapper{
+/* #layers_wrapper{
     height:300px;
-}
+} */
 #details_panel{
     font-size: .75rem !important;
 }
@@ -524,6 +543,11 @@ a.disabled {
 
 .popup  tr:nth-child(even) {background: rgba(51, 181, 229, 0.4);}
 .popup  tr:nth-child(odd) {background: #fff}
+
+/* Moves the zoom controls 100px down from the top */
+.leaflet-top.leaflet-left {
+    margin-top: 20px; 
+}
 
 .td_top{
     vertical-align:top
@@ -1121,6 +1145,7 @@ a[aria-disabled="true"] {
     overflow-y: auto;
     border: 1px solid rgba(0,0,0,.15);
     border-radius: 0.25rem;
+    max-height: 150px;
 }
 
 .overlay {
@@ -1405,6 +1430,10 @@ a[aria-disabled="true"] {
 .leaflet-popup-content{
       width: 345px;
 }
+.leaflet-popup-content:has(.compressed) {
+      width: 105px !important;
+}
+
 .dropdown-item{
     margin-bottom: 3px;
 }
@@ -1592,25 +1621,26 @@ a[aria-disabled="true"] {
 /* ------\-------- */
 
 
-
-
-/* .left-div-map-buttons {
-  margin-top: 10px;
-  display: flex;
-  flex-wrap: wrap;
+/* Toggle button */
+.sidebar-toggle {
+  position: absolute;
+  top: 45px;
+  left: 340px; /* same as sidebar width */
+  transform: translateX(-50%);
+  z-index: 1000;
+  cursor: pointer;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+   display: block;
+}
+/* When sidebar is collapsed, pull button to edge */
+.sidebar-toggle:has(.collapsed) {
+  left: 27px;
 }
 
-.left-div-map {
-  display: flex;
-  flex-direction: column;
-} */
 
-
-
-
-
-
-/* Responsive adjustments for smaller screens */
+/* For smaller screens */
 @media (max-width: 768px) {
   #footer {
     align-items: center;    /* Centers the text */
@@ -1626,18 +1656,48 @@ a[aria-disabled="true"] {
        height: 100%;
     }
 
-    #side_bar {
-    height: 80%;
-    }
+   #app_container {
+    display: flex !important;
+    flex-direction: column !important;
+    height: calc(100vh - 30px) !important;
+    overflow: hidden;
+}
 
-    #map_wrapper {
-        height: 50%;
-    }
+#side_bar {
+    flex: 0 0 60%;      /* Sidebar takes top 40% of screen */
+    width: 100%;
+    border-bottom: 2px solid #ccc;
 
-    #map_panel_wrapper {
-        height: 40%;
-        width: 100%;
-    }
+    overflow: hidden;   
+    display: flex;
+    flex-direction: column;
+    pointer-events: auto !important;
+}
+
+#side_bar.collapsed {
+  /* transform: translateX(-100%); */
+  flex: 0 0 0%;      
+  width: 0;
+}
+
+#map_wrapper {
+    flex: 1 1 60%;      /* Map takes the remaining 60% */
+    width: 100% !important;
+    position: relative !important;
+    display: block !important;
+    visibility: visible !important;
+    margin-bottom: 8px;
+    margin-top: ;
+}
+#map_panel_wrapper {
+    margin-top: 40px;
+}
+
+.sidebar-toggle {
+    left: 27px;
+}
+
+
 
     /* Container Widths */
     #map_panel {
@@ -1645,7 +1705,7 @@ a[aria-disabled="true"] {
     }
     
 }
-/* media query for larger screens */
+/* For larger screens */
 @media (min-width: 768px) {
     #side_bar{
      width:360px;
@@ -1655,13 +1715,15 @@ a[aria-disabled="true"] {
     #side_bar,
     #map_wrapper,
     #map_panel_wrapper {
-        height: 100%;
+        height: calc(100vh - 58px);
+        margin-bottom: 0px;
     }
 
         #map_panel,
         #map_panel_wrapper {
         width: 100%;
         position: relative;
+       
         }
      html, body {
         height: 100%;

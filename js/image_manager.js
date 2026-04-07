@@ -32,7 +32,7 @@ class Image_Manager {
              handles: "e, w",
              resize: function( event, ui ) {
 
-               $this.update_map_size()
+               update_map_size()
              }
              }
         );
@@ -51,7 +51,7 @@ class Image_Manager {
               L.DomEvent.on(this._container, 'click', function(){
                 $("#image_map").hide()
                  $("#image_map").width("0");
-                $this.update_map_size()
+               update_map_size()
               }, this);
               return  this._container;
             }
@@ -85,8 +85,8 @@ class Image_Manager {
     }
     update_map_size(){
         // make the map fill the difference
-        var window_width=$( "#map_wrapper" ).width()
-        $("#map").width(window_width-$("#image_map").width()-2)
+        // var window_width=$( "#map_wrapper" ).width()
+        // $("#map").width(window_width-$("#image_map").width()-2)
         map_manager.map.invalidateSize(true)
         this.image_map.invalidateSize(true)
     }

@@ -105,10 +105,7 @@ class Filter_Manager {
         
 
     }
-    handle_point_search(latlng) {
-        const lat = latlng.lat;
-        const lng = latlng.lng;
-
+    handle_point_search(lat,lng) {
         if(layer_manager.point_marker){
             layer_manager.map.removeLayer(layer_manager.point_marker);
         }
