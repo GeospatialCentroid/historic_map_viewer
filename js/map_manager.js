@@ -38,8 +38,10 @@ class Map_Manager {
         $this.update_map_pos()
     });
     this.map.on('click', function(e) {
-        if (e.originalEvent.target.classList.contains('leaflet-interactive')) {
-        // The user clicked a marker or a polygon hitbox
+
+        const interactiveClasses = ['leaflet-interactive', 'leaflet-sbs-range'];
+        if (interactiveClasses.some(cls => e.originalEvent.target.classList.contains(cls))) {
+            // The user clicked a marker, a polygon hitbox, or the split control, so ignore
             return; 
         }
         var text = LANG.MAP.MAP_SEARCH;
