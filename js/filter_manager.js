@@ -334,6 +334,19 @@ class Filter_Manager {
 
        })
     }
+    reset(){
+        // clears the form
+        for (var id in this.filters) {
+            // Convert back to the ID format used in the DOM (with __)
+            let domId = id.replaceAll(" ", "__");
+            this.reset_filter(domId);
+            this.remove_filter(domId);
+        }
+        $("#search").val("");
+        this.filters = {};
+        this.filter();
+
+  }
     set_filters(){
         var select_item =true
         //loop over all the set url params and set the form
@@ -536,6 +549,12 @@ class Filter_Manager {
          this.show_sorted_results(subset)
 
           section_manager.slide_position("results");
+
+          if(Object.keys(this.filters).length>0){
+              $("#filter_reset").show();
+          }else{
+             $("#filter_reset").hide();
+          }
     }
     add_filter_watcher(){
         var $this=this;

@@ -90,7 +90,7 @@
 </div>
 <div class="page vh-100"><div id="content">
     <div id="header" class="m-2  w-100" >
-        <span class="header_text">CSU Libraries Historic Map Explorer</span>
+        <span class="header_text">CSU Libraries Historic Map Explorer <span class="short_desc">Explore historic maps to see how places have changed overtime</span></span>
       
         <div id="git_but" class="float-end d-inline-block"><a class="btn btn-default" href="https://github.com/geospatialcentroid/historic_map_viewer" target="git" data-toggle="tooltip" title="Go to Git Repo" data-original-title="Go to git Repo"><i class="bi bi-github"></i></a></div>
 
@@ -171,8 +171,11 @@
                          <input id="filter_end_date" type="text" class="date_field"/>
                          <div class='filter_slider_box'></div>
                      </div>
+                      <span id="filter_reset">Filters (<a href="#" onclick="filter_manager.reset(); return false">reset</a>)</span>
+                     <div id="filter_box">
 
-                     <div id="filter_box"></div>
+
+                     </div>
                 </div>
                 <div id="nav_wrapper">
                    <button id="nav" class="btn  btn-primary" onclick="javascript:section_manager.go_back()"></button>

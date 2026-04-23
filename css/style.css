@@ -1149,6 +1149,7 @@ a[aria-disabled="true"] {
 }
 
 .overlay {
+  position: fixed;
   width: 100%; /* Full width (cover the whole page) */
   height: 100%; /* Full height (cover the whole page) */
   top: 0;
@@ -1661,41 +1662,41 @@ a[aria-disabled="true"] {
     flex-direction: column !important;
     height: calc(100vh - 30px) !important;
     overflow: hidden;
-}
+    }
 
-#side_bar {
-    flex: 0 0 60%;      /* Sidebar takes top 40% of screen */
-    width: 100%;
-    border-bottom: 2px solid #ccc;
+    #side_bar {
+        flex: 0 0 60%;      /* Sidebar takes top 40% of screen */
+        width: 100%;
+        border-bottom: 2px solid #ccc;
 
-    overflow: hidden;   
-    display: flex;
-    flex-direction: column;
-    pointer-events: auto !important;
-}
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        pointer-events: auto !important;
+    }
 
-#side_bar.collapsed {
-  /* transform: translateX(-100%); */
-  flex: 0 0 0%;      
-  width: 0;
-}
+    #side_bar.collapsed {
+      /* transform: translateX(-100%); */
+      flex: 0 0 0%;
+      width: 0;
+    }
 
-#map_wrapper {
-    flex: 1 1 60%;      /* Map takes the remaining 60% */
-    width: 100% !important;
-    position: relative !important;
-    display: block !important;
-    visibility: visible !important;
-    margin-bottom: 8px;
+    #map_wrapper {
+        flex: 1 1 60%;      /* Map takes the remaining 60% */
+        width: 100% !important;
+        position: relative !important;
+        display: block !important;
+        visibility: visible !important;
+        margin-bottom: 8px;
 
-}
-#map_panel_wrapper {
-    margin-top: 40px;
-}
+    }
+    #map_panel_wrapper {
+        margin-top: 40px;
+    }
 
-.sidebar-toggle {
-    left: 27px;
-}
+    .sidebar-toggle {
+        left: 27px;
+    }
 
 
 
@@ -1703,7 +1704,9 @@ a[aria-disabled="true"] {
     #map_panel {
         width: 100%;
     }
-    
+    .short_desc{
+        display:none;
+    }
 }
 /* For larger screens */
 @media (min-width: 768px) {
@@ -1729,6 +1732,18 @@ a[aria-disabled="true"] {
         height: 100%;
         overflow: hidden;
     }
+    .short_desc{
+        display:fixed;
+    }
 }
 
+#filter_reset{
 
+   display: inline-block;
+    margin-top:15px;
+}
+.short_desc{
+    padding-left:6px;
+    font-size:smaller;
+    font-weight:normal;
+}
