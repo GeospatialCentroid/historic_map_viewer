@@ -103,7 +103,7 @@ class Filter_Manager {
             }
         });
         
-
+        $("#filter_reset").hide();
     }
     handle_point_search(lat,lng) {
         if(layer_manager.point_marker){
