@@ -135,16 +135,28 @@ class Filter_Manager {
         }
         this.filter()
     }
+    getYear(dateString) {
+        // 1. Look for the first 4-digit number (e.g., 1864, 1973, 1952)
+        console_log("getYear",dateString)
+        try{
+            const fourDigitMatch = dateString.match(/\b\d{4}\b/);
+            if (fourDigitMatch) {
+                return parseInt(fourDigitMatch[0], 10);
+            }
+        }catch(e){
+            console.log(dateString, "ERROR PARSING DATE")
+        }
+        return null;
+    }
     show_date_search(col,all_data){
-         //date search
-         var dates=[];
-
+        //date search
+        var dates=[];
         for (var i=0;i<all_data.length;i++){
-            if(all_data[i][col][0] != null && all_data[i][col][0]!='' && String(all_data[i][col][0]).length>1){
-               dates = dates.concat(all_data[i][col])
+            let year = this.getYear(String(all_data[i][col][0]));
+            if(year){ 
+                dates.push(year)
             }
         }
-
         dates= dates.sort();
 
         $('#filter_date_checkbox').change(
