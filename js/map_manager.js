@@ -63,6 +63,8 @@ class Map_Manager {
     L.control.layer_list({ position: 'bottomleft' }).addTo( this.map);
     var html=  "<label for='toggle_marker_checkbox'>"+LANG.MAP.MARKER_TOGGLE+"</lable> <input id='toggle_marker_checkbox' class='form-check-input' type='checkbox' checked/>"
     html+="<br/><label for='toggle_outline_checkbox'>"+LANG.MAP.LAYERS_OUTLINE_TOGGLE+"</lable> <input id='toggle_outline_checkbox' class='form-check-input' type='checkbox' checked/>"
+    html+="<br/><label for='toggle_auto_zoom_checkbox'>"+LANG.MAP.LAYERS_AUTO_ZOOM_TOGGLE+"</lable> <input id='toggle_auto_zoom_checkbox' class='form-check-input' type='checkbox' checked/>"
+    
     $("#layer_list_title").html(html)
     //
     $('#toggle_marker_checkbox').change(function() {
@@ -104,6 +106,9 @@ class Map_Manager {
     layer_manager.layer_load_complete($button);
     $button.html(LANG.RESULT.REMOVE);
     $("." + but_id + "_zoom").show();
+    if ($('#toggle_auto_zoom_checkbox').is(':checked')){
+        $("." + but_id + "_zoom").click();
+    }
     if(typeof section_id !== "undefined" && typeof item_id !== "undefined" ){
         var item = filter_manager.get_item(section_id,item_id);
         filter_manager.update_parent_but(section_id, item.parent_id);

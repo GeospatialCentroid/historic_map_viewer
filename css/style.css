@@ -133,7 +133,8 @@ a {
 #nav_wrapper{
     height:30px;
     margin-bottom: 5px;
-     position: relative;
+    margin-top: 5px;
+    position: relative;
 }
 #nav{
     padding:3px;
@@ -1746,4 +1747,17 @@ a[aria-disabled="true"] {
     padding-left:6px;
     font-size:smaller;
     font-weight:normal;
+}
+
+.ui-slider-horizontal .ui-slider-handle {
+    width: 1em;           /* Increase width (default is usually 1.2em) */
+    height: 1em;          /* Increase height */
+    top: 50%;             /* Move to vertical center of the track */
+    margin-top: -.5em;     /* Offset by half the height to perfectly center it */
+    cursor: pointer;      /* Optional: makes it look more interactive */
+
+}
+
+.list-group .list-group-item:nth-child(even) {
+    background-color: #f8f9fa; /* A light grey, or use a darker hex like #e9ecef */
 }
