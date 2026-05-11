@@ -6,7 +6,7 @@ const tourSteps = [
   },
   {
    element: "#side_bar",
-    intro: "The \"Search\" tab on the left is where you can search for maps by keyword, location, year or topic. Scanned maps can be added to the dynamic map using the <b>Add</b> button. (They can be removed in the \"Map\" tab.) For non-georeferenced maps, click <b>View</b> to display the scanned map.",
+    intro: "The \"Search\" tab on the left is where you can search for maps by keyword, location, year or topic. Scanned maps can be added to the dynamic map using the <b><i class='bi bi-globe-americas'></i> Add</b> button. (They can be removed in the \"Map\" tab.) For non-georeferenced maps, click <b><i class='bi bi-file-image'></i> View</b> to display the scanned map.",
     position: "right",
     action: "run",
     fn: "show_results"

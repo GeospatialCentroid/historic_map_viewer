@@ -1761,3 +1761,7 @@ a[aria-disabled="true"] {
 .list-group .list-group-item:nth-child(even) {
     background-color: #f8f9fa; /* A light grey, or use a darker hex like #e9ecef */
 }
+
+.view_but{
+    background-color: #626060;
+}

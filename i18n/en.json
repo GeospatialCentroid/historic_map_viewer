@@ -79,8 +79,8 @@
 		"PUBLISHER": 		"Publisher",
 		"PLACE":			"Place",
 	  	"AUTHOR":			"Author",
-		"ADD": 					"Add",
-		"VIEW": 			"View",
+		"ADD": 				"<i class='bi bi-globe-americas'></i> Add",
+		"VIEW": 			"<i class='bi bi-file-image'></i> View",
 		"REMOVE": 			"Remove",
 		"DOWNLOAD": 		"Download",
 

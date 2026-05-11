@@ -988,7 +988,7 @@ class Filter_Manager {
          var func ="image_manager.show_image"
          var title = item[section.title_col]
          var ref_url = item["Reference URL"]
-         button_text = `<button type="button" class="btn ${_class}" onclick="${func}(\`${iiif_url}\`, \`${title}\`, \`${ref_url}\`)">${text}</button>`
+         button_text = `<button type="button" class="btn ${_class} view_but" onclick="${func}(\`${iiif_url}\`, \`${title}\`, \`${ref_url}\`)">${text}</button>`
         }
 
         if(item?.child_ids && item.child_ids.length>0){

@@ -379,12 +379,14 @@ function run_resize() {
            data_table_height= $("#data_table_wrapper").height()
         }
 
-        var header_height=$("#header").outerHeight()+100;
+        var header_height=$("#header").outerHeight(true)+100;
         var footer_height=15//$("#footer").height()
         var window_height= window.innerHeight
         var minus_height=header_height+footer_height+$("#filter_box").outerHeight(true)
 
-
+        if($("#filter_box").outerHeight(true)>0){
+            minus_height+=$("#filter_reset").outerHeight(true)// to account for reset button
+        }
        var extra = 0;
        if (window.innerWidth >768){
             // desktop view
