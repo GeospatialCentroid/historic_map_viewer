@@ -306,7 +306,7 @@ class Layer_Manager {
         html+="<div class='left-div-map-buttons'>"
         html+=`<button type="button" id="${id}_toggle" class="btn ${add_class} ${id}_toggle" onclick="layer_manager.add_layer_toggle(0,'${item_id}')">${text}</button>`
 
-        html+=`<button type="button" class="btn btn-primary item_zoom" onclick="layer_manager.zoom_layer('0','${item_id}')">Zoom</button>`
+        html+=`<button type="button" class="btn btn-primary item_zoom ${id}_zoom" onclick="layer_manager.zoom_layer('0','${item_id}')">Zoom</button>`
          if(download_link){
               html +=download_link;
          }
