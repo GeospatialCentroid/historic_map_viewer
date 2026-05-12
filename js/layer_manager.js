@@ -143,7 +143,7 @@ class Layer_Manager {
     this.map.removeLayer(layer.layer_obj);
 
     $("."+_layer_id+"_toggle").removeClass("active")
-    $("."+_layer_id+"_toggle").text(LANG.RESULT.ADD) // revert to Add button text
+    $("."+_layer_id+"_toggle").html(LANG.RESULT.ADD) // revert to Add button text
     $("."+_layer_id+"_toggle").removeClass('btn-danger').addClass('btn-primary');
     $("#"+_layer_id+"_drag").remove();
     $("."+_layer_id+"_zoom").hide();
@@ -976,7 +976,7 @@ class Layer_Manager {
 
     $(elm_id).removeClass("progress-bar-striped progress-bar-animated");
     $(this).removeClass('btn-primary').addClass('btn-danger');
-    $(elm_id).text(LANG.RESULT.REMOVE)
+    $(elm_id).html(LANG.RESULT.REMOVE)
 
     // update the maps ta
     this.update_layer_count();
