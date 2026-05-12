@@ -1779,3 +1779,12 @@ a[aria-disabled="true"] {
 .view_but{
     background-color: #626060;
 }
+
+#disclaimer_close {
+    float: right;
+    margin-left: 10px; /* Prevents text from crowding the button */
+}
+.short-btn {
+  padding: 3px;
+  max-height: 25px;
+}

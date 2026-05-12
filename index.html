@@ -91,11 +91,12 @@
 <div class="page vh-100"><div id="content">
     <div id="header" class="m-2  w-100" >
         <span class="header_text">CSU Libraries Historic Map Explorer <span class="short_desc">Explore historic maps to see how places have changed overtime</span></span>
-      
+        
         <div id="git_but" class="float-end d-inline-block"><a class="btn btn-default" href="https://github.com/geospatialcentroid/historic_map_viewer" target="git" data-toggle="tooltip" title="Go to Git Repo" data-original-title="Go to git Repo"><i class="bi bi-github"></i></a></div>
 
         <div id="info_but" class="float-end d-inline-block"><a class="btn btn-default" href="#"  title="info" data-original-title="info"><i class="bi bi-info-circle"></i></a> </div>
 
+ <button type="button" class="btn btn-primary short-btn float-end d-inline-block" onclick="$('#disclaimer').modal('hide');startHistoricMapTour()">Take the Tour</button>
 
 
    </div>
@@ -314,8 +315,7 @@
           <span id="disclaimer_text">
 
           </span>
-          <button type="button" class="btn btn-primary" onclick="$('#disclaimer').modal('hide');startHistoricMapTour()">Tour</button>
-        <button type="button" class="btn btn-primary" id="disclaimer_close" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="disclaimer_close" data-dismiss="modal">Close</button>
       </div>
 
       <div class="modal-footer">
