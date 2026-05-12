@@ -61,11 +61,15 @@ class Map_Manager {
     //this.add_legend()
 
     L.control.layer_list({ position: 'bottomleft' }).addTo( this.map);
-    var html=  "<label for='toggle_marker_checkbox'>"+LANG.MAP.MARKER_TOGGLE+"</lable> <input id='toggle_marker_checkbox' class='form-check-input' type='checkbox' checked/>"
-    html+="<br/><label for='toggle_outline_checkbox'>"+LANG.MAP.LAYERS_OUTLINE_TOGGLE+"</lable> <input id='toggle_outline_checkbox' class='form-check-input' type='checkbox' checked/>"
-    html+="<br/><label for='toggle_auto_zoom_checkbox'>"+LANG.MAP.LAYERS_AUTO_ZOOM_TOGGLE+"</lable> <input id='toggle_auto_zoom_checkbox' class='form-check-input' type='checkbox' checked/>"
-    
+    var html=  "<label class='form-label  toggle-label' for='map_settings'><i class='bi bi-gear-fill'></i> "+LANG.MAP.MAP_SETTINGS+"<span class='arrow'></span></label>"
+    html+="<div id='map_settings'>"
+    html+="<div class='form-check form-switch'><label for='toggle_marker_checkbox'>"+LANG.MAP.MARKER_TOGGLE+"</lable> <input id='toggle_marker_checkbox' class='form-check-input' role='switch' type='checkbox' checked/></div>"
+    html+="<div class='form-check form-switch'><label for='toggle_outline_checkbox'>"+LANG.MAP.LAYERS_OUTLINE_TOGGLE+"</lable> <input id='toggle_outline_checkbox' class='form-check-input' role='switch' type='checkbox' checked/></div>"
+    html+="<div class='form-check form-switch'><label for='toggle_auto_zoom_checkbox'>"+LANG.MAP.LAYERS_AUTO_ZOOM_TOGGLE+"</lable> <input id='toggle_auto_zoom_checkbox' class='form-check-input' role='switch' type='checkbox' checked/></div>"
+    html+="</div>"
     $("#layer_list_title").html(html)
+
+ 
     //
     $('#toggle_marker_checkbox').change(function() {
         if(this.checked) {

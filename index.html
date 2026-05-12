@@ -158,14 +158,17 @@
 
                     <div id="filter_bounds">
                          <div  class="float-left">
-                          <input  id="filter_bounds_checkbox"  class="form-check-input" type="checkbox" value="">
-                          <label class="form-check-label" for="filter_bounds_checkbox"></label>
+                          <div class="form-check form-switch">
+                            <input  id="filter_bounds_checkbox"  class="form-check-input"  role="switch" type="checkbox" value="">
+                            <label class="form-check-label" for="filter_bounds_checkbox"></label>
+                          </div>
                         </div>
                      </div>
-                    <br/>
                      <div id="Date__Search_slider" class="inline">
-                         <input  id="filter_date_checkbox" class="form-check-input" type="checkbox" value="">
+                        <div class="form-check form-switch">
+                         <input  id="filter_date_checkbox" class="form-check-input" role="switch" type="checkbox" value="">
                           <label id="filter_date_label" class="form-check-label" for="filter_date_checkbox"></label>
+                          </div>
                          <input id="filter_start_date" type="text" class="date_field"/>
                          <span id="filter_date_to"></span>
                          <input id="filter_end_date" type="text" class="date_field"/>

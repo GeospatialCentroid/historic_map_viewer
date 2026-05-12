@@ -745,7 +745,9 @@ class Filter_Manager {
                     });
                     // add reference to input element to bind update
                 }else{
-                    $("#filters").append(this.get_multi_select(a,this.catalog[a],this.catalog_counts[a],this.catalog_keys[a]))
+
+                    $("#filters").append(this.get_multi_select(a,this.catalog[a],this.catalog_counts[a],this.catalog_keys[a],this.has_multiple_multi_select))
+                    this.has_multiple_multi_select=true;
                 }
            }
          }
@@ -765,11 +767,19 @@ class Filter_Manager {
                 }
             }
     }
-     get_multi_select(id,options,counts,keys){
+     get_multi_select(id,options,counts,keys,collapsed){
         var html=""
+        var rotate=""
+        var content_hidden=""
+        if(collapsed){
+            rotate="rotate" 
+            content_hidden="content-hidden"           
+        }
+
         var _id = id.replaceAll(" ", "__");
-        html+="<label class='form-label  toggle-label' for='"+_id+"'>"+id+"<span class='arrow'></span></label>"
-        html+="<div class='form-group filter_list' name='"+_id+"' id='"+_id+"' >"
+        html+="<label class='form-label  toggle-label' for='"+_id+"'>"+id+"<span class='arrow "+rotate+"'></span></label>"
+       
+        html+="<div class='form-group filter_list "+content_hidden+"' name='"+_id+"' id='"+_id+"' >"
         for (var o in options){
        // console.log(o)
             var val = options[o];
@@ -791,6 +801,7 @@ class Filter_Manager {
         }
 
         html+=" </div>"
+        html+="<div class='toggle-label-line'></div>"
         return html
 
     }

@@ -204,7 +204,8 @@
 		"LAYERS_AUTO_ZOOM_TOGGLE": "Auto-zoom Added Layers",
 		"BASEMAP_TEXT": "Base Map Options",
 		"ADDITIONAL_INFO": "See Additional information",
-		"MAP_SEARCH": "Search Here"
+		"MAP_SEARCH": "Search Here",
+		"MAP_SETTINGS": "Map Settings"
 	},
 	"BASEMAP": {
 		"TITLE": "Basemap",
