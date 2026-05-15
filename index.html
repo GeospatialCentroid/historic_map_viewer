@@ -45,6 +45,7 @@
 
       <script src="js/plugins/leaflet/leaflet-rotate/leaflet-rotate-src.js"></script>
       <script type="module" src='js/plugins/leaflet/turf.js'></script>
+     <script src='js/plugins/leaflet/esri-leaflet.js'></script>
 
     <link rel="stylesheet" href="css/style.css" />
       <script src="js/map_manager.js"></script>
@@ -242,6 +243,7 @@
                 </div>
             </div>
         </div>
+        <div id="map_and_table_column">
         <div id="map_wrapper">
 
             <div id="image_map" class="map">
@@ -253,7 +255,7 @@
             </div>
             <div id="map" class="map"></div>
         </div>
-    </div>
+
         <div id="data_table_wrapper">
             <div id="data_table_total" class="float-left">
                 <table>
@@ -295,12 +297,12 @@
                 </div>
 
             </div>
-            <a class='fa fa-times btn data_table_close' onclick='table_manager.close()'></a>
+            <a class='bi bi-x btn data_table_close' onclick='table_manager.close()'></a>
             <div id ="data_table"></div>
         </div>
-
+        </div>
     </div>
-
+    </div>
 </div>
 
 <div class="modal fade" id="disclaimer" tabindex="-1" role="dialog" aria-labelledby="disclaimer" aria-hidden="true">

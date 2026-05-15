@@ -79,6 +79,8 @@ Aside from a required unique column id for each record, there are specific colum
 It should be noted that a unique id column is required for each row. 
 Since CONTENTdm IDs are only unique within their collection, a composite key is required. This has been achieved by combining the collection column, plus a "-", followed by the CONTENTdm number (e.g p17393coll70-3). 
 
+Note: Do not use underscores ("_") as these are used internally when combining a section id to the beginning of the record id.
+
 #### Children Column
 To support parent child relationships, commonly referred to as composite records in CONTENTdm, a comma separated self-referencing column is needed.
 To populate this column via automation, use the python_scripts/fetch_children.py script.

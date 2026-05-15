@@ -52,7 +52,7 @@ class Layer_Manager {
     this.split_right_layers=[];
 
     //  only show the table for specific types
-    this.table_types=["esriSFS","esriSMS","esriPMS","esriSLS","vector","GeoJSON","mapserver","feature layer"]
+    this.table_types=["esriSFS","esriSMS","esriPMS","esriSLS","vector","GeoJSON","mapserver","featurelayer"]
     //
     var $this=this
     // make the map layers sortable
@@ -128,7 +128,7 @@ class Layer_Manager {
 
         var item = filter_manager.get_item(section_id,item_id);
         //layer_manager.toggle_layer section_id,item_id,type,drawing_info,url,z,item_ids
-        layer_manager.toggle_layer(section_id,item_id,item.type)//,false,false,this.layers_list.length)//,,false,match.URL)
+        layer_manager.toggle_layer(section_id,item_id,item.type,item.drawing_info,item.url)//,false,false,this.layers_list.length)//,,false,match.URL)
          var layer =  this.get_layer_obj(section_id+"_"+item_id)
          this.map.addLayer(layer.layer_obj)
     }
@@ -244,8 +244,17 @@ class Layer_Manager {
   zoom_layer(_id,item_id){
       var resource = filter_manager.get_item(_id,item_id)
 
-     var layer =  this.get_layer_obj(_id+"_"+item_id)
+     var layer =  this.get_layer_obj(_id+"_"+item_id);
+      // the zoom is dependent on the type
+     if(layer.type=="featurelayer"){// todo make this more inclusive of other types that use esri-leaflet
+        layer.layer_obj.query().bounds(function (error, latlngbounds) {
+            if (latlngbounds) {
+                map_manager.map.fitBounds(latlngbounds);
+            }
+        });
+     }else{
       map_manager.map_zoom_event(layer.layer_obj.getBounds())
+     }
   }
   add_to_map_tab(section_id,item_id,_z){
         var $this = this;
@@ -313,10 +322,10 @@ class Layer_Manager {
         html +="<button type='button' class='btn btn-primary' onclick='filter_manager.select_item(\""+section_id+"\",\""+item_id+"\")'>"+LANG.RESULT.DETAILS+"</button>"
         html+='</div>'
         html+='</div>'
-//        console_log("the type is ",layer.type)
-//        if ($.inArray(layer.type,$this.table_types)>-1){
-//            html +="<button type='button' class='btn btn-primary' onclick='layer_manager.show_table_data(\""+id+"\")'><i class='bi bi-table'></i></button>"
-//        }
+
+       if ($.inArray(item.type,this.table_types)>-1){
+           html +="<button type='button' class='btn btn-primary' onclick='layer_manager.show_table_data(\""+section_id+"_"+item_id+"\")'><i class='bi bi-table'></i></button>"
+       }
 
 //
 //        if (typeof(o.color)!="undefined"){
@@ -572,7 +581,7 @@ class Layer_Manager {
 
     get_service_method(r){
         for (var i=0;i<this.service_method.length;i++){
-               if (r==this.service_method[i].ref){
+               if (r==this.service_method[i].name){
                     return this.service_method[i]
                }
         }
@@ -598,6 +607,10 @@ class Layer_Manager {
     this.map.getPane(`item_${section_id}_${item_id}`).style.zIndex = _z+100;
 
     var service_method = this.get_service_method(_type)
+    console_log(_type,"_type")
+    console_log(service_method,"service_method")
+    console_log(layer_options.url)
+    console_log(layer_options,"layer_options")
 
     //todo attempt overcoming cors
 //     layer_options.url='http://localhost:8000/sr/'+encodeURIComponent(layer_options.url)
@@ -616,9 +629,6 @@ class Layer_Manager {
         }
         //filter_manager.load_json(layer_options.url+'legend?f=json',layer_manager.create_legend,_resource_id)
     }
-    console_log(service_method,"service_method")
-     console_log(layer_options.url)
-    console_log(layer_options,"layer_options")
 
     if (service_method._class=="distortableImageOverlay"){
         // get the corners from the solr field
@@ -692,6 +702,7 @@ class Layer_Manager {
 
     }else if(service_method?._method && service_method._method.indexOf(".")>-1){
         var method_parts=service_method._method.split(".")
+        
         var layer_obj =  L[service_method._class][method_parts[0]][method_parts[1]](layer_options.url,layer_options).addTo(this.map);
 
 
@@ -720,7 +731,10 @@ class Layer_Manager {
 
       }else{
         console_log("Passed in",layer_options)/*filter_manager.get_bounds(resource.locn_geometry),*/ // pass in the bounds
-       var layer_obj =  L[service_method._class][service_method._method](layer_options)//.addTo(this.map);
+       console_log(service_method._class,service_method._method)
+       layer_options.f='json'
+       console.log(layer_options)
+        var layer_obj =  L[service_method._class][service_method._method](layer_options)//.addTo(this.map);
         console_log(layer_obj)
       }
 
@@ -735,9 +749,9 @@ class Layer_Manager {
 
     try{
         layer_obj.on('click', function (e) {
-            console_log(e)
+            console.log(e,resource)
 
-           // $this.layer_click(e,_resource_id);
+           $this.layer_click(e,resource.section_id+"_"+resource._id);
 
         });
     }catch(e){
@@ -785,7 +799,8 @@ class Layer_Manager {
 
      layer_obj.on('load', function (e) {
         console.log("loaded",e)
-        $this.layer_load_complete(this);
+        const but_id = `item_${e.target.id}`;
+        $this.layer_load_complete(but_id);
 
         //$this.show_bounds($this.get_layer_obj(this.layer_id).layer_obj.getBounds())
 
@@ -925,8 +940,9 @@ class Layer_Manager {
     return "<a href='javascript:void(0);' onclick=\"filter_manager.show_details('"+resource["id"]+"')\" >"+resource["dct_title_s"]+"</a>"
   }
   layer_click(e,_resource_id){
-
-        console.log("layer_click",e,_resource_id)
+        // todo store section_id as part of item
+   
+        console_log("layer_click",e,_resource_id)
 
         map_manager.layer_clicked=true
         map_manager.selected_layer_id=_resource_id
@@ -934,31 +950,20 @@ class Layer_Manager {
         map_manager.click_lat_lng = e.latlng
         map_manager.click_x_y=e.containerPoint
 
-        //map_manager.popup_show(e.layer.feature);
+       map_manager.popup_show();
+      
+        var item_parts=_resource_id.split("_")
+       var item= filter_manager.get_item(item_parts[0],item_parts[1]);
+       
 
-       //show the details
-       // we need to make sure that the parent is selected
-       console.log(e)
-       //todo store section_id as part of item
-       var section_id=0
-       var item= filter_manager.get_item(section_id,_resource_id);
-       console_log(item,"is the item clicked")
-       // if there is a parent id - we should select it instead
-      if(typeof(item.parent_id) =="undefined" || item.parent_id==""){
-         //console.log(item.parent_id)
-          filter_manager.select_item(section_id,_resource_id)
-
-       }else{
-          filter_manager.show_layers(section_id,item.parent_id,_resource_id)
-       }
        //filter_manager.select_item(0,e.layer.feature.properties.id)
-//        try{
-//              map_manager.selected_feature_id=layer_manager.get_object_id(e.layer.feature);
-//              map_manager.show_popup_details([e.layer.feature])
-//        }catch(error){
-//            // could be an artificial click
-//             console_log(e)
-//        }
+       //try{
+             map_manager.selected_feature_id=layer_manager.get_object_id(e.layer.feature);
+             map_manager.show_popup_details([e.layer.feature])
+    //    }catch(error){
+    //        // could be an artificial click
+    //         console_log(e)
+    //    }
          //map_manager.layer_clicked=false
   }
     get_object_id(_feature){
@@ -972,11 +977,19 @@ class Layer_Manager {
         }
         return _feature["id"]
   }
-  layer_load_complete(elm_id){
+  layer_load_complete(but_id){
+    //`item_${section_id}_${item_id}`;
+    console_log("layer_load_complete",but_id)
+    const $button = $("." + but_id + "_toggle");
 
-    $(elm_id).removeClass("progress-bar-striped progress-bar-animated");
-    $(this).removeClass('btn-primary').addClass('btn-danger');
-    $(elm_id).html(LANG.RESULT.REMOVE)
+    $button.html(LANG.RESULT.REMOVE);
+    $button.removeClass("progress-bar-striped progress-bar-animated");
+    $("." + but_id + "_zoom").show();
+    if ($('#toggle_auto_zoom_checkbox').is(':checked')){
+        $("." + but_id + "_zoom").click();
+    }
+
+    $button.removeClass("btn-primary").addClass("btn-danger");
 
     // update the maps ta
     this.update_layer_count();
@@ -1107,6 +1120,7 @@ class Layer_Manager {
 
 
   show_table_data(_layer_id){
+    console_log("show_table_data",_layer_id)
     //todo check if we already have a table object
     table_manager.get_layer_data(_layer_id)
     analytics_manager.track_event("map_tab","show_table","layer_id",_layer_id)
@@ -1259,8 +1273,8 @@ class Layer_Manager {
 }
     //
     get_layer_select_html(_layer_id,_change_event,is_table,omit_selected){
-        console_log("todo get_layer_select_html")
-        return
+        var section_id=0;// make this dynamic
+        var title_col = section_manager.json_data[section_id]["title_col"]
         var html=""
         if(_change_event){
             html+="<span>"+LANG.IDENTIFY.IDENTIFY_SELECT_LAYER+"</span>"
@@ -1281,7 +1295,8 @@ class Layer_Manager {
                     skip=true
                 }
             }
-            var title = this.layers[i].resource_obj[filter_manager["title_col"]];
+
+            var title = this.layers[i].resource_obj[title_col];
             title = title.clip_text(30)
             if ($.inArray(this.layers[i].type,this.table_types)>-1 || !is_table){
                 // omit the selected value if flag set

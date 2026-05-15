@@ -130,7 +130,7 @@ function initialize_interface() {
       table_manager = new Table_Manager({
         elm_wrap:"data_table_wrapper",
           elm:"data_table"})
-
+        table_manager.init();
 
     map_manager.init()
 
@@ -373,63 +373,65 @@ function run_resize() {
         
 }
 
- function window_resize_do(){
-     var data_table_height=0
-         if( $("#data_table_wrapper").is(":visible")){
-           data_table_height= $("#data_table_wrapper").height()
-        }
+function window_resize_do() {
+    var window_height = window.innerHeight;
+    var window_width = window.innerWidth;
+    
+    // 1. Calculate the base area
+    var header_height = $("#header").outerHeight(true);
+    var footer_height = 15; 
+    var available_height = window_height - header_height - footer_height;
 
-        var header_height=$("#header").outerHeight(true)+100;
-        var footer_height=15//$("#footer").height()
-        var window_height= window.innerHeight
-        var minus_height=header_height+footer_height+$("#filter_box").outerHeight(true)
-
-        if($("#filter_box").outerHeight(true)>0){
-            minus_height+=$("#filter_reset").outerHeight(true)// to account for reset button
-        }
-       var extra = 0;
-       if (window.innerWidth >768){
-            // desktop view
-            //$("#data_table_wrapper").width(window_width-side_bar_width-1)
-
-            map_manager.map.scrollWheelZoom.enable();
-            $("#sidebar_toggle").css({top: 45 });
-            
-       }else{
-             //mobile view
-            $("#sidebar_toggle").css({top: $("#map_wrapper").offset().top+5 });
-
-            //this only needs to be done the first time the site is loaded
-            setTimeout(() => {
-                $("#sidebar_toggle").css({
-                top: $("#map_wrapper").offset().top + 5
-                });
-            }, 1000);
-            // $("#data_table_wrapper").width(window_width)
-
-            map_manager.map.scrollWheelZoom.disable();
-            extra = $("#map_wrapper").outerHeight(true)-28
+    // 2. Handle the Split State
+    if ($("#data_table_wrapper").is(":visible")) {
+        $("body").addClass("split-view");
+        
  
-       }
-      $(".scroll_wrapper").css({ "max-height":(window_height-minus_height-extra-140)+"px"});
-      $("#results_scroll").css({ "max-height":(window_height-minus_height-extra-158)+"px"})
+        // Hard 50/50 Split
+        var half_height = available_height / 2;
+        $("#map_wrapper").css("height", half_height + "px");
+        $("#data_table_wrapper").css("height", half_height + "px");
+        
+    } else {
+        $("body").removeClass("split-view");
+        $("#map_wrapper").css("height", available_height + "px");
+    }
 
-       update_map_size();
-       update_side_bar_icon(true);
-        //final sets
-        $("#panels").width($("#side_bar").width())
-        $(".panel").width($("#side_bar").width())
-        if(map_manager){
-            map_manager.map.invalidateSize()
-        }
-        // slide to position top
-         $("#panels").stop(true, true)
-         // if we are on the search tab, make sure the viewable panel stays when adjusted
-        if("search_tab"==$("#tabs").find(".active").attr("id")){
-            section_manager.slide_position(section_manager.panel_name)
-        }
-        $("#sidebar_toggle").show()
- }
+    // 3. Handle Sidebar/Mobile Logic
+    if (window_width > 768) {
+        $("#sidebar_toggle").css({ top: 45 });
+        $('#data_table').width(window_width-$("#side_bar").width())
+        if (map_manager && map_manager.map) map_manager.map.scrollWheelZoom.enable();
+    } else {
+        $("#sidebar_toggle").css({ top: $("#map_wrapper").offset().top + 5 });
+        $('#data_table').width(window_width)
+        if (map_manager && map_manager.map) map_manager.map.scrollWheelZoom.disable();
+        
+    }
+    
+
+    // 4. Sidebar Content Scroll Heights
+    var filter_box_height = $("#filter_box").outerHeight(true) || 0;
+    var scroll_minus = header_height + footer_height + filter_box_height + 150;
+    $(".scroll_wrapper").css({ "max-height": (window_height - scroll_minus) + "px" });
+    $("#results_scroll").css({ "max-height": (window_height - scroll_minus - 18) + "px" });
+
+    // 5. Update Map and Sidebar Widths
+    if (map_manager && map_manager.map) {
+        map_manager.map.invalidateSize();
+    }
+
+    
+    $("#panels, .panel").width($("#side_bar").width());
+
+    // Fix sidebar tab sliding
+    if ("search_tab" == $("#tabs").find(".active").attr("id")) {
+        section_manager.slide_position(section_manager.panel_name);
+    }
+
+     update_side_bar_icon(true);
+     $("#sidebar_toggle").show()
+}
 
 function update_map_size(){
 

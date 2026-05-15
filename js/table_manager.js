@@ -1,7 +1,7 @@
 /**
  * Description. A table object to be used for showing the data
  *
- * @file   This files defines the Table_Manager class.
+ * @file   This file defines the Table_Manager class.
  * @author Kevin Worthington
  *
  * @param {Object} properties     The properties passed as a json object specifying:
@@ -80,11 +80,13 @@ class Table_Manager {
 
     $("#table_query_execute").text(LANG.DATA_TABLE.EXECUTE)
 
-     $("#table_query_fields").click(function(){
-        var index = $(this).find(":hover").last().index();
-        var layer = layer_manager.get_layer_obj( $this.selected_layer_id)
-        table_manager.add_query_field(layer.resource_obj.fields[0][index].alias)
-
+     $("#table_query_fields").on("click", ".list-group-item", function(e) {
+        e.preventDefault(); // Stop the '#' link from jumping the page
+        var $item = $(this);
+        var aliasValue = $item.attr("alias");
+        
+        var layer = layer_manager.get_layer_obj(layer_manager.selected_layer_id);
+        table_manager.add_query_field(aliasValue);
     });
 
     $("#table_query_operators").click(function(){
@@ -102,24 +104,25 @@ class Table_Manager {
   }
   populate_fields(){
     //lets load the metadata
+    var html ="";
     var int_type=["esriFieldTypeOID","esriFieldTypeSingle","esriFieldTypeDouble"]
     var layer = layer_manager.get_layer_obj( this.selected_layer_id)
-     var html ="";
-     for(var i in layer.resource_obj.fields){
-         for(var j in layer.resource_obj.fields[i]){
-             var f = layer.resource_obj.fields[i][j]
+    fetch(`${layer.url}?f=json`)
+    .then(response => response.json())
+    .then(data => {
+        console.log("Available Fields:");
+        data.fields.forEach(f => {
+            //console.log(`${field.name} (${field.type}) - Alias: ${field.alias}`);
              var type=LANG.DETAILS.TEXT
              if(int_type.indexOf(f.type) > -1 ){
                   var type=LANG.DETAILS.NUMBER
              }
+            html +='<a href="#" class="list-group-item list-group-item-action" alias="'+f.alias+'">'+f.name+": "+type+'</a>';
+          });
+          $("#table_query_fields").html(html)
 
-             html +='<a href="#" class="list-group-item list-group-item-action">'+f.name+": "+type+'</a>';
-         }
-     }
-
-     //
-
-     $("#table_query_fields").html(html)
+    })
+    .catch(error => console.error('Error fetching metadata:', error));
 
   }
   add_query_field(val){
@@ -152,6 +155,8 @@ class Table_Manager {
        _layer_id =  this.selected_layer_id
      }
     this.page_start=0
+    console.log("get_layer_data",_layer_id)
+    console.log("Show the table")
     this.elm_wrap.show();
     layer_manager.map.invalidateSize(true);
     $(window).trigger("resize");
@@ -206,10 +211,10 @@ class Table_Manager {
 
   }
   get_data(_layer_id,func,no_page){
-    console_log("get data...")
+    console.log("get data...",_layer_id)
    $("#data_table_total .spinner-border").show();
     var $this=this
-
+    console.log(_layer_id,layer_manager.get_layer_obj(_layer_id))
     var layer = layer_manager.get_layer_obj(_layer_id)
     if (!layer?.layer_obj){
         console.log("no layer_obj",layer)
@@ -231,7 +236,7 @@ class Table_Manager {
     // when a mapserver is requested for table view need to specify the layer id in question
     // temporarily look at the first layer todo expand to more more flexible
 
-    var url= layer.resource_obj.usable_links[0][0]
+    var url= layer.resource_obj.url//.usable_links[0][0]
     console_log(url)
 //    if ( url.endsWith("/MapServer/")){
 //        url=url+"0/"

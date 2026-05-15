@@ -63,9 +63,9 @@ class Map_Manager {
     L.control.layer_list({ position: 'bottomleft' }).addTo( this.map);
     var html=  "<label class='form-label  toggle-label' for='map_settings'><i class='bi bi-gear-fill'></i> "+LANG.MAP.MAP_SETTINGS+"<span class='arrow'></span></label>"
     html+="<div id='map_settings'>"
-    html+="<div class='form-check form-switch'><label for='toggle_marker_checkbox'>"+LANG.MAP.MARKER_TOGGLE+"</lable> <input id='toggle_marker_checkbox' class='form-check-input' role='switch' type='checkbox' checked/></div>"
-    html+="<div class='form-check form-switch'><label for='toggle_outline_checkbox'>"+LANG.MAP.LAYERS_OUTLINE_TOGGLE+"</lable> <input id='toggle_outline_checkbox' class='form-check-input' role='switch' type='checkbox' checked/></div>"
-    html+="<div class='form-check form-switch'><label for='toggle_auto_zoom_checkbox'>"+LANG.MAP.LAYERS_AUTO_ZOOM_TOGGLE+"</lable> <input id='toggle_auto_zoom_checkbox' class='form-check-input' role='switch' type='checkbox' checked/></div>"
+    html+="<div class='form-check form-switch'><label for='toggle_marker_checkbox'>"+LANG.MAP.MARKER_TOGGLE+"</label> <input id='toggle_marker_checkbox' class='form-check-input' role='switch' type='checkbox' checked/></div>"
+    html+="<div class='form-check form-switch'><label for='toggle_outline_checkbox'>"+LANG.MAP.LAYERS_OUTLINE_TOGGLE+"</label> <input id='toggle_outline_checkbox' class='form-check-input' role='switch' type='checkbox' checked/></div>"
+    html+="<div class='form-check form-switch'><label for='toggle_auto_zoom_checkbox'>"+LANG.MAP.LAYERS_AUTO_ZOOM_TOGGLE+"</label> <input id='toggle_auto_zoom_checkbox' class='form-check-input' role='switch' type='checkbox'/></div>"
     html+="</div>"
     $("#layer_list_title").html(html)
 
@@ -105,14 +105,9 @@ class Map_Manager {
     const item_id = entry.item_id;
     const but_id = `item_${section_id}_${item_id}`;
     
-    const $button = $("." + but_id + "_toggle");
-    $button.removeClass("progress-bar-striped progress-bar-animated");
-    layer_manager.layer_load_complete($button);
-    $button.html(LANG.RESULT.REMOVE);
-    $("." + but_id + "_zoom").show();
-    if ($('#toggle_auto_zoom_checkbox').is(':checked')){
-        $("." + but_id + "_zoom").click();
-    }
+
+    layer_manager.layer_load_complete(but_id);
+    
     if(typeof section_id !== "undefined" && typeof item_id !== "undefined" ){
         var item = filter_manager.get_item(section_id,item_id);
         filter_manager.update_parent_but(section_id, item.parent_id);
@@ -224,11 +219,18 @@ class Map_Manager {
     }
 
  popup_show(item){
+    var html = '';
+    var $this=this
+    var id = null
+    if(!item){
+        var html = '<div id="popup_content"><div class="spinner_wrapper" style="text-align:center"><div class="spinner-border spinner-border-sm" role="status"><span class="sr-only">Loading...</span></div></div></div>'
+
+    }else{
         var item_id=item.id
         var section_id=item.section_id
         var section = section_manager.json_data[section_id];
-        var $this=this
-        const id = `item_${section_id}_${item_id}`;
+        
+        id = `item_${section_id}_${item_id}`;
         // get the existing slider values
         var t = $("." + id+'_slider').slider("value");
         var c = $("." + id+'_color_remove'+'_slider').slider("value");
@@ -240,14 +242,15 @@ class Map_Manager {
             _class += " layer-active" // mix-in showing layer controls
         }
         var html = layer_manager.get_layer_html(section_id,item_id,_class,extra,"_popup")
-
-        this.popup= L.popup(this.popup_options)
-            .setLatLng(this.click_lat_lng)
-            .setContent(html)
-            .openOn(this.map)
-           .on("remove", function () {
-                $this.show_highlight_geo_json()
-             });
+    }
+    this.popup= L.popup(this.popup_options)
+        .setLatLng(this.click_lat_lng)
+        .setContent(html)
+        .openOn(this.map)
+        .on("remove", function () {
+            $this.show_highlight_geo_json()
+            });
+    if(item){
         // add active class if the layer is visible  
         // create and set slider values
         layer_manager.make_slider(id+'_slider',t)
@@ -261,7 +264,7 @@ class Map_Manager {
         }
 
         analytics_manager.track_event("web_map","click","layer_id",`${section_id}_${item_id}`)
-
+        }
      }
       show_highlight_geo_json(geo_json,_no_fill){
         let fill_opacity=.5
@@ -373,6 +376,7 @@ class Map_Manager {
      }
       get_selected_layer(){
         // start with the last layer (top) if not yet set - check to make use the previous selection still exists
+
         if (!this.selected_layer_id || !layer_manager.is_on_map(this.selected_layer_id) ){
             if ( layer_manager.layers.length>0){
                 this.selected_layer_id=layer_manager.layers[layer_manager.layers.length-1].id
@@ -456,5 +460,182 @@ class Map_Manager {
         L.control.myControl({
           position: 'bottomright'
         }).addTo(this.map);
+    }
+     show_popup_details(_features){
+           console.log("show pop up details",_features)
+           var $this =this
+           console.log( map_manager.selected_layer_id,"before")
+           var layer = this.get_selected_layer()
+           if(!layer){
+                this.popup_close()
+                return
+           }
+           console.log(layer.id,"after")
+           var layer_select_html="<span id='layer_select'>"+ this.show_layer_select(layer.id)+"</span>"
+          // make sure at least one feature was identified.
+          var  html =layer_select_html
+          $this.features=_features
+
+          if (typeof(_features)!="undefined" && _features.length > 0) {
+            // Add in next and previous buttons
+            // show the feature layer
+
+            if (_features.length>1){
+              $this.last_click_features=_features
+              var prev_link="<a href='javascript:map_manager.show_popup_details_show_num(-1)' id='popup_prev' class='disabled_link'>« "+LANG.IDENTIFY.PREVIOUS+"</a> "
+              var next_link=" <a href='javascript:map_manager.show_popup_details_show_num(1)' id='popup_next' class='disabled_link' onclick=''>"+LANG.IDENTIFY.NEXT+" »</a>"
+              html += "<span class=''>"+LANG.IDENTIFY.FOUND+" "+_features.length+"</span> <a href='javascript:table_manager.generate_table(map_manager.last_click_features);table_manager.show_total_records(map_manager.last_click_features.length);$(\"#data_table_spinner\").hide();'>"+LANG.IDENTIFY.SHOW_IN_TABLE+"</a><br/>"
+              html += "<table id='popup_control_table'><tr><th>"+prev_link+"</th><th><span class=''>"+LANG.IDENTIFY.SHOWING_RESULT+"</span> <span id='popup_result_num'></span></th><th>"+next_link+"</th></tr></table>"
+            }
+
+
+            html += "<div id='popup_scroll'><table id='props_table'>"
+            html+="</table></div>"
+            html+= "<a href='javascript:map_manager.map_zoom_event()'>"+LANG.IDENTIFY.ZOOM_TO+"</a><br/>"
+          } else {
+            html = LANG.IDENTIFY.NO_INFORMATION+"<br/>"+layer_select_html
+          }
+           setTimeout(function(){
+               $("#popup_content").html(html)
+                //show the first returned feature
+                $this.features =  _features
+                if(typeof(_features)!="undefined" && _features?.length > 0){
+                    console_log( $this.features,"Delayed")
+                    $this.show_popup_details_show_num()
+                }
+
+           }, 300);
+
+        }
+
+
+         show_popup_details_show_num(num){
+
+        if (!num){
+            // default setting
+            this.result_num=0
+        }else{
+            this.result_num=this.result_num+num
+        }
+        this.show_highlight_geo_json(this.features[this.result_num])
+        var props= this.features[this.result_num].properties
+
+        var html=''
+         for (var p in props){
+            var val = String(props[p]).hyper_text()
+            html+="<tr><td>"+p+"</td><td>"+val+"</td></tr>"
+         }
+        $("#props_table").html(html)
+        // update the text
+        $("#popup_result_num").html(this.result_num+1)
+        //update the controls
+         if(this.result_num>0){
+            $("#popup_prev").removeClass("disabled_link")
+        }else{
+            $("#popup_prev").addClass("disabled_link")
+        }
+
+        if(this.result_num<this.features.length-1){
+            $("#popup_next").removeClass("disabled_link")
+        }else{
+            $("#popup_next").addClass("disabled_link")
+        }
+    }
+    show_layer_select(_layer_id){
+        var trigger_map_click=false
+        // triggered when there is an update
+         if (typeof(_layer_id)!="undefined"){
+            this.selected_layer_id = _layer_id
+         }
+         // if the _layer_id is not set and the this.selected_layer_id is no longer on the map trigger a new map click with the first layer
+         if (!_layer_id || !layer_manager.is_on_map(this.selected_layer_id) ){
+
+            // make sure there are still layers left
+            if(layer_manager.layers.length>0){
+                this.selected_layer_id=layer_manager.layers[0].id
+                trigger_map_click = true
+            }else{
+                this.popup_close()
+
+                return
+            }
+
+        }
+
+        var html = layer_manager.get_layer_select_html(this.selected_layer_id,"map_manager.set_selected_layer_id")
+         $("#layer_select").html(html)
+         //also return the html for direct injection
+         if (trigger_map_click &&  $("#layer_select").length){
+            this.map_click_event()
+
+         }
+         return html
+     }
+
+      set_selected_layer_id(elm){
+        var $this= this
+        $this.selected_layer_id =$(elm).val();
+        // retrigger the click event
+        // map_manager.map_click_event()
+        //turn off other layer
+//         for (var i in layer_manager.layers){
+//            var l = layer_manager.layers[i]
+//            if (l.id!=$this.selected_layer_id){
+//             l.layer_obj.setInteractive(false)
+//            }
+//         }
+    //move the layer in question to the top
+
+    $("#sortable_layers").prepend($("#"+$this.selected_layer_id+"_drag"));
+    layer_manager.update_layer_order();
+        var layer= layer_manager.get_layer_obj($this.selected_layer_id)
+
+
+
+
+         if ($this.highlighted_feature){
+            $this.map.removeLayer($this.highlighted_feature)
+         }
+
+         $this.popup_close()
+        if(layer.type=="GeoJSON"){
+          var ev = document.createEvent("MouseEvent");
+          var offset = $("#map").offset()
+          var el = document.elementFromPoint(offset.top+$this.click_x_y["y"],offset.left+$this.click_x_y["x"])
+            ev.initMouseEvent(
+                "click",
+                true, true,
+                window, null,
+                0,0,  offset.left+$this.click_x_y["x"], offset.top+$this.click_x_y["y"], /* coordinates */
+                false, false, false, false, /* modifier keys */
+                0 /*left*/, null
+            );
+            el.dispatchEvent(ev);
+        }else{
+            $this.mousedown_time=0
+            $this.map.fireEvent('click',{latlng:map_manager.click_lat_lng })
+        }
+
+
+    }
+     try_identify(){
+
+        // for dynamic features services - try identify instead
+        var $this=this;
+        var layer = this.get_selected_layer()
+
+        try{
+            // todo - we may need to identify by a specific layer by adding  ".layers('visible:0')"
+            layer.layer_obj.identify().simplify($this.map,1).on($this.map).at(this.click_lat_lng).run(function (error, featureCollection) {
+
+                   $this.show_popup_details(featureCollection?.features)
+            });
+        }catch(e){
+              console_log("identify query error",e)
+              $this.show_popup_details()
+            throw "no identify";
+        return
+      }
+
     }
  }

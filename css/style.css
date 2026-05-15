@@ -107,10 +107,10 @@ a {
 
 #app_container {
   display: flex;
-  height: 100%;
   width: 100%;
-  flex-direction: row;
+  flex-direction:row;
   align-items: stretch;
+  height: calc(100vh - 60px); /* Adjust 60px to match your header height */
 }
 
 #side_bar{
@@ -787,17 +787,30 @@ position: relative;
   overflow: auto;
   min-width: 70px;
 }
-#data_table_wrapper{
-    background-color:#FFF;
-    float:left;
-    width:100%;
-    display:none;
-    position: relative;
+/* Override any absolute positioning from the original CSS */
+body.split-view #map_wrapper, 
+body.split-view #data_table_wrapper {
+    position: relative !important; 
+    top: auto !important;
+    left: auto !important;
+    bottom: auto !important;
+    right: auto !important;
+    width: 100% !important;
+}
+
+#data_table_wrapper {
+    background: white;
+    z-index: 10;
+    overflow-y: auto;
+}
+#data_table_wrapper {
+    display: none;
 }
 
 #data_table{
     height: 300px;
     overflow: auto;
+    overflow-x: auto;
     width:100%;
 
 }
@@ -1655,6 +1668,12 @@ a[aria-disabled="true"] {
   left: 27px;
 }
 
+#map_and_table_column {
+    display: flex !important;
+    flex-direction: column !important; /* This is the key line */
+    height: 100%;
+    width: 100%;
+}
 
 /* For smaller screens */
 @media (max-width: 768px) {
@@ -1708,12 +1727,30 @@ a[aria-disabled="true"] {
     #map_panel_wrapper {
         margin-top: 40px;
     }
+    #map_and_table_column {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1; /* Take up remaining width next to sidebar */
+        flex: 1 1 0;
+        height: 100%;
+        width: 100%;
+    }
 
+    #map_wrapper, #data_table_wrapper {
+        /* flex: 1 1 auto;  */
+        width: 100% !important;
+        margin: 0;
+        padding: 0;
+    }
     .sidebar-toggle {
         left: 27px;
     }
 
 
+    body.split-view #data_table_wrapper {
+         display: block;
+        border-top: 3px solid #000;
+    }
 
     /* Container Widths */
     #map_panel {

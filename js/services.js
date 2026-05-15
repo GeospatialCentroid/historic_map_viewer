@@ -43,7 +43,7 @@ var services = [
 "_method": "Vector.vectorTileLayer"
 },
 {
-"name": "feature layer",
+"name": "featurelayer",
 "ref": "urn:x-esri:serviceType:ArcGIS#FeatureLayer",
 "_class": "esri",
 "_method": "featureLayer",
