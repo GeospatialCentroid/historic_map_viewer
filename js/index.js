@@ -125,7 +125,8 @@ function initialize_interface() {
      {params:params['e'] ,
         lat:40.111,
         lng: -104.1378635,
-        z:7
+        z:7,
+        popup_options:{autoPan: true,autoPanPadding: [0, 260],}
         })
       table_manager = new Table_Manager({
         elm_wrap:"data_table_wrapper",

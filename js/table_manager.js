@@ -36,7 +36,7 @@ class Table_Manager {
     $("[for='table_bounds_checkbox']").text(LANG.DATA_TABLE.LIMIT)
     $('#table_bounds_checkbox').change(
         function(){
-            $this.get_layer_data().change()
+            $this.get_layer_data()
 
             analytics_manager.track_event("table","filter_bounds_"+$('#table_bounds_checkbox').is(':checked'),"layer_id",$this.selected_layer_id)
         });
@@ -95,6 +95,12 @@ class Table_Manager {
         table_manager.add_query_field($("#table_query_operators a:eq("+index+")").text() )
 
     });
+    $("#table_query_close").click(function(e) {
+      e.preventDefault(); // Stop any default anchor tag behavior
+      
+      // Replace '#your_modal_id' with the actual ID of the modal container div
+      $("#table_query").modal('hide'); 
+  });
   }
   show_query_panel(){
     //set the query value
@@ -117,7 +123,7 @@ class Table_Manager {
              if(int_type.indexOf(f.type) > -1 ){
                   var type=LANG.DETAILS.NUMBER
              }
-            html +='<a href="#" class="list-group-item list-group-item-action" alias="'+f.alias+'">'+f.name+": "+type+'</a>';
+            html +='<a href="#" class="list-group-item list-group-item-action" alias="'+f.name+'">'+f.alias+": "+type+'</a>';
           });
           $("#table_query_fields").html(html)
 
@@ -149,6 +155,7 @@ class Table_Manager {
      analytics_manager.track_event("table","custom_query_"+this.query,"layer_id",this.selected_layer_id)
   }
   get_layer_data(_layer_id){
+    console.log("get_layer_data",_layer_id)
      // perform an initial search using the specified layer_id or the previously selected one
      // @param _layer_id: a string for the resource
      if (!_layer_id){
@@ -380,42 +387,46 @@ class Table_Manager {
     var html="";
 
     //determine the id, which isn;t always the same for each geojson
-    if(typeof(_rows[0][this.id])=="undefined"){
-             this.id = "_id"
-    }
-    // todo this needs to be more robust
-    if (!_rows[0].properties?.id && _rows[0].properties?.OBJECTID ){
-        this.id ="OBJECTID"
-    }
-    for(var i =0;i<_rows.length;i++){
-        var id=""
-        if(_rows[i]?.properties){
-            var id=_rows[i].properties[this.id]
-        }
-        var csv_array=[]
-        html+="<tr onclick='table_manager.highlight_feature(this,\""+id+"\")' ondblclick='table_manager.zoom_feature(this,\""+id+"\")'>"
-        for (var p in _cols){
-            if(p!="_id"){
-                  var text = ""
-                  if(_rows[i]?.properties){
-                    text=_rows[i].properties[p]
-                  }else{
+    try{
+      if(typeof(_rows[0][this.id])=="undefined"){
+              this.id = "_id"
+      }
+      // todo this needs to be more robust
+      if (!_rows[0].properties?.id && _rows[0].properties?.OBJECTID ){
+          this.id ="OBJECTID"
+      }
+      for(var i =0;i<_rows.length;i++){
+          var id=""
+          if(_rows[i]?.properties){
+              var id=_rows[i].properties[this.id]
+          }
+          var csv_array=[]
+          html+="<tr onclick='table_manager.highlight_feature(this,\""+id+"\")' ondblclick='table_manager.zoom_feature(this,\""+id+"\")'>"
+          for (var p in _cols){
+              if(p!="_id"){
+                    var text = ""
+                    if(_rows[i]?.properties){
+                      text=_rows[i].properties[p]
+                    }else{
 
-                    text=_rows[i][_cols[p]]
-                  }
-                  csv_array.push(String(text))
-                  if(typeof text === 'string'){
-                    text = text.hyper_text()
-                    if(text.indexOf("<a href")==-1){
-                        text = text.clip_text(50)
+                      text=_rows[i][_cols[p]]
                     }
-                  }
-                  html+="<td>"+text+"</td>"
-              }
-        }
-        html+="</tr>"
-        this.csv+=csv_array.join(",")+"\n"
-    }
+                    csv_array.push(String(text))
+                    if(typeof text === 'string'){
+                      text = text.hyper_text()
+                      if(text.indexOf("<a href")==-1){
+                          text = text.clip_text(50)
+                      }
+                    }
+                    html+="<td>"+text+"</td>"
+                }
+          }
+          html+="</tr>"
+          this.csv+=csv_array.join(",")+"\n"
+      }
+  }catch(e){
+    console.error("Error generating table rows",e)
+  }
     return html
   }
 

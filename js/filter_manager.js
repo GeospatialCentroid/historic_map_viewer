@@ -1089,6 +1089,10 @@ class Filter_Manager {
                  item_html+="<div class='item_text_sm'>Creator:<b> "+item[section.creator_col]+"</b></div> <div class=\"results-buttons\">"
                  
                  item_html+=this.get_add_button(section_id,item._id)
+
+                 if ($.inArray(item.type,layer_manager.table_types)>-1){
+                        item_html +="<button type='button' class='btn btn-primary table_but' onclick='layer_manager.show_table_data(\""+section_id+"_"+item._id+"\")'><i class='bi bi-table'></i></button>"
+                    }
                  // if the record has no children
                  if(item.child_ids.length==0){
                     item_html+='<button type="button" class="btn btn-primary" onclick="filter_manager.download_item(\''+item[section.download_col]+'\')">'+LANG.RESULT.DOWNLOAD+'</button>'

@@ -908,6 +908,13 @@ body.split-view #data_table_wrapper {
     width:5px;
 }
 
+.table_but{
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 10;
+}
+
 
 .data_table_spinner_wrapper{
     float:left;
@@ -1673,6 +1680,50 @@ a[aria-disabled="true"] {
     flex-direction: column !important; /* This is the key line */
     height: 100%;
     width: 100%;
+}
+
+
+#props_table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+}
+
+#props_table th, 
+#props_table td {
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+
+#props_table tr:nth-child(even) {
+    background-color: #f8f9fa; 
+}
+
+
+#props_table td:first-child {
+    font-weight: bold;
+    color: #2c3e50;
+    white-space: nowrap; 
+    width: 30%;
+}
+
+#layer_select {
+    display: block;
+    width: 100%;
+    padding: 10px 36px 10px 12px; /* Extra padding on the right for the custom arrow */
+    font-size: 14px;
+    font-family: inherit;
+    background-color: #ffffff;
+    font-weight: 800;
+}
+
+/* Match the options style internally */
+#layer_select option {
+    color: #2c3e50;
+    padding: 8px;
+    background-color: #ffffff;
 }
 
 /* For smaller screens */

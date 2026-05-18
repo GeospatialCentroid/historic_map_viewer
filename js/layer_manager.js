@@ -324,7 +324,7 @@ class Layer_Manager {
         html+='</div>'
 
        if ($.inArray(item.type,this.table_types)>-1){
-           html +="<button type='button' class='btn btn-primary' onclick='layer_manager.show_table_data(\""+section_id+"_"+item_id+"\")'><i class='bi bi-table'></i></button>"
+           html +="<button type='button' class='btn btn-primary table_but' onclick='layer_manager.show_table_data(\""+section_id+"_"+item_id+"\")'><i class='bi bi-table'></i></button>"
        }
 
 //
@@ -1022,11 +1022,11 @@ class Layer_Manager {
       var layer_options ={
         url: url,
         pane:`item_${section_id}_${item_id}`,
-        // to enable cursor and click events on raster images
+        // // to enable cursor and click events on raster images
         interactive:true,
         bubblingMouseEvents: false,
-        maxZoom: 20,
-        useCors:false
+         maxZoom: 21,
+         //useCors:false - causes issue with the service
       }
       var type;
       var symbol;
