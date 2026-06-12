@@ -547,7 +547,7 @@ class Filter_Manager {
             }
         }
         //this.populate_search(subset)
-       // this.generate_filters(subset)
+
         // be sure to set the filter_manager params for setting filters during menu regeneration
 
         this.params=[this.filters]
@@ -752,6 +752,27 @@ class Filter_Manager {
            }
          }
     }
+    add_latest_filter(data,col){
+        // 1. Clone the array and sort it descending by parsed 'Date created'
+        var sortedRecords = data.slice().sort(function(a, b) {
+            return parse_date(b[col]) - parse_date(a[col]);
+        });
+        
+        // 2. Extract the top 10 entries
+        var top10 = sortedRecords.slice(0, 10);
+        
+         $("#filters").append(this.get_multi_select("Latest",[],[],[],true))
+         var $select = $("#Latest");
+
+        // // 3. Append them dynamically to the element
+        top10.forEach(function(record) {
+            // Fallback options depending on your record schema keys (e.g., title, name)
+            var displayTitle = record.Title.clip_text(30);
+            var optionText = displayTitle + " (" + record["Date created"] + ")";
+            $select.append(`<a href="#" onclick="filter_manager.select_item(${record.section_id},'${record._id}')">${optionText}</a><br/>`);
+        });
+
+    }
     add_to_catalog(col,val){
         if(typeof(this.catalog[col])=="undefined"){
                this.catalog[col]=[val]
@@ -767,7 +788,9 @@ class Filter_Manager {
                 }
             }
     }
+
      get_multi_select(id,options,counts,keys,collapsed){
+
         var html=""
         var rotate=""
         var content_hidden=""
@@ -859,6 +882,9 @@ class Filter_Manager {
         var data = $this.section_manager.get_match('section_id_'+section_id)
 
         $this.generate_filters(data,$this.section_manager.json_data[section_id].filter_cols)
+        if($this.section_manager.json_data[section_id]?.latest_col){
+            $this.add_latest_filter(data,$this.section_manager.json_data[section_id].latest_col)
+        }  
         $this.add_filter_watcher();
         var title_col=$this.section_manager.json_data[section_id]["title_col"]
         $this.sort_data(data,title_col)

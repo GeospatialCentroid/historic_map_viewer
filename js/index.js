@@ -380,7 +380,7 @@ function window_resize_do() {
     
     // 1. Calculate the base area
     var header_height = $("#header").outerHeight(true);
-    var footer_height = 15; 
+    var footer_height = 20; 
     var available_height = window_height - header_height - footer_height;
 
     // 2. Handle the Split State
@@ -412,10 +412,30 @@ function window_resize_do() {
     
 
     // 4. Sidebar Content Scroll Heights
-    var filter_box_height = $("#filter_box").outerHeight(true) || 0;
-    var scroll_minus = header_height + footer_height + filter_box_height + 150;
-    $(".scroll_wrapper").css({ "max-height": (window_height - scroll_minus) + "px" });
-    $("#results_scroll").css({ "max-height": (window_height - scroll_minus - 18) + "px" });
+    // var filter_box_height = $("#filter_box").outerHeight(true) || 0;
+    // var scroll_minus = header_height + footer_height + filter_box_height + 350;
+    // $(".scroll_wrapper").css({ "max-height": (window_height - scroll_minus) + "px" });
+    // $("#results_scroll").css({ "max-height": (window_height - scroll_minus - 18) + "px" });
+    // 4. Sidebar Content Scroll Heights (Using precise viewport coordinate mapping)
+    var sideBarEl = document.getElementById('side_bar');
+    var resultsScrollEl = document.getElementById('results_scroll');
+
+    if (sideBarEl && resultsScrollEl) {
+        var sidebarRect = sideBarEl.getBoundingClientRect();
+        var resultsRect = resultsScrollEl.getBoundingClientRect();
+        
+        // Calculate exactly how many pixels down the results start inside the sidebar
+        var topOffsetInSidebar = resultsRect.top - sidebarRect.top;
+        
+        // Compute the exact remaining space left before hitting the bottom of the sidebar
+        var remainingHeight = sidebarRect.height - topOffsetInSidebar;
+        
+        // Apply max-height (subtracting a 0px buffer to protect margins/absolute layout counts)
+        var finalMaxHeight = Math.max(100, remainingHeight - 0); 
+        
+        $("#results_scroll").css({ "max-height": finalMaxHeight + "px" });
+        $(".scroll_wrapper").css({ "max-height": finalMaxHeight + "px" });
+    }
 
     // 5. Update Map and Sidebar Widths
     if (map_manager && map_manager.map) {

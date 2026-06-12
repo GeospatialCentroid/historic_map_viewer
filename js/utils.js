@@ -332,4 +332,39 @@ function stringifyWithoutCircular(obj) {
   });
 }
 
+function parse_date(date_str) {
+    if (!date_str) return new Date(0); // Fallback for missing dates
+    
+    var parts = date_str.split('/');
+    if (parts.length !== 3) return new Date(0);
+    
+    var month = parseInt(parts[0], 10) - 1; // JS months are 0-indexed
+    var day = parseInt(parts[1], 10);
+    var year = parseInt(parts[2], 10);
+    
+    // Explicitly handle 2-digit years for the 2000s era
+    if (year < 100) {
+        year += 2000;
+    }
+    
+    return new Date(year, month, day);
+}
 
+async function getMapServiceBounds(url) {
+    console.log(url)
+  try {
+    const response = await fetch(url);
+    const metadata = await response.json();
+    
+    // Extracted spatial bounding boundaries
+    const extent = metadata.fullExtent; 
+    
+    console.log("Bounding Box Coordinates:", extent);
+    console.log(`XMin: ${extent.xmin}, YMin: ${extent.ymin}, XMax: ${extent.xmax}, YMax: ${extent.ymax}`);
+    console.log("Spatial Reference WKID:", extent.spatialReference.wkid);
+    
+    return extent;
+  } catch (error) {
+    console.error("Failed to fetch map service metadata:", error);
+  }
+}

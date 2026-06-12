@@ -252,6 +252,9 @@ class Layer_Manager {
                 map_manager.map.fitBounds(latlngbounds);
             }
         });
+     }else if(layer.type=="mapservice"){
+       
+         map_manager.map_zoom_event(L.geoJSON(layer.resource_obj.geojson).getBounds())
      }else{
       map_manager.map_zoom_event(layer.layer_obj.getBounds())
      }

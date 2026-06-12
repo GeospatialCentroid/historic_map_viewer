@@ -1876,3 +1876,8 @@ a[aria-disabled="true"] {
   padding: 3px;
   max-height: 25px;
 }
+
+.filter_list a{
+    padding-left: 10px;
+
+}
