@@ -1160,7 +1160,10 @@ class Filter_Manager {
             html+='<button type="button" class="btn btn-success" onclick="filter_manager.select_item('+section_id+',\''+item.child_ids[i]+'\',true);" >Details</button>'
             html+="</div>";
             html+='<div class="item_thumb_container"><img class="item_thumb" src="'+thumb_url+'"></div>'
-            html+='<a href="javascript:void(0);" onclick="image_manager.show_image(\''+iiif_url+'\',\''+child[section.title_col]+'\',\''+child["Reference URL"]+'\');">'+LANG.DETAILS.IMAGE_VIEW+'</a>'+"<br/>";
+            if (child.type=="AllMaps"){
+                           html+='<a href="javascript:void(0);" onclick="image_manager.show_image(\''+iiif_url+'\',\''+child[section.title_col]+'\',\''+child["Reference URL"]+'\');">'+LANG.DETAILS.IMAGE_VIEW+'</a>'+"<br/>";
+ 
+            }
 
             html+="</li>";
         }
@@ -1260,7 +1263,7 @@ class Filter_Manager {
         html+="</div>"
         html+='<div class="item_thumb_container"><img class="item_thumb" src="'+thumb_url+'"></div>';
 
-        if(item?.child_ids && item.child_ids.length==0){
+        if(item?.child_ids && item.child_ids.length==0 && item.type=="AllMaps"){
             html+='<a href="javascript:void(0);" onclick="image_manager.show_image(\''+iiif_url+'\',\''+item[section.title_col]+'\',\''+item["Reference URL"]+'\');">'+LANG.DETAILS.IMAGE_VIEW+'</a>'+"<br/>";
         }
         for (var i in item){

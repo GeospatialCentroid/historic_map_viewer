@@ -798,7 +798,7 @@ class Layer_Manager {
      }
 
      layer_obj.on('load', function (e) {
-        console.log("loaded",e)
+        console.log("loaded",e.target.id)
         const but_id = `item_${e.target.id}`;
         $this.layer_load_complete(but_id);
 
@@ -1022,8 +1022,7 @@ class Layer_Manager {
       var layer_options ={
         url: url,
         pane:`item_${section_id}_${item_id}`,
-        // // to enable cursor and click events on raster images
-        interactive:true,
+        interactive:true, // to enable cursor and click events on raster images
         bubblingMouseEvents: false,
          maxZoom: 21,
          //useCors:false - causes issue with the service

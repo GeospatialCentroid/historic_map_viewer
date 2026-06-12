@@ -40,6 +40,9 @@ class Map_Manager {
     this.map.on('click', function(e) {
 
         const interactiveClasses = ['leaflet-interactive', 'leaflet-sbs-range'];
+        try{
+
+        
         if (interactiveClasses.some(cls => e.originalEvent.target.classList.contains(cls))) {
             // The user clicked a marker, a polygon hitbox, or the split control, so ignore
             return; 
@@ -52,7 +55,9 @@ class Map_Manager {
         .setLatLng(e.latlng)
         .setContent(html)
         .openOn($this.map)
-
+        }catch(err){
+            console_log("Error handling map click",err)
+        }
       
        
     });
@@ -597,7 +602,7 @@ class Map_Manager {
             $this.map.removeLayer($this.highlighted_feature)
          }
 
-         $this.popup_close()
+        this.popup_close()
         if(layer.type=="GeoJSON"){
           var ev = document.createEvent("MouseEvent");
           var offset = $("#map").offset()
@@ -637,5 +642,14 @@ class Map_Manager {
         return
       }
 
+    }
+     popup_close(){
+        if (this.popup){
+            this.map.closePopup();
+            if (this.highlighted_feature) {
+              this.map.removeLayer(this.highlighted_feature);
+            }
+        }
+        delete this.popup;
     }
  }

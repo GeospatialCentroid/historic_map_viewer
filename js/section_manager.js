@@ -212,7 +212,12 @@ class Section_Manager {
 
                     obj.section_id=i// create a reference to the section for mix and match filtering
                     if( obj?.["geojson"]){
+                        try{
                         obj.geojson = JSON.parse(obj["geojson"])
+                        }catch(e){
+                            console.log("error parsing geojson for record "+obj[section.unique_id_col],e)
+                        }
+
                     }
                     //keep track of parent record we're a child of
                     obj.record_section_id=false;
@@ -232,13 +237,14 @@ class Section_Manager {
                 }
 
                 $this.json_data[i].all_data = remaining;
+               
               }
              //clean up
               delete section.json_data;
               section.items_showing=[]
 
           }
-
+          console.log($this.json_data[0])
           $this.check_all_section_completion()
     }
 

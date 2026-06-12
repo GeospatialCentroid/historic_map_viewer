@@ -496,7 +496,7 @@ class Table_Manager {
   get_sort_icon(direction){
     var icon = "up"
     if (direction== "DESC"){ icon="down" }
-    return  '<i class="fas fa-sort-'+icon+'"></i>'
+    return  '<i class="bi bi-caret-'+icon+'"></i>'
   }
 
   get_feature(_id){
