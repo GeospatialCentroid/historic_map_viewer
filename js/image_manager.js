@@ -80,7 +80,7 @@ class Image_Manager {
         L.DragAction, L.ScaleAction, L.DistortAction, 
         L.RotateAction, L.FreeRotateAction, L.LockAction, 
         L.OpacityAction, L.BorderAction, 
-       // L.DeleteAction, L.CopyCornersAction
+        L.DeleteAction, L.CopyCornersAction
     ];
 
     // Initialize the overlay WITHOUT adding it to the map immediately
