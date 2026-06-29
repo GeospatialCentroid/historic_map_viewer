@@ -137,7 +137,7 @@ class Filter_Manager {
     }
     getYear(dateString) {
         // 1. Look for the first 4-digit number (e.g., 1864, 1973, 1952)
-        console_log("getYear",dateString)
+        
         try{
             const fourDigitMatch = dateString.match(/\b\d{4}\b/);
             if (fourDigitMatch) {
@@ -148,14 +148,22 @@ class Filter_Manager {
         }
         return null;
     }
-    show_date_search(col,all_data){
+    show_date_search(all_data){
         //date search
         var dates=[];
+       
         for (var i=0;i<all_data.length;i++){
-            let year = this.getYear(String(all_data[i][col][0]));
-            if(year){ 
-                dates.push(year)
+            var section_id=all_data[i]?.section_id
+            if(typeof section_id !== 'undefined' && Number.isFinite(section_id)){
+                var section =section_manager.json_data[all_data[i]?.section_id]
+                var col=section?.year_start_col
+                let year = this.getYear(String(all_data[i][col][0]));
+                if(year){ 
+                    dates.push(year)
+                }
+
             }
+            
         }
         dates= dates.sort();
 
@@ -444,22 +452,23 @@ class Filter_Manager {
        $("#"+_id+"__chip").remove()
     }
     filter(section_id){
-        // create a subset of the items based on the set filters
-        var subset=[];
-        //loop though the items in the list
-        var start=0
-        var end=this.section_manager.json_data.length
+        var subset = []; // This will now hold a flat list of items that passed filters
+        
+        // Determine loop range: if section_id is provided, only filter that section
+        var start = section_id ? section_id : 0;
+        var end = section_id ? section_id + 1 : this.section_manager.json_data.length;
         if(section_id){
             //allow filtering results from a single section
             start=section_id
             end =section_id+1
         }
-        for (var i=start;i<end;i++){
-            for (var j=0;j<this.section_manager.json_data[i].all_data.length;j++){
+        for (var i = start; i < end; i++) {
+                let section_data = this.section_manager.json_data[i].all_data;
+                for (var j = 0; j < section_data.length; j++) {
                 // compare each to the filter set to create a subset
                 var meets_criteria=true; // a boolean to determine if the item should be included
 
-                var obj=this.section_manager.json_data[i].all_data[j]
+                var obj=section_data[j];
                 for (var a in this.filters){
                     if (a==LANG.SEARCH.CHIP_SUBMIT_BUT_LABEL){
                         // if search term not found in both title and sub title
@@ -637,13 +646,13 @@ class Filter_Manager {
         // create a separate obj to track the occurrences of each unique option
         this.catalog_counts={}
        // allow mapping the search key to a different value
-         this.catalog_keys={}
+        this.catalog_keys={}
         for (var i=0;i<_data.length;i++){
-            var obj=_data[i]
-//            //add a unique id, prepend 'item_' for use as a variable, only do this on first pass
-//            if(!this.ids_added){
-//              obj["id"]="item_"+i;
-//            }
+            var obj = _data[i];
+
+            if (this.is_parent_record(obj)) {
+                continue;
+            }
 
             //for (var a in obj){// use instead if we want to filter on all
             for (var j in filter_cols){
@@ -788,7 +797,20 @@ class Filter_Manager {
                 }
             }
     }
+        /**
+     * Returns true if a record is a parent wrapper record.
+     * Parent records contain a populated "children" field.
+     */
+    is_parent_record(item) {
+        return item?.children && String(item.children).trim() !== "";
+    }
 
+    /**
+     * Count only actual records (exclude parent wrappers).
+     */
+    get_actual_record_count(data) {
+        return data.filter(item => !this.is_parent_record(item)).length;
+    }
      get_multi_select(id,options,counts,keys,collapsed){
 
         var html=""
@@ -867,28 +889,56 @@ class Filter_Manager {
          }
          $this.has_earth_param=false
     }
-    list_results(section_id){
-        var $this = this
-        //set initial variables
-        $this.showing_id=section_id;
-        $this.filters={};// reset filters
+list_results(section_id = null) {
+    var $this = this;
+    $this.showing_id = section_id;
+    $this.filters = {}; // Reset filters
 
+    var combined_data = [];
+    var master_filter_cols = [];
 
+    if (section_id !== null) {
+        // --- EXISTING BEHAVIOR: Single Section ---
+        var section = $this.section_manager.json_data[section_id];
+        combined_data = $this.section_manager.get_match('section_id_' + section_id);
+        master_filter_cols = section.filter_cols;
+        
+        // Generate filters for just this section
+        $this.generate_filters(combined_data, master_filter_cols);
+       
+    } else {
+        // --- NEW BEHAVIOR: Multiple Datasets (Aggregate) ---
+        // Loop through all sections and combine their data
+        for (var i = 0; i < $this.section_manager.json_data.length; i++) {
+            var section = $this.section_manager.json_data[i];
+            var section_data = $this.section_manager.get_match('section_id_' + i);
+            
+            // Add items to combined list and ensure they know their section_id
+            section_data.forEach(item => {
+                item.section_id = i; 
+                combined_data.push(item);
+            });
 
-        //move to the results panel and list all the items
-        // each items visibility is stored in the filter manager - if showing
+            // Merge filter columns
+            master_filter_cols = [...new Set([...master_filter_cols, ...section.filter_cols])];
+        }
+       
+        // Generate filters based on the combined pool of data
+        $this.generate_filters(combined_data, master_filter_cols);
 
-        var items_showing=$this.section_manager.json_data[section_id].items_showing
-        var data = $this.section_manager.get_match('section_id_'+section_id)
-
-        $this.generate_filters(data,$this.section_manager.json_data[section_id].filter_cols)
-        if($this.section_manager.json_data[section_id]?.latest_col){
-            $this.add_latest_filter(data,$this.section_manager.json_data[section_id].latest_col)
-        }  
-        $this.add_filter_watcher();
-        var title_col=$this.section_manager.json_data[section_id]["title_col"]
-        $this.sort_data(data,title_col)
+         console_log("section?.latest_col",section?.latest_col)
+        if (section?.latest_col) {
+            console_log("Create the latest")
+            $this.add_latest_filter(combined_data, section.latest_col);
+        }
     }
+
+    $this.add_filter_watcher();
+    
+    // Sort and display the results
+    // We pass combined_data regardless of whether it's one section or all
+    $this.sort_data(combined_data);
+}
     show_sorted_results(section_id){
        //take the subset and short by title
 
@@ -1025,7 +1075,7 @@ class Filter_Manager {
          var func ="image_manager.show_image"
          var title = item[section.title_col]
          var ref_url = item["Reference URL"]
-         button_text = `<button type="button" class="btn ${_class} view_but" onclick="${func}(\`${iiif_url}\`, \`${title}\`, \`${ref_url}\`)">${text}</button>`
+         button_text = `<button type="button" class="btn ${_class} view_but" onclick="${func}(\`${iiif_url}\`, \`${title}\`, \`${ref_url}\`, \`${item_id}\`)">${text}</button>`
         }
 
         if(item?.child_ids && item.child_ids.length>0){
@@ -1062,13 +1112,13 @@ class Filter_Manager {
 
     //--
      show_results(sorted_data){
+         
          // hide all the items
          var $this = this;
           var item_ids =[];
           var parent_ids =[];//empty list to store the parents to prevent repeat display
          // the sorted data could be a mix of items from multiple sections
          var html= '<ul class="list-group"' +'">'
-
          // if parents has only one child, just show the child (it should have all the parent metadata)
          for (var i=0;i<sorted_data.length;i++){
             var item = sorted_data[i]
@@ -1081,8 +1131,8 @@ class Filter_Manager {
             var section_id = item.section_id
             var but_id="item_"+section_id+'_'+item._id+"_toggle"
             var no_show=false;// used to prevent repeat parents from displaying
-
             // if the item has a parent = swap it for the parent
+
              if(typeof(item.parent_id) !="undefined" && item.parent_id!=""){
 
                //check that the parent id is not in the list of parent_ids
@@ -1150,12 +1200,16 @@ class Filter_Manager {
         $('#results_scroll').animate({
                 scrollTop: 0
             }, 1000);
-         $this.update_results_info(sorted_data.length)
+        
+        // Calculate the actual number of records by excluding parent wrappers
+        $this.update_results_info(
+            $this.get_actual_record_count(sorted_data)
+        );
 
     }
 
     //
-     show_layers(section_id,item_id,_child_id){
+   show_layers(section_id,item_id,_child_id){
          // create a panel allowing the individual layers to be added
         // the thumbnail should be shown along with the name
         var $this=this;
@@ -1163,6 +1217,14 @@ class Filter_Manager {
 
         // Assume other metadata is the same - todo populate this child record metadata from parent records
         var item = this.get_item(section_id,item_id);
+        
+ 
+        // If the array is empty but the raw children string exists, populate the array
+        if ((!item.child_ids || item.child_ids.length === 0) && item.children) {
+            item.child_ids = String(item.children).split(",");
+        }
+        // ----------------------
+
         var section=section_manager.get_section_details(section_id)
         var html=""
 
@@ -1171,10 +1233,16 @@ class Filter_Manager {
         html+= '<ul class="list-group"' +'">'
 
         for (var i=0;i<item.child_ids.length;i++){
+            console_log("getting child ", item.child_ids[i])
+            console_log(section_id, this.get_item(section_id,item.child_ids[i]))
             var child = this.get_item(section_id,item.child_ids[i]);
-            var thumb_url=child[section.image_col]
-            var iiif_url = child["IIIF"];
+           if (!child) {
+                console.warn(`Child with ID ${item.child_ids[i]} not found.`);
+                continue; 
+            }
 
+           const thumb_url = child?.[section?.image_col] ?? "";
+           const iiif_url = child?.["IIIF"] ?? "";
             html += '<li id="'+item.child_ids[i]+'_item" class="list-group-item list-group-item-action" onmouseover="filter_manager.show_highlight('+section_id+',\''+item.child_ids[i]+'\');" onmouseout="map_manager.hide_highlight_feature();">'
 
             html+='<div class="breakable">'+child[section.title_col]+"</div>";// add the title column
@@ -1186,8 +1254,8 @@ class Filter_Manager {
             html+='<button type="button" class="btn btn-success" onclick="filter_manager.select_item('+section_id+',\''+item.child_ids[i]+'\',true);" >Details</button>'
             html+="</div>";
             html+='<div class="item_thumb_container"><img class="item_thumb" src="'+thumb_url+'"></div>'
-            if (child.type=="AllMaps"){
-                           html+='<a href="javascript:void(0);" onclick="image_manager.show_image(\''+iiif_url+'\',\''+child[section.title_col]+'\',\''+child["Reference URL"]+'\');">'+LANG.DETAILS.IMAGE_VIEW+'</a>'+"<br/>";
+            if (child.type=="AllMaps" || (child.type=="image" &&  child.geojson!="")){
+                           html+='<a href="javascript:void(0);" onclick="image_manager.show_image(\''+iiif_url+'\',\''+child[section.title_col]+'\',\''+child["Reference URL"]+'\',\''+child["id"]+'\');">'+LANG.DETAILS.IMAGE_VIEW+'</a>'+"<br/>";
  
             }
 
@@ -1290,10 +1358,10 @@ class Filter_Manager {
         html+='<div class="item_thumb_container"><img class="item_thumb" src="'+thumb_url+'"></div>';
 
         if(item?.child_ids && item.child_ids.length==0 && item.type=="AllMaps"){
-            html+='<a href="javascript:void(0);" onclick="image_manager.show_image(\''+iiif_url+'\',\''+item[section.title_col]+'\',\''+item["Reference URL"]+'\');">'+LANG.DETAILS.IMAGE_VIEW+'</a>'+"<br/>";
+            html+='<a href="javascript:void(0);" onclick="image_manager.show_image(\''+iiif_url+'\',\''+item[section.title_col]+'\',\''+item["Reference URL"]+'\',\''+item_id+'\');">'+LANG.DETAILS.IMAGE_VIEW+'</a>'+"<br/>";
         }
         for (var i in item){
-            if ($.inArray(i,section.show_cols)!=-1){
+            if ($.inArray(i,section.show_cols)!=-1 || DEBUGMODE){
                 var link = item[i]
                 if ((typeof link === 'string' || link instanceof String) && link.indexOf("http")==0){
                    link="<a href='"+link+"' target='_blank'>"+link+"</a>"
@@ -1315,27 +1383,7 @@ class Filter_Manager {
             html+='<input class="readonly_input" type="text" value='+item[section.map_tiles_col]+'>'
             html+="</div>"
         }
-        // generate a table from the table_data_cols
-        // these could be any number of columns of the same size so they can be combined into a table
-        var table_data =[]
-        for (var c in this.table_data_col){
-            if(item[this.table_data_col[c]].indexOf(",")>-1){
-                table_data.push(item[this.table_data_col[c]].split(','))
-            }else{
-                table_data.push(item[this.table_data_col[c]])
-            }
 
-        }
-
-      //check that there is data
-//      if(table_data[0].length==1 && match.usable_links.length>0){
-//         // temporarily get the details from the ESRI metadata
-//         this.load_json(match.usable_links[0][0]+"?f=json",this.show_loaded_columns)
-//
-//      }else{
-//            html+=this.table_manager.get_combined_table_html(this.table_data_col,table_data)
-//
-//        }
 
         $("#"+_elm).html(html)
     }

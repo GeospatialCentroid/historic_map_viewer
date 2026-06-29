@@ -350,21 +350,148 @@ function parse_date(date_str) {
     return new Date(year, month, day);
 }
 
-async function getMapServiceBounds(url) {
-    console.log(url)
-  try {
-    const response = await fetch(url);
-    const metadata = await response.json();
-    
-    // Extracted spatial bounding boundaries
-    const extent = metadata.fullExtent; 
-    
-    console.log("Bounding Box Coordinates:", extent);
-    console.log(`XMin: ${extent.xmin}, YMin: ${extent.ymin}, XMax: ${extent.xmax}, YMax: ${extent.ymax}`);
-    console.log("Spatial Reference WKID:", extent.spatialReference.wkid);
-    
-    return extent;
-  } catch (error) {
-    console.error("Failed to fetch map service metadata:", error);
+// 
+L.CopyCornersAction = L.EditAction.extend({
+    initialize: function(map, overlay, options) {
+        options = options || {};
+        options.toolbarIcon = {
+            html: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-top: 6px;"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/></svg>',
+            tooltip: 'Copy GeoJSON for Dataset'
+        };
+        L.EditAction.prototype.initialize.call(this, map, overlay, options);
+    },
+
+addHooks: function() {
+        var overlay = this._overlay;
+        var corners = overlay.getCorners();
+        
+        // Extract the ID from the overlay object or its options
+        var layerId = overlay.options.id || overlay.id || overlay.layer_id || "Unknown ID";
+
+        // Helper function to return [longitude, latitude] as numbers
+        var formatCoord = function(c) {
+            return [parseFloat(c.lng.toFixed(6)), parseFloat(c.lat.toFixed(6))];
+        };
+
+        // Extract corners based on the Z-shape storage [NW, NE, SW, SE]
+        var nw = formatCoord(corners[0]);
+        var ne = formatCoord(corners[1]);
+        var sw = formatCoord(corners[2]);
+        var se = formatCoord(corners[3]);
+
+        // Construct a valid GeoJSON Feature with a closed polygon ring
+        var geojsonFeature = {
+            "type": "Feature",
+            "properties": {
+                "id": layerId
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [[
+                    nw, // Top-Left
+                    ne, // Top-Right
+                    se, // Bottom-Right
+                    sw, // Bottom-Left
+                    nw  // Close the loop (Return to Top-Left)
+                ]]
+            }
+        };
+
+        // Convert to a clean, indented JSON string (2 spaces)
+        var copyText = JSON.stringify(geojsonFeature, null, 2);
+
+        // Construct the multi-line instruction message
+        var alertMsg = "GeoJSON successfully copied to clipboard!\n\n" +
+                       "Layer ID: " + layerId + "\n" +
+                       "Instructions: Paste this GeoJSON into the geometry field in your dataset for this specific layer.\n\n" +
+                       copyText;
+
+        // Push to clipboard and alert the user
+        navigator.clipboard.writeText(copyText).then(function() {
+            alert(alertMsg);
+        }).catch(function(err) {
+            console.error("Failed to copy GeoJSON: ", err);
+        });
+    }
+});
+
+/**
+ * Safely extracts 4 corners from a GeoJSON Feature and returns them in a Z-shape layout.
+ * @param {Object|String} geojson - The GeoJSON input from the Solr resource.
+ * @returns {L.LatLng[]|null} Array of 4 Leaflet LatLng points, or null if invalid.
+ */
+function getCornersFromGeoJSON(geojson) {
+    if (!geojson) return null;
+
+    if (typeof geojson === 'string') {
+        try {
+            geojson = JSON.parse(geojson);
+        } catch (e) {
+            console.error("Failed to parse GeoJSON string:", e);
+            return null;
+        }
+    }
+
+    try {
+        var geometry = geojson.geometry || geojson;
+        var coords = geometry.coordinates?.[0];
+        
+        if (coords && coords.length >= 4) {
+            var nw = L.latLng(coords[0][1], coords[0][0]); // Index 0
+            var ne = L.latLng(coords[1][1], coords[1][0]); // Index 1
+            var se = L.latLng(coords[2][1], coords[2][0]); // Index 2
+            var sw = L.latLng(coords[3][1], coords[3][0]); // Index 3
+
+            // Conforms strictly to your environment's target layout: [NW, SW, NE, SE]
+            return [nw, sw, ne, se];
+        }
+    } catch (err) {
+        console.error("Error parsing GeoJSON coordinate structure:", err);
+    }
+
+    return null;
+}
+
+/**
+ * Normalizes spatial data by extracting valid GeoJSON from either a standard GeoJSON object 
+ * or a IIIF Georeference AnnotationPage/Annotation.
+ * * @param {Object|string} input - The JSON string or object to parse.
+ * @returns {Object} A standard GeoJSON object.
+ * @throws {Error} If no valid GeoJSON is found.
+ */
+function extractGeoJSON(input) {
+  // Parse the input if it's passed as a string
+  const data = typeof input === 'string' ? JSON.parse(input) : input;
+
+  if (!data || typeof data !== 'object') {
+    throw new Error("Input must be a valid JSON object or string.");
   }
+
+  // A list of valid root-level GeoJSON types
+  const validGeoJSONTypes = [
+    "FeatureCollection", "Feature", "Point", "LineString", 
+    "Polygon", "MultiPoint", "MultiLineString", "MultiPolygon", "GeometryCollection"
+  ];
+
+  // 1. Check if the input itself is already valid GeoJSON
+  if (validGeoJSONTypes.includes(data.type)) {
+    return data;
+  }
+
+  // 2. Check if the input is a IIIF AnnotationPage containing items
+  if (data.type === "AnnotationPage" && Array.isArray(data.items)) {
+    for (const item of data.items) {
+      if (item.body && validGeoJSONTypes.includes(item.body.type)) {
+        return item.body; // Return the nested FeatureCollection
+      }
+    }
+  }
+
+  // 3. Check if the input is a single IIIF Annotation
+  if (data.type === "Annotation" && data.body && validGeoJSONTypes.includes(data.body.type)) {
+    return data.body;
+  }
+
+  // If we reach this point, we didn't find any GeoJSON
+  throw new Error("Unable to locate valid GeoJSON within the provided data structure.");
 }

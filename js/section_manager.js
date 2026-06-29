@@ -168,90 +168,98 @@ class Section_Manager {
             .split(',')
             .map(c => c.trim()); // Split and trim column names
         var temp_json=[]
-         for (var j=0;j<all_data.length;j++){
-            const row = all_data[j];
-            // Check if any include_col field is non-empty
-            const hasValue = include_cols.some(col => row[col] && row[col] !== '');
-            if (hasValue) {
-                temp_json.push(row);
-            }
+        console_log("all_data.length",all_data.length)
+        for (var j=0;j<all_data.length;j++){
+        const row = all_data[j];
+        // Check if any include_col field is non-empty
+        const hasValue = include_cols.some(col => row[col] && row[col] !== '');
+        if (hasValue) {
+            temp_json.push(row);
         }
+     }
         return temp_json;
 
     }
-    check_section_completion(data,slot){
-        console.log("check_section_completion")
-        // when all the data for a section is loaded, join it together
-         var $this = section_manager
-         //store the data in the slot
-          var section = $this.json_data[slot[0]]
-          section.data[slot[1]].data=data
-          //check if all the data is available in the specific section
-          var all_data_loaded =true
-          for (var j=0;j<section.data.length;j++){
-            if(!section.data[j]?.data){
-                all_data_loaded =false
+   check_section_completion(data, slot) {
+        var $this = section_manager;
+        
+        var section_index = slot[0]; 
+        var section = $this.json_data[section_index];
+        
+        section.data[slot[1]].data = data;
+
+        var all_data_loaded = true;
+        for (var j = 0; j < section.data.length; j++) {
+            if (!section.data[j]?.data) {
+                all_data_loaded = false;
             }
-          }
+        }
 
-         if(all_data_loaded){
+        if (all_data_loaded) {
+            $this.json_data[section_index].id = section_index;
+            $this.join_data($this.json_data[section_index]);
 
-            for (var i=0;i<section.data.length;i++){
-                $this.json_data[i].id=i;// keep track of the section id for reference later
-                $this.join_data($this.json_data[i])
-
-
-                // be sure to filter data for complete records
-                if($this.json_data[i]?.include_col){
-                   $this.json_data[i].all_data = $this.included_data($this.json_data[i].all_data,$this.json_data[i].include_col)
-                }
-                let all_data=$this.json_data[i].all_data
-                for (var j=0;j<all_data.length;j++){
-
-                    var obj = all_data[j]
-
-                    obj.section_id=i// create a reference to the section for mix and match filtering
-                    if( obj?.["geojson"]){
-                        try{
-                        obj.geojson = JSON.parse(obj["geojson"])
-                        }catch(e){
-                            console.log("error parsing geojson for record "+obj[section.unique_id_col],e)
-                        }
-
+            if ($this.json_data[section_index]?.include_col) {
+                $this.json_data[section_index].all_data = $this.included_data(
+                    $this.json_data[section_index].all_data,
+                    $this.json_data[section_index].include_col
+                );
+            }
+            
+            let all_data = $this.json_data[section_index].all_data;
+            for (var j = 0; j < all_data.length; j++) {
+                var obj = all_data[j];
+                
+                // CRUCIAL: Assign the actual section index so the record knows where it came from
+                obj.section_id = section_index; 
+                
+                if (obj?.["geojson"]) {
+                    try {
+                        obj.geojson = JSON.parse(obj["geojson"]);
+                    } catch (e) {
+                        console.log("error parsing geojson for record " + obj[section.unique_id_col], e);
                     }
-                    //keep track of parent record we're a child of
-                    obj.record_section_id=false;
-                    // if the record is a child, attempt to find it's parent and transfer the values
-                    all_data[j]=section_manager.add_parent_id(obj,all_data,section.unique_id_col)
                 }
-                // store the parents for easy access.
-                section.parents = {};
-                const remaining = [];
+                
+                obj.record_section_id = false;
+                all_data[j] = section_manager.add_parent_id(obj, all_data, section.unique_id_col,section?.parent_id);
+            }
 
-                for (const obj of all_data) {
-                  if (obj.children !== "") {
-                     section.parents[obj[section.unique_id_col]] = obj;
-                  } else {
-                    remaining.push(obj);
-                  }
+            section.parents = {};
+            const remaining = [];
+           for (const obj of all_data) {
+                // Safely check if the record is a parent
+                const isParent = obj.children && String(obj.children).trim() !== "";
+                
+                if (isParent) {
+                    // Store in the lookup dictionary for your join logic
+                    section.parents[obj[section.unique_id_col]] = obj;
                 }
+                
+                // Push EVERYTHING (both parents and standalone/child items) 
+                // to 'remaining' so they are retained in the application
+                remaining.push(obj); 
+            }
 
-                $this.json_data[i].all_data = remaining;
-               
-              }
-             //clean up
-              delete section.json_data;
-              section.items_showing=[]
-
-          }
-          console.log($this.json_data[0])
-          $this.check_all_section_completion()
+            $this.json_data[section_index].all_data = remaining;
+            delete section.json_data;
+            section.items_showing = [];
+        }
+        
+        $this.check_all_section_completion();
     }
 
       join_data(section){
         console_log("join_data")
         // lets start by storing the first loaded data file in the top spot
-        section.all_data= $.csv.toObjects(section.data[0].data)//todo if the first loaded data is geojson, we'll want to convert it to a flat json structure for searching
+        console_log(section)
+
+        try{
+            section.all_data= $.csv.toObjects(section.data[0].data)//todo if the first loaded data is geojson, we'll want to convert it to a flat json structure for searching
+        }catch(e){
+            console_log("error converting  $.csv.toObjects",section)
+            section.all_data=section.data[0].data
+        }
         //takes one or more data files and joins them on a key
         //starting with the second dataset, look for the left_join_col,right_join_col
         //When matched, map all the parameters to the first dataset
@@ -285,20 +293,11 @@ class Section_Manager {
                 section.filter_cols=filter_cols
                 this.update_data(section.all_data,section.show_cols,separated_cols,section?.image_col,section?.color_col)
                 filter_manager.create_filter_values(section,section.all_data,filter_cols,section?.year_start_col,section?.year_end_col);
-
-                if(section?.year_start_col){
-                     console_log(section?.year_start_col, "is the start col", "Get all the dates")
-
-
-                    filter_manager.show_date_search(section?.year_start_col,section.all_data)
-                }
-                //console.log("second data",section.data[j].data,section.data[j][1])
-
             }
           }
 
     }
-    add_parent_id(obj,all_data,unique_id_col){
+    add_parent_id(obj,all_data,unique_id_col,_parent_id){
         /*
         obj: who we are working with
         all_data: the data
@@ -316,6 +315,7 @@ class Section_Manager {
 
                 if (!parent.children || parent.children.trim() === "") continue;
 
+                parent.children =  parent.children.replace(/^'+/, "") //remove leading apostrophes which are added to prevent excel from treating list as number
                 const children_array = parent.children
                     .split(",")
                     .map(s => s.trim())
@@ -332,7 +332,14 @@ class Section_Manager {
         const parent = all_data._parent_lookup.get(obj[unique_id_col]);
 
         if ((!obj.children || obj.children.trim() === "") && parent) {
-            obj.parent_id = parent._id;
+            if(_parent_id== false || _parent_id ==""){
+                // only set the parent id if it hasn't been set already
+                obj.parent_id = parent._id;
+            }else{
+                // instead put the 'existing' parent id in a predictable place for access
+                obj.parent_id = obj[_parent_id];
+            }
+            
             obj = this.inject_parent_metadata(parent, obj, ["children","is_map"]);
         }
         return obj
@@ -353,28 +360,39 @@ class Section_Manager {
       return result;
 
     }
-    check_all_section_completion(){
-        var $this = section_manager
-        var all_sections_data_loaded=true
-        for (var i=0; i<$this.json_data.length;i++){
-             if(!$this.json_data[i]?.all_data){
-                console_log("check to make sure all has really loaded")
-                all_sections_data_loaded =false
+    check_all_section_completion() {
+        var $this = section_manager;
+        var all_sections_data_loaded = true;
+        
+        for (var i = 0; i < $this.json_data.length; i++) {
+             if (!$this.json_data[i]?.all_data) {
+                all_sections_data_loaded = false;
              }
         }
-        if (all_sections_data_loaded){
+
+        if (all_sections_data_loaded ) {
+            // All the    
+            let combined_data = [];
+            for (let i = 0; i < $this.json_data.length; i++) {
+                combined_data = combined_data.concat($this.json_data[i].all_data);
+            }
+
+            // Pass the temporary combined array just to the date slider
+            filter_manager.show_date_search(combined_data);
+
+
             run_resize();
-            //hide loader
-            clearInterval($this.progress_interval)
-            $("#loader").css("width", 100 + "%")
-            setTimeout( function() {
-
+            
+            // Hide loader
+            clearInterval($this.progress_interval);
+            $("#loader").css("width", 100 + "%");
+            setTimeout(function() {
                 $(".overlay").fadeOut("slow", function () {
-                    $(this).css({display:"none",'background-color':"none"});
+                    $(this).css({ display: "none", 'background-color': "none" });
                 });
-            },1200);
+            }, 1200);
 
-            $this.setup_interface()
+            $this.setup_interface();
         }
     }
 
@@ -400,15 +418,7 @@ class Section_Manager {
                 "iiif":obj[section.iiif_base_url],
                 "attribution":obj[section.title_col],
              }
-            //   if(transcription_mode){
-            //      if(_data[i].data){
-            //         obj_props["has_data"]= true
-            //         _data[i]["has_data"]= "Yes"
-            //      }else{
-            //       _data[i]["has_data"]= ""
-            //      }
-            // }
-            // only adda feature value if the coordinates are set
+            // only ada feature value if the coordinates are set
             if( Number(obj.longitude) !=0 && Number(obj.latitude) !=0){
                  obj["feature"]={}
                  obj["feature"]["features"] =[
@@ -436,16 +446,20 @@ class Section_Manager {
             var properties={}
                  for (var k=0;k<separated_cols.length;k++){
                        // if there is a number clean it up
-                       if (all_data[i][separated_cols[k]].match(/\d/) == null){
-                            all_data[i][separated_cols[k]] = all_data[i][separated_cols[k]]
-                              .split(",")
-                              .map(s => s.trim());
-                       }else{
-                            // contentdm uses semicolon for date lists
-                            all_data[i][separated_cols[k]] =  all_data[i][separated_cols[k]].split(";").map(function(item) {
-                              return getValidNumber(item.trim());
-                            });
-                     }
+                       if(all_data[i]?.[separated_cols[k]] ){
+                            if (all_data[i][separated_cols[k]]?.match(/\d/) == null){
+                                    all_data[i][separated_cols[k]] = all_data[i][separated_cols[k]]
+                                    .split(",")
+                                    .map(s => s.trim());
+                            }else{
+                                    // contentdm uses semicolon for date lists
+                                    all_data[i][separated_cols[k]] =  all_data[i][separated_cols[k]].split(";").map(function(item) {
+                                    return getValidNumber(item.trim());
+                                    });
+                            }
+
+                       }
+                       
                  }
             // and if there is an image col
             if(image_col){
@@ -503,8 +517,10 @@ class Section_Manager {
 //             html+= "onmouseenter='filter_manager.show_bounds(\""+id+"\")' "
                 html+=">"
                 html+= this.json_data[i]["name"]
-                //html+='<div class="float-end input-group-text"><span class="form-check" ><input class="form-check-input section_check" type="checkbox" value="" id="section_id_'+id+'" ></span>'
-               html +="<button type='button' class='btn  shadow-none'  style='margin-top: -5px;' onclick='filter_manager.list_results(\""+id+"\")' id='arrow_"+id+"'><i  class='bi bi-chevron-right'></i></button>"
+                // no longer passing a section id
+               html +="<button type='button' class='btn  shadow-none'  style='margin-top: -5px;' onclick='filter_manager.list_results()' id='arrow_"+id+"'><i  class='bi bi-chevron-right'></i></button>"
+
+                //html +="<button type='button' class='btn  shadow-none'  style='margin-top: -5px;' onclick='filter_manager.list_results(\""+id+"\")' id='arrow_"+id+"'><i  class='bi bi-chevron-right'></i></button>"
              html+="</div>"
 
              html+="</li>"

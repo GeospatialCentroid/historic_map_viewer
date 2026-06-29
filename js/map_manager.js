@@ -158,8 +158,9 @@ class Map_Manager {
   }
   add_hitbox_layer(resource_obj) {
     const $this = this;
+    console_log(resource_obj.geojson)
 
-    const hitbox = L.geoJSON(resource_obj.geojson, {
+    const hitbox = L.geoJSON(extractGeoJSON(resource_obj.geojson), {
         style: {
             opacity: 0,
             fillOpacity: 0,
@@ -289,12 +290,17 @@ class Map_Manager {
                 }
             }).addTo(this.map);
         }else{
+           try{
             this.highlighted_feature =  L.geoJSON(geo_json,{
-                interactive: false ,
-                style: function (feature) {
-                    return {color: "#fff",fillColor:"#fff",fillOpacity:fill_opacity};
-                }
-                }).addTo(this.map);
+            interactive: false ,
+            style: function (feature) {
+                return {color: "#fff",fillColor:"#fff",fillOpacity:fill_opacity};
+            }
+            }).addTo(this.map);
+           }catch(e){
+            console_log("geo_json error",geo_json)
+           }
+           
         }
 
     }

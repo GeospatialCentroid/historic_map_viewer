@@ -207,6 +207,9 @@
 		"MAP_SEARCH": "Search Here",
 		"MAP_SETTINGS": "Map Settings"
 	},
+	"IMAGE": {
+		"GEOREFERENCE": "Georeference this Image"
+	},
 	"BASEMAP": {
 		"TITLE": "Basemap",
 		"TIP": "Choose a Basemap",

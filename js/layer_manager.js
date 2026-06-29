@@ -252,7 +252,7 @@ class Layer_Manager {
                 map_manager.map.fitBounds(latlngbounds);
             }
         });
-     }else if(layer.type=="mapservice"){
+     }else if(layer.type=="mapservice" || layer.type=="image"){
        
          map_manager.map_zoom_event(L.geoJSON(layer.resource_obj.geojson).getBounds())
      }else{
@@ -316,13 +316,16 @@ class Layer_Manager {
 
 
         html+="<div class='left-div-map-buttons'>"
-        html+=`<button type="button" id="${id}_toggle" class="btn ${add_class} ${id}_toggle" onclick="layer_manager.add_layer_toggle(0,'${item_id}')">${text}</button>`
+        html+=`<button type="button" id="${id}_toggle" class="btn ${add_class} ${id}_toggle" onclick="layer_manager.add_layer_toggle('${section_id}','${item_id}')">${text}</button>`
 
-        html+=`<button type="button" class="btn btn-primary item_zoom ${id}_zoom" onclick="layer_manager.zoom_layer('0','${item_id}')">Zoom</button>`
+        html+=`<button type="button" class="btn btn-primary item_zoom ${id}_zoom" onclick="layer_manager.zoom_layer('${section_id}','${item_id}')">Zoom</button>`
          if(download_link){
               html +=download_link;
          }
         html +="<button type='button' class='btn btn-primary' onclick='filter_manager.select_item(\""+section_id+"\",\""+item_id+"\")'>"+LANG.RESULT.DETAILS+"</button>"
+       if(DEBUGMODE){
+        html += '<i class="bi bi-arrow-repeat iiif_reload_btn" style="cursor: pointer; font-size: 1.2rem; margin-left: 8px; color: #17a2b8;" onclick="layer_manager.reload_iiif(\'' + section_id + '\',\'' + item_id + '\')" title="Reload IIIF Data"></i>';       
+       }
         html+='</div>'
         html+='</div>'
 
@@ -594,7 +597,7 @@ class Layer_Manager {
     var $this=this
     var update_url=false
     // create layer at pane
-
+    console_log(section_id,item_id,"section and item")
     var resource = filter_manager.get_item(section_id,item_id); //section_manager.get_match(_resource_id)
     var layer_options = this.get_layer_options(section_id,item_id,url,_drawing_info)
 
@@ -614,6 +617,7 @@ class Layer_Manager {
     console_log(service_method,"service_method")
     console_log(layer_options.url)
     console_log(layer_options,"layer_options")
+    console_log("resource",resource)
 
     //todo attempt overcoming cors
 //     layer_options.url='http://localhost:8000/sr/'+encodeURIComponent(layer_options.url)
@@ -634,33 +638,69 @@ class Layer_Manager {
     }
 
     if (service_method._class=="distortableImageOverlay"){
-        // get the corners from the solr field
-        var corners = filter_manager.get_poly_array(resource["locn_geometry"])
-        var cs=[]
-        if (corners){
-            for(var i =0;i<4;i++){
-                var c = corners[i].split(" ")
-                // not values come in as lng lat
-                cs.push(L.latLng(c[1],c[0]))
-            }
-            //shift the last value into the second position to conform with distortableImageOverlay
-            cs.splice(1, 0, cs.splice(3, 1)[0]);
+       console.log(resource);
+        
+        // Extract the corners using the new helper function
+        var cs = getCornersFromGeoJSON(resource["geojson"]);
+        url = resource["IIIF"]//to do pass this as the orginal url
 
-             // zoom in first for images as they are often quite small
-             filter_manager.zoom_layer(resource.dcat_bbox)
+        if (cs) {
+          console.log(cs);
+            // filter_manager.zoom_layer(resource.dcat_bbox);
 
+            // 1. Create the layer
+            var layer_obj = L[service_method._class](url, {
+                actions: false,
+                mode: "lock",
+                editable: false,
+                corners: cs,
+                id: resource.id || resource.layer_id,
+               
+            });
+            // layer_obj.on('add', function() {
+            //     var imgElement = layer_obj.getElement();
+            //     if (imgElement) {
+            //         // The mouse will completely ignore the image now
+            //         imgElement.style.pointerEvents = 'none'; 
+            //     }
+            // });
 
-            var layer_obj =  L[service_method._class](url,{
-                    actions:[L.LockAction],mode:"lock",editable:false,
-                    corners: cs,
-                   }).addTo(this.map);
+            layer_obj.on('click', function(e) {
+                console.log("Layer clicked!", e.target.options.id);
+                L.DomEvent.stopPropagation(e); // Stop the click from triggering the map underneath
+            });
 
-        }else{
-            //we have no coordinates, just show the image in a separate leaflet
-             this.show_image_viewer_layer(L[service_method._class](url,{ actions:[L.LockAction],mode:"lock",editable:false}))
-              map_manager.image_map.attributionControl._attributions = {};
-              map_manager.image_map.attributionControl.addAttribution(this.get_attribution(resource));
-             return
+            // 2. Force the property explicitly BEFORE it touches the map
+            layer_obj._corners = cs;
+
+            // 3. Listen for the image to actually finish loading its pixels
+            layer_obj.on('load', function() {
+               setTimeout(() => {
+                // Grab the current zoom level
+                var currentZoom = $this.map.getZoom();
+                
+                // Jump in one zoom level, completely disabling the animation
+                $this.map.setZoom(currentZoom + 1, { animate: false });
+                
+                // Instantly jump right back to the original zoom level, also without animation
+                $this.map.setZoom(currentZoom, { animate: false });
+                
+            }, 100);
+            });
+
+            // 4. Finally, add it to the map
+            layer_obj.addTo(this.map);
+        } else {
+            // We have no coordinates, just show the image in a separate leaflet viewer
+            this.show_image_viewer_layer(L[service_method._class](url, { 
+                actions: [L.LockAction], 
+                mode: "lock", 
+                editable: false 
+            }));
+            
+            map_manager.image_map.attributionControl._attributions = {};
+            map_manager.image_map.attributionControl.addAttribution(this.get_attribution(resource));
+            return;
         }
 
 
@@ -671,27 +711,44 @@ class Layer_Manager {
         return
     }else if(service_method._method=="AllMaps"){
         var section = section_manager.get_section_details(section_id);
-//        var layer_obj = new Allmaps.WarpedMapLayer(
-//          resource[section.annotation_col],{ pane: `item_${section_id}_${item_id}`}
-//        );
 
-         // if loading the annotation from a relative path
-
-       // create an index for warped layers for easy access when capturing the load event
+      
+        
         this.warpedLayerIndex = this.warpedLayerIndex || {};
-
-        const url = window.location.origin + "/" + window.location.pathname + "/" + resource[section.annotation_col];
-        var layer_obj = new Allmaps.WarpedMapLayer(url, {pane: `item_${section_id}_${item_id}`});
-
+        var url = resource[section.annotation_col];
+        console_log(resource,section.annotation_col)
+        if (url.startsWith('http://') || url.startsWith('https://')) {
+            // It's an absolute URL, use it exactly as provided
+        } else {
+            // It's a relative URL, append it to the current site path
+            // .replace(/\/$/, "") safely removes any trailing slash from the base path
+            let basePath = (window.location.origin + window.location.pathname).replace(/\/$/, "");
+            let relativePath = url.startsWith('/') ? url : '/' + url;
+            url = basePath + relativePath;
+        }
+       
         // store metadata by URL
+        var layer_obj = new Allmaps.WarpedMapLayer(url, {pane: `item_${section_id}_${item_id}`});
+        console_log(url)
+        var warpedLayerIndex_id;
+        if (resource.geojson.items && resource.geojson.items.length > 0) {
+            warpedLayerIndex_id = resource.geojson.items[0].id;
+        } else if (resource.geojson.features && resource.geojson.features.length > 0) {
+            warpedLayerIndex_id = resource.geojson.features[0].properties.id;
+        } else {
+            console.error("Unrecognized AllMaps JSON format:", resource.geojson);
+        }
+
         //console.log("Storing metadata for warped layer:", resource.geojson.features[0].properties.id);
-        this.warpedLayerIndex[resource.geojson.features[0].properties.id] = {
+        this.warpedLayerIndex[warpedLayerIndex_id] = {
             section_id,
             item_id,
             resource_obj: resource,
             layer_obj
         };
-        // console.log(window.location.origin+"/"+window.location.pathname+"/"+resource[section.annotation_col])
+        
+        
+
         getDominantColorFromWarpedLayer(resource[section.image_col])
         .then(dominant => {
            layer.dominant_color=dominant
@@ -777,7 +834,7 @@ class Layer_Manager {
      var layer = { type:type,"id":section_id+"_"+item_id,"url":url,"layer_obj":layer_obj,"resource_obj":Object.assign({}, resource)}
 
       // exclude the points layer
-      if(layer.id!='0_-1'){
+      if(layer.id.indexOf("_-1")==-1){
          if(typeof(_z)=="undefined"){
               this.layers.push(layer);
          }else{
@@ -924,10 +981,12 @@ class Layer_Manager {
          geo.on('dblclick', function (e) {
             L.DomEvent.stopPropagation(e);
             L.DomEvent.preventDefault(e);
+            console.log("geo.on('dblclick'", e)
             layer_manager.add_layer_toggle(0,e.target.options.pane)
          });
 
          geo.on('mouseover', function (e) {
+              console.log("geo.on('mouseover'", e)
            filter_manager.show_highlight(0,e.target.options.pane);
         });
         geo.on('mouseout', function (e) {
@@ -959,7 +1018,6 @@ class Layer_Manager {
        var item= filter_manager.get_item(item_parts[0],item_parts[1]);
        
 
-       //filter_manager.select_item(0,e.layer.feature.properties.id)
        //try{
              map_manager.selected_feature_id=layer_manager.get_object_id(e.layer.feature);
              map_manager.show_popup_details([e.layer.feature])
@@ -1002,6 +1060,7 @@ class Layer_Manager {
 
 
   show_image_viewer_layer(_layer){
+    console.log("Show the layer",_layer)
         var  $this = this
         $("#image_map").width("75%")
         $("#image_map").show();
@@ -1009,7 +1068,12 @@ class Layer_Manager {
 
         // remove existing layers
         for (var i in $this.image_layers){
-            image_manager.image_map.removeLayer($this.image_layers[i]);
+            try{
+                image_manager.image_map.removeLayer($this.image_layers[i]);
+            }catch(e){
+                console.log("Attempting removeLayer",e)
+            }
+            
         }
 
          $(".leaflet-spinner").show();
@@ -1116,6 +1180,7 @@ class Layer_Manager {
    }
    update_layer_count(){
     //add the the layer count to the maps tab
+
     $("#map_tab .value").text( this.layers.length+1)
 
    }
@@ -1408,12 +1473,11 @@ class Layer_Manager {
         this.layers_list=[]
         for(var i =0;i<this.layers.length;i++){
            var obj = this.layers[i]
-           if(obj["id"]!="0_-1"){// exclude the point layer
-               this.layers_list.push({
-                   id:obj["id"],
-                   });
-               }
-           }
+          
+            this.layers_list.push({
+                id:obj["id"],
+                });
+            }
         save_params()
     }
     layer_list_change(){
@@ -1468,5 +1532,23 @@ class Layer_Manager {
         }
 
     }
-}
+ reload_iiif(section_id, item_id) {
+        var layer_id = "item_" + section_id + "_" + item_id;
+        
+        // Only attempt to reload if the layer is currently on the map
+        if (this.is_on_map(section_id + "_" + item_id)) {
+            
+            // Trigger the existing remove flow
+            this.remove_feature_layer(layer_id);
+            
+            // Re-add it after a brief timeout to let Leaflet and the DOM settle
+            setTimeout(() => {
+                this.add_layer_toggle(section_id, item_id);
+            }, 250);
+            
+        } else {
+            console.warn("Layer is not on the map, skipping reload.");
+        }
+  }  
 
+}
