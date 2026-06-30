@@ -715,7 +715,7 @@ Kasper,complete,PLSS numbers are wrong,y,https://archives.mountainscholar.org/di
 Violet ,complete,cool!,y,https://archives.mountainscholar.org/digital/api/singleitem/collection/,p17393coll186,AllMaps,https://archives.mountainscholar.org/digital/api/singleitem/collection/p17393coll186/id/25479/thumbnail,https://archives.mountainscholar.org/digital/download/collection/p17393coll186/id/25479/size/full,https://archives.mountainscholar.org/iiif/2/p17393coll186:25479/info.json,https://editor.allmaps.org/#/collection?url=https://archives.mountainscholar.org/iiif/2/p17393coll186:25479/info.json,https://annotations.allmaps.org/images/7717b8965dfd3b0b,annotations/7717b8965dfd3b0b.json,https://allmaps.xyz/images/7717b8965dfd3b0b/{z}/{x}/{y}@2x.png,"historic, inlandWaters, utilitiesCommunication, planningCadastre","diversion, plss, roads, handDrawn",City,"Vicinity map, yellow",,Unidentified mapmaker,,,,,,,,,,Fort Collins (Colo.),,,,,,,,,,,,1987,,,,1987,A vicinity map of Fort Collins and the North Poudre irrigation system with land under the system that was irrigated by some or all leased water during the 1985-1986 irrigation season marked in yellow ink.,,,,,,Cache la Poudre River Watershed (Colo.); Cache la Poudre River Watershed (Colo.) -- Maps; Irrigation -- Colorado -- Maps; North Poudre Irrigation Company -- Maps,,English,eng,,,,,,North Poudre Irrigation Company Records,North Poudre Irrigation Company Records,Series 11: Oversize; Subseries 11.1: Maps and plans,,Colorado State University. Libraries,"Copyright and other restrictions may apply. User is responsible for compliance with all applicable laws. For information about copyright law, please see https://libguides.colostate.edu/copyright.",,,,,wnprm011,,,,https://hdl.handle.net/10217/02.0043541,Finding aid: https://archives.colostate.edu/repositories/2/resources/54; wwdl,,,,"Contained in: System maps and vicinity maps, 1987, undated",,,,,,,,index.cpd,,7/16/25,,http://cdm17393.contentdm.oclc.org/cdm/ref/collection/p17393coll186/id/25479,25479,,,,p17393coll186-25479,"{""type"": ""FeatureCollection"", ""features"": [{""type"": ""Feature"", ""properties"": {""@context"": ""https://schemas.allmaps.org/map/2/context.json"", ""id"": ""https://annotations.allmaps.org/maps/2c18233af54908dd"", ""type"": ""GeoreferencedMap"", ""created"": ""2025-10-07T19:02:28.878Z"", ""modified"": ""2025-10-07T19:02:28.878Z"", ""resource"": {""id"": ""https://archives.mountainscholar.org/iiif/2/p17393coll186:25479"", ""uri"": ""https://archives.mountainscholar.org/iiif/2/p17393coll186:25479"", ""type"": ""ImageService2"", ""width"": 1738, ""height"": 2272}, ""gcps"": [{""id"": ""24172e7ef3ea5731"", ""index"": 1.8887309978179503, ""resource"": [1459, 923], ""geo"": [-104.9922834, 40.7551081]}, {""id"": ""7b2cfb78cba997c8"", ""index"": 2.3151095880060284, ""resource"": [708, 628], ""geo"": [-105.2432783, 40.8277604]}, {""id"": ""d12268797380182a"", ""index"": 0.41579515190243865, ""resource"": [877, 1296], ""geo"": [-105.188563, 40.6637339]}, {""id"": ""092e9c553ae66483"", ""index"": 3.510522031038033, ""resource"": [1463, 1597], ""geo"": [-105.0014196, 40.5809889]}], ""resourceMask"": [[165, 114], [165, 2214], [1717, 2205], [1724, 125]], ""transformation"": {""type"": ""polynomial"", ""options"": {""order"": 1}}, ""_allmaps"": {""id"": ""https://annotations.allmaps.org/maps/2c18233af54908dd"", ""version"": ""https://annotations.allmaps.org/maps/2c18233af54908dd@d892fad8afa1cc6b"", ""image"": {""id"": ""https://annotations.allmaps.org/images/7717b8965dfd3b0b"", ""version"": ""https://annotations.allmaps.org/images/7717b8965dfd3b0b@180e57d23e2c2e15"", ""canvases"": []}, ""scale"": 0.035639, ""area"": 2559613259.76}}, ""geometry"": {""type"": ""Polygon"", ""coordinates"": [[[-105.417083233, 40.961033454], [-105.436714002, 40.431811227], [-104.920210282, 40.429430057], [-104.898437262, 40.953591103], [-105.417083233, 40.961033454]]]}}]}",40.69416884,-105.168516,4457.103023,
 Violet,complete,,y,https://archives.mountainscholar.org/digital/api/singleitem/collection/,p17393coll186,AllMaps,https://archives.mountainscholar.org/digital/api/singleitem/collection/p17393coll186/id/25481/thumbnail,https://archives.mountainscholar.org/digital/download/collection/p17393coll186/id/25481/size/full,https://archives.mountainscholar.org/iiif/2/p17393coll186:25481/info.json,https://editor.allmaps.org/#/collection?url=https://archives.mountainscholar.org/iiif/2/p17393coll186:25481/info.json,https://annotations.allmaps.org/images/61ea61a5c622c8cc,annotations/61ea61a5c622c8cc.json,https://allmaps.xyz/images/61ea61a5c622c8cc/{z}/{x}/{y}@2x.png,"historic, inlandWaters, utilitiesCommunication, planningCadastre","diversion, plss, roads, handDrawn",City,"Vicinity map, brown",,Unidentified mapmaker,,,,,,,,,,Fort Collins (Colo.),,,,,,,,,,,,1987,,,,1987,A vicinity map of Fort Collins and the North Poudre irrigation system with land under the system that has less than one share of stock owned for each six acres of irrigated land marked in brown ink.,,,,,,Cache la Poudre River Watershed (Colo.); Cache la Poudre River Watershed (Colo.) -- Maps; Irrigation -- Colorado -- Maps; North Poudre Irrigation Company -- Maps,,English,eng,,,,,,North Poudre Irrigation Company Records,North Poudre Irrigation Company Records,Series 11: Oversize; Subseries 11.1: Maps and plans,,Colorado State University. Libraries,"Copyright and other restrictions may apply. User is responsible for compliance with all applicable laws. For information about copyright law, please see https://libguides.colostate.edu/copyright.",,,,,wnprm010,,,,https://hdl.handle.net/10217/02.0043542,Finding aid: https://archives.colostate.edu/repositories/2/resources/54; wwdl,,,,"Contained in: System maps and vicinity maps, 1987, undated",,,,,,,,index.cpd,,7/16/25,,http://cdm17393.contentdm.oclc.org/cdm/ref/collection/p17393coll186/id/25481,25481,,,,p17393coll186-25481,"{""type"": ""FeatureCollection"", ""features"": [{""type"": ""Feature"", ""properties"": {""@context"": ""https://schemas.allmaps.org/map/2/context.json"", ""id"": ""https://annotations.allmaps.org/maps/3dde75d2fdf21af7"", ""type"": ""GeoreferencedMap"", ""created"": ""2025-11-13T21:52:54.319Z"", ""modified"": ""2025-11-13T21:52:54.319Z"", ""resource"": {""id"": ""https://archives.mountainscholar.org/iiif/2/p17393coll186:25481"", ""uri"": ""https://archives.mountainscholar.org/iiif/2/p17393coll186:25481"", ""type"": ""ImageService2"", ""width"": 1726, ""height"": 2274}, ""gcps"": [{""id"": ""301c29601ed24436"", ""index"": 2.285172524298067, ""resource"": [868, 1308], ""geo"": [-105.18859839796296, 40.66373164683472]}, {""id"": ""5f1f44e54f986feb"", ""index"": 1.900616700084972, ""resource"": [1451, 1137], ""geo"": [-105.00033885107243, 40.70392460170933]}, {""id"": ""d49332170847b02f"", ""index"": 3.2345593185746395, ""resource"": [610, 424], ""geo"": [-105.2755977935801, 40.879687798355775]}, {""id"": ""e366c101b4b025e6"", ""index"": 0.6130826250246295, ""resource"": [1217, 2024], ""geo"": [-105.07738997570884, 40.48016815074888]}, {""id"": ""6632117bac7705ac"", ""index"": 4.837559752500716, ""resource"": [1458, 1611], ""geo"": [-105.00130709193783, 40.58112270509602]}], ""resourceMask"": [[171, 132], [163, 2218], [1707, 2223], [1705, 134]], ""transformation"": {""type"": ""polynomial"", ""options"": {""order"": 1}}, ""_allmaps"": {""id"": ""https://annotations.allmaps.org/maps/3dde75d2fdf21af7"", ""version"": ""https://annotations.allmaps.org/maps/3dde75d2fdf21af7@0ee1821c6b38e53d"", ""image"": {""id"": ""https://annotations.allmaps.org/images/61ea61a5c622c8cc"", ""version"": ""https://annotations.allmaps.org/images/61ea61a5c622c8cc@e8134f6b3fe7af8d"", ""canvases"": []}, ""scale"": 0.036345, ""area"": 2432068160.33}}, ""geometry"": {""type"": ""Polygon"", ""coordinates"": [[[-105.416581723, 40.955272744], [-105.417946242, 40.435223654], [-104.918476337, 40.429871761], [-104.920348467, 40.950733892], [-105.416581723, 40.955272744]]]}}]}",40.69249296,-105.1682758,4234.813916,
 Violet,complete,,y,https://archives.mountainscholar.org/digital/api/singleitem/collection/,p17393coll186,AllMaps,https://archives.mountainscholar.org/digital/api/singleitem/collection/p17393coll186/id/25224/thumbnail,https://archives.mountainscholar.org/digital/download/collection/p17393coll186/id/25349/size/full,,,,,,"historic, inlandWaters, elevation, farming",imagery,City,Aerial photography,,"United States. Agricultural Stabilization and Conservation Service, photographer",,,,,,,,,,,,,,,,,,,,,,1963,,,,1963,,,,,,,Aerial photography -- Colorado -- Larimer County; Larimer County (Colo.); Cache la Poudre River Watershed (Colo.),,,,,,,,,North Poudre Irrigation Company Records,North Poudre Irrigation Company Records,Series 11: Oversize; Subseries 2: Aerial photographs,,Colorado State University. Libraries,,,,,,,,,,https://hdl.handle.net/10217/186228,Finding aid: https://archives.colostate.edu/repositories/2/resources/54; wwdl,,,,3DD-34 to 3DD-59. 1963,,,,,,,,,,10/12/21,,http://cdm17393.contentdm.oclc.org/cdm/ref/collection/p17393coll186/id/25349,25349,,,"p17393coll186-25224,p17393coll186-25225,p17393coll186-25226,p17393coll186-25227,p17393coll186-25228,p17393coll186-25229,p17393coll186-25230,p17393coll186-25231,p17393coll186-25232,p17393coll186-25233,p17393coll186-25234,p17393coll186-25235,p17393coll186-25236,p17393coll186-25237,p17393coll186-25238,p17393coll186-25239,p17393coll186-25241,p17393coll186-25242,p17393coll186-25243,p17393coll186-25244,p17393coll186-25245,p17393coll186-25246,p17393coll186-25247,p17393coll186-25248,p17393coll186-25249,p17393coll186-25250,p17393coll186-25251,p17393coll186-25252,p17393coll186-25253,p17393coll186-25254,p17393coll186-25255,p17393coll186-25256,p17393coll186-25257,p17393coll186-25260,p17393coll186-25261,p17393coll186-25262,p17393coll186-25263,p17393coll186-25264,p17393coll186-25265,p17393coll186-25266,p17393coll186-25267,p17393coll186-25268,p17393coll186-25269,p17393coll186-25270,p17393coll186-25271,p17393coll186-25272,p17393coll186-25273,p17393coll186-25274,p17393coll186-25275,p17393coll186-25276,p17393coll186-25277,p17393coll186-25278,p17393coll186-25279,p17393coll186-25280,p17393coll186-25282,p17393coll186-25283,p17393coll186-25284,p17393coll186-25285,p17393coll186-25286,p17393coll186-25287,p17393coll186-25288,p17393coll186-25289,p17393coll186-25290,p17393coll186-25291,p17393coll186-25292,p17393coll186-25293,p17393coll186-25294,p17393coll186-25295,p17393coll186-25296,p17393coll186-25297,p17393coll186-25298,p17393coll186-25299,p17393coll186-25300,p17393coll186-25301,p17393coll186-25303,p17393coll186-25304,p17393coll186-25305,p17393coll186-25306,p17393coll186-25307,p17393coll186-25308,p17393coll186-25309,p17393coll186-25310,p17393coll186-25311,p17393coll186-25312,p17393coll186-25313,p17393coll186-25314,p17393coll186-25315,p17393coll186-25316,p17393coll186-25317,p17393coll186-25318,p17393coll186-25319,p17393coll186-25320,p17393coll186-25321,p17393coll186-25322,p17393coll186-25323,p17393coll186-25324,p17393coll186-25325,p17393coll186-25326,p17393coll186-25327,p17393coll186-25328,p17393coll186-25329,p17393coll186-25330,p17393coll186-25331,p17393coll186-25332,p17393coll186-25333,p17393coll186-25334,p17393coll186-25335,p17393coll186-25336,p17393coll186-25337,p17393coll186-25338,p17393coll186-25339,p17393coll186-25340,p17393coll186-25341,p17393coll186-25342,p17393coll186-25343,p17393coll186-25344,p17393coll186-25346,p17393coll186-25347,p17393coll186-25348,p17393coll186-25349,p17393coll186-25350",p17393coll186-0,,,,,
-,,,,,,AllMaps,https://archives.mountainscholar.org/digital/api/singleitem/collection/p17393coll166/id/18455/thumbnail,https://archives.mountainscholar.org/digital/download/collection//id//size/full,,,,,,"historic, inlandWaters",irrigation,County,Colorado Groundwater Well Maps,,Unidentified author,,,,,,,,,,,,,,,,,,,,,,1947-1969,,,,1947-1969,"Folder of oversized maps showing historic Colorado groundwater well locations. See <a href=""https://geospatialcentroid.github.io/csu_groundwater_data_explorer"">CSU Groundwater Data Explorer</a> to access geolocated datasheets.",Water level measurements collected from marked groundwater wells.,,,,,"Groundwater -- Colorado, Wells -- Colorado",,,,,,,,,Groundwater Data Collection,,,,,"Copyright and other restrictions may apply. User is responsible for compliance with all applicable laws. For information about copyright law, please see https://libguides.colostate.edu/copyright.",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"p17393coll166-18455,p17393coll166-23965,p17393coll166-23966,p17393coll166-23967,p17393coll166-23968,p17393coll166-23969,p17393coll166-24125,p17393coll166-24056,p17393coll166-24057,p17393coll166-24128,p17393coll166-24129,p17393coll166-24161,p17393coll166-24189,p17393coll166-24190,p17393coll166-24191,p17393coll166-24192,p17393coll166-24344,p17393coll166-24345,p17393coll166-24375,p17393coll166-24403,p17393coll166-24404,p17393coll166-24405,p17393coll166-24470,p17393coll166-24534,p17393coll166-24582,p17393coll166-24583,p17393coll166-24619,p17393coll166-24620,p17393coll166-24621,p17393coll166-24622,p17393coll166-24632,p17393coll166-24698,p17393coll166-24699,p17393coll166-24745,p17393coll166-24801,p17393coll166-24802,p17393coll166-24876",p17393coll166-0,,,,,
+,,,y,,,AllMaps,https://archives.mountainscholar.org/digital/api/singleitem/collection/p17393coll166/id/18455/thumbnail,https://archives.mountainscholar.org/digital/download/collection//id//size/full,,,,,,"historic, inlandWaters",irrigation,County,Colorado Groundwater Well Maps,,Unidentified author,,,,,,,,,,,,,,,,,,,,,,1947-1969,,,,1947-1969,"Folder of oversized maps showing historic Colorado groundwater well locations. See <a href=""https://geospatialcentroid.github.io/csu_groundwater_data_explorer"">CSU Groundwater Data Explorer</a> to access geolocated datasheets.",Water level measurements collected from marked groundwater wells.,,,,,"Groundwater -- Colorado, Wells -- Colorado",,,,,,,,,Groundwater Data Collection,,,,,"Copyright and other restrictions may apply. User is responsible for compliance with all applicable laws. For information about copyright law, please see https://libguides.colostate.edu/copyright.",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"p17393coll166-18455,p17393coll166-23965,p17393coll166-23966,p17393coll166-23967,p17393coll166-23968,p17393coll166-23969,p17393coll166-24125,p17393coll166-24056,p17393coll166-24057,p17393coll166-24128,p17393coll166-24129,p17393coll166-24161,p17393coll166-24189,p17393coll166-24190,p17393coll166-24191,p17393coll166-24192,p17393coll166-24344,p17393coll166-24345,p17393coll166-24375,p17393coll166-24403,p17393coll166-24404,p17393coll166-24405,p17393coll166-24470,p17393coll166-24534,p17393coll166-24582,p17393coll166-24583,p17393coll166-24619,p17393coll166-24620,p17393coll166-24621,p17393coll166-24622,p17393coll166-24632,p17393coll166-24698,p17393coll166-24699,p17393coll166-24745,p17393coll166-24801,p17393coll166-24802,p17393coll166-24876",p17393coll166-0,,,,,
 Kevin,,,y,https://archives.mountainscholar.org/digital/api/singleitem/collection/,p17393coll166,AllMaps,https://archives.mountainscholar.org/digital/api/singleitem/collection/p17393coll166/id/18455/thumbnail,https://archives.mountainscholar.org/digital/download/collection/p17393coll166/id/18455/size/full,https://archives.mountainscholar.org/iiif/2/p17393coll166:18455/info.json,https://editor.allmaps.org/#/collection?url=https://archives.mountainscholar.org/iiif/2/p17393coll166:18455/info.json,https://annotations.allmaps.org/images/463a2848e5e6181e,annotations/463a2848e5e6181e.json,https://allmaps.xyz/maps/37db2b7a060596fc/{z}/{x}/{y}.png,,,County,Morgan,,,,,,,,,,,,,,,,,,,,,,,,1947-1969,,,,1947-1969,,,,,,,Wells -- Colorado,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,https://archives.mountainscholar.org/digital/collection/p17393coll166/id/18455/rec/1,18455,,,,p17393coll166-18455,"{""type"": ""FeatureCollection"", ""features"": [{""type"": ""Feature"", ""properties"": {""@context"": ""https://schemas.allmaps.org/map/2/context.json"", ""id"": ""https://annotations.allmaps.org/maps/37db2b7a060596fc"", ""type"": ""GeoreferencedMap"", ""created"": ""2024-03-20T19:11:13.629Z"", ""modified"": ""2024-03-20T19:11:13.629Z"", ""resource"": {""id"": ""https://archives.mountainscholar.org/iiif/2/p17393coll166:18455"", ""width"": 2889, ""height"": 3150, ""type"": ""ImageService2""}, ""gcps"": [{""resource"": [2067, 1250], ""geo"": [-103.6217138, 40.2687494]}, {""resource"": [860, 1116], ""geo"": [-103.9798961, 40.2981156]}, {""resource"": [2173, 1851], ""geo"": [-103.590349, 40.1393668]}], ""resourceMask"": [[306, 123], [229, 2419], [2586, 2465], [2610, 135]], ""transformation"": {""type"": ""polynomial"", ""options"": {""order"": 1}}, ""_allmaps"": {""id"": ""https://annotations.allmaps.org/maps/37db2b7a060596fc"", ""version"": ""https://annotations.allmaps.org/maps/37db2b7a060596fc@5455c7deaee52d08"", ""image"": {""id"": ""https://annotations.allmaps.org/images/463a2848e5e6181e"", ""version"": ""https://annotations.allmaps.org/images/463a2848e5e6181e@3388857e6a94dda6"", ""canvases"": []}, ""scale"": 0.040714, ""area"": 3252715477.26}}, ""geometry"": {""type"": ""Polygon"", ""coordinates"": [[[-104.144153832, 40.512053624], [-104.167360376, 40.017984647], [-103.467877404, 40.00705198], [-103.460394483, 40.508461046], [-104.144153832, 40.512053624]]]}}]}",40.26042286,-103.8091455,5592.063602,
 Kevin,,WGDC00105,y,https://archives.mountainscholar.org/digital/api/singleitem/collection/,p17393coll166,AllMaps,https://archives.mountainscholar.org/digital/api/singleitem/collection/p17393coll166/id/23965/thumbnail,https://archives.mountainscholar.org/digital/download/collection/p17393coll166/id/23965/size/full,https://archives.mountainscholar.org/iiif/2/p17393coll166:23965/info.json,https://editor.allmaps.org/#/collection?url=https://archives.mountainscholar.org/iiif/2/p17393coll166:23965/info.json,https://annotations.allmaps.org/images/e348a13d2928b704,annotations/e348a13d2928b704.json,https://allmaps.xyz/maps/1d9659029beb2e75/{z}/{x}/{y}.png,,,County,Baca,,,,,,,,,,,,,,,,,,,,,,,,1936,,,,1936,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,https://archives.mountainscholar.org/digital/collection/p17393coll166/id/23965/rec/1,23965,,,,p17393coll166-23965,"{""type"": ""FeatureCollection"", ""features"": [{""type"": ""Feature"", ""properties"": {""@context"": ""https://schemas.allmaps.org/map/2/context.json"", ""id"": ""https://annotations.allmaps.org/maps/1d9659029beb2e75"", ""type"": ""GeoreferencedMap"", ""created"": ""2024-01-22T19:52:02.856Z"", ""modified"": ""2024-01-22T21:29:17.482Z"", ""resource"": {""id"": ""https://archives.mountainscholar.org/iiif/2/p17393coll166:23965"", ""width"": 12182, ""height"": 7755, ""type"": ""ImageService2""}, ""gcps"": [{""resource"": [4316, 4050], ""geo"": [-102.2917264, 37.3946983]}, {""resource"": [2075, 2323], ""geo"": [-102.1285411, 37.5576125]}, {""resource"": [2080, 4979], ""geo"": [-102.3737642, 37.5571285]}], ""resourceMask"": [[592, 1232], [595, 7053], [10104, 7038], [9892, 913]], ""transformation"": {""type"": ""polynomial"", ""options"": {""order"": 1}}, ""_allmaps"": {""id"": ""https://annotations.allmaps.org/maps/1d9659029beb2e75"", ""version"": ""https://annotations.allmaps.org/maps/1d9659029beb2e75@ad0d0af1abd819c5"", ""image"": {""id"": ""https://annotations.allmaps.org/images/e348a13d2928b704"", ""version"": ""https://annotations.allmaps.org/images/e348a13d2928b704@83e0b8d24279e403"", ""canvases"": []}, ""scale"": 0.123097, ""area"": 3708260900.94}}, ""geometry"": {""type"": ""Polygon"", ""coordinates"": [[[-102.025339524, 37.665419942], [-102.562767381, 37.664937448], [-102.577253392, 36.973994397], [-102.011409957, 36.98967708], [-102.025339524, 37.665419942]]]}}]}",37.32055993,-102.2951883,5874.166982,
 Connor,,WGDC00105,y,https://archives.mountainscholar.org/digital/api/singleitem/collection/,p17393coll166,AllMaps,https://archives.mountainscholar.org/digital/api/singleitem/collection/p17393coll166/id/23966/thumbnail,https://archives.mountainscholar.org/digital/download/collection/p17393coll166/id/23966/size/full,https://archives.mountainscholar.org/iiif/2/p17393coll166:23966/info.json,https://editor.allmaps.org/#/collection?url=https://archives.mountainscholar.org/iiif/2/p17393coll166:23966/info.json,https://annotations.allmaps.org/images/11236be2d40d0724,annotations/11236be2d40d0724.json,https://allmaps.xyz/maps/88709f4d93e2047b/{z}/{x}/{y}.png,,,County,Baca,,,,,,,,,,,,,,,,,,,,,,,,1953,,,,1953,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,https://archives.mountainscholar.org/digital/collection/p17393coll166/id/23966/rec/1,23966,,,,p17393coll166-23966,"{""type"": ""FeatureCollection"", ""features"": [{""type"": ""Feature"", ""properties"": {""@context"": ""https://schemas.allmaps.org/map/2/context.json"", ""id"": ""https://annotations.allmaps.org/maps/88709f4d93e2047b"", ""type"": ""GeoreferencedMap"", ""created"": ""2024-01-25T18:05:40.572Z"", ""modified"": ""2024-02-19T21:46:55.916Z"", ""resource"": {""id"": ""https://archives.mountainscholar.org/iiif/2/p17393coll166:23966"", ""width"": 7350, ""height"": 12072, ""type"": ""ImageService2""}, ""gcps"": [{""resource"": [6108, 3263], ""geo"": [-102.0418081, 37.4696637]}, {""resource"": [3494, 4396], ""geo"": [-102.2837483, 37.3877276]}, {""resource"": [2685, 4521], ""geo"": [-102.3580401, 37.3804105]}, {""resource"": [3402, 4442], ""geo"": [-102.2916426, 37.3850964]}, {""resource"": [6271, 9807], ""geo"": [-102.042224, 36.9928516]}, {""resource"": [3400, 4296], ""geo"": [-102.2917272, 37.3946936]}], ""resourceMask"": [[2633, 9839], [2626, 9140], [2626, 9058], [2632, 8988], [2626, 8871], [2629, 8486], [2632, 7708], [2625, 7056], [2626, 6165], [2628, 5878], [2624, 5705], [2628, 5588], [2624, 5106], [2630, 4417], [2632, 3524], [2633, 2628], [2633, 2503], [2630, 2452], [2635, 2335], [2634, 1594], [2636, 815], [2714, 821], [3086, 819], [3350, 819], [3781, 821], [3905, 817], [4117, 821], [4471, 821], [4732, 823], [4846, 821], [4871, 828], [4886, 831], [4902, 823], [4948, 819], [5319, 822], [6070, 822], [6102, 2318], [6112, 2773], [6107, 2976], [6119, 3450], [6135, 3811], [6129, 4021], [6138, 4224], [6141, 4343], [6138, 4479], [6141, 4652], [6148, 4803], [6151, 4968], [6146, 5054], [6161, 5279], [6158, 5474], [6168, 5656], [6168, 5923], [6168, 6053], [6180, 6167], [6183, 6293], [6200, 7151], [6257, 9240], [6274, 9812], [5162, 9817], [3709, 9832]], ""transformation"": {""type"": ""polynomial"", ""options"": {""order"": 1}}, ""_allmaps"": {""id"": ""https://annotations.allmaps.org/maps/88709f4d93e2047b"", ""version"": ""https://annotations.allmaps.org/maps/88709f4d93e2047b@86902058a4165d33"", ""image"": {""id"": ""https://annotations.allmaps.org/images/11236be2d40d0724"", ""version"": ""https://annotations.allmaps.org/images/11236be2d40d0724@f1c658d96c0b6b45"", ""canvases"": []}, ""scale"": 0.123532, ""area"": 2085119636.89}}, ""geometry"": {""type"": ""Polygon"", ""coordinates"": [[[-102.375044756, 36.992306665], [-102.276611552, 36.992284719], [-102.143677107, 36.992659019], [-102.041955846, 36.992473655], [-102.042167366, 37.0341324], [-102.042474696, 37.186271701], [-102.04201452, 37.248755619], [-102.041992995, 37.257931827], [-102.04282284, 37.2662387], [-102.042517524, 37.275704687], [-102.041890452, 37.295146369], [-102.042377663, 37.308403693], [-102.041645292, 37.322601192], [-102.042488841, 37.338992043], [-102.041829536, 37.345251687], [-102.041716415, 37.357267692], [-102.042002036, 37.36826626], [-102.041870127, 37.380864787], [-102.041276323, 37.390766184], [-102.041271237, 37.399432686], [-102.041617663, 37.414218636], [-102.040575667, 37.429506882], [-102.041191273, 37.455801107], [-102.041175628, 37.490321483], [-102.040241538, 37.505100516], [-102.040087585, 37.538236413], [-102.039500992, 37.647183896], [-102.108191502, 37.647554967], [-102.142118117, 37.647956724], [-102.14633492, 37.647688192], [-102.147817155, 37.647113575], [-102.14918209, 37.647339432], [-102.151452285, 37.647861492], [-102.161884037, 37.647772189], [-102.185751807, 37.64804678], [-102.218130556, 37.648221692], [-102.237511826, 37.648617702], [-102.248862929, 37.64838771], [-102.288279816, 37.648746298], [-102.31242668, 37.648876741], [-102.346456503, 37.648914916], [-102.353576713, 37.649390348], [-102.355589192, 37.592668226], [-102.35723803, 37.538711603], [-102.357970141, 37.530194685], [-102.357815523, 37.526479623], [-102.358109097, 37.517377712], [-102.360304896, 37.452135707], [-102.362585114, 37.387112643], [-102.364752083, 37.336945873], [-102.36551824, 37.301846928], [-102.366158887, 37.293329515], [-102.366199331, 37.280730494], [-102.367056306, 37.259833494], [-102.369240362, 37.194955566], [-102.370131383, 37.147476539], [-102.372232979, 37.090827727], [-102.373411581, 37.062795323], [-102.373137574, 37.05427297], [-102.373850767, 37.049178864], [-102.374043351, 37.043208011], [-102.375044756, 36.992306665]]]}}]}",37.31710442,-102.2032754,3302.688419,
@@ -738,7 +738,154 @@ Lucas,,WGDC00130,y,https://archives.mountainscholar.org/digital/api/singleitem/c
 Lucas,,WGDC00205,y,https://archives.mountainscholar.org/digital/api/singleitem/collection/,p17393coll166,AllMaps,https://archives.mountainscholar.org/digital/api/singleitem/collection/p17393coll166/id/24403/thumbnail,https://archives.mountainscholar.org/digital/download/collection/p17393coll166/id/24403/size/full,https://archives.mountainscholar.org/iiif/2/p17393coll166:24403/info.json,https://editor.allmaps.org/#/collection?url=https://archives.mountainscholar.org/iiif/2/p17393coll166:24403/info.json,https://annotations.allmaps.org/images/02d96b63c2248cf3,annotations/02d96b63c2248cf3.json,https://allmaps.xyz/maps/31ebc1f858c34650/{z}/{x}/{y}.png,,,County,Washington,,,,,,,,,,,,,,,,,,,,,,,,1948,,,,1948,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,https://archives.mountainscholar.org/digital/collection/p17393coll166/id/24403/rec/1,24403,,,,p17393coll166-24403,"{""type"": ""FeatureCollection"", ""features"": [{""type"": ""Feature"", ""properties"": {""@context"": ""https://schemas.allmaps.org/map/2/context.json"", ""id"": ""https://annotations.allmaps.org/maps/31ebc1f858c34650"", ""type"": ""GeoreferencedMap"", ""created"": ""2024-01-30T21:23:40.577Z"", ""modified"": ""2024-01-30T21:49:59.824Z"", ""resource"": {""id"": ""https://archives.mountainscholar.org/iiif/2/p17393coll166:24403"", ""width"": 11998, ""height"": 7301, ""type"": ""ImageService2""}, ""gcps"": [{""resource"": [4872, 1642], ""geo"": [-103.2171139, 40.3636807]}, {""resource"": [8169, 4709], ""geo"": [-102.9081376, 40.149131]}, {""resource"": [4724, 4304], ""geo"": [-103.2273165, 40.1767095]}, {""resource"": [6915, 1645], ""geo"": [-103.0267513, 40.36479]}], ""resourceMask"": [[2233, 624], [2237, 1842], [2164, 1842], [2137, 6705], [9391, 6705], [9388, 1850], [9551, 1852], [9540, 632]], ""transformation"": {""type"": ""polynomial"", ""options"": {""order"": 1}}, ""_allmaps"": {""id"": ""https://annotations.allmaps.org/maps/31ebc1f858c34650"", ""version"": ""https://annotations.allmaps.org/maps/31ebc1f858c34650@7b22df748e000bd2"", ""image"": {""id"": ""https://annotations.allmaps.org/images/02d96b63c2248cf3"", ""version"": ""https://annotations.allmaps.org/images/02d96b63c2248cf3@a6063e6a621ffc38"", ""canvases"": []}, ""scale"": 0.127327, ""area"": 2718899510.89}}, ""geometry"": {""type"": ""Polygon"", ""coordinates"": [[[-103.462279194, 40.434661835], [-103.460674464, 40.348921045], [-103.467441683, 40.34889404], [-103.46501805, 40.006548538], [-102.79256041, 40.009232063], [-102.797756988, 40.351003299], [-102.782644596, 40.350922807], [-102.784900263, 40.436801799], [-103.462279194, 40.434661835]]]}}]}",40.22204456,-103.1291347,4668.81586,
 Lucas,,WGDC00205,y,https://archives.mountainscholar.org/digital/api/singleitem/collection/,p17393coll166,AllMaps,https://archives.mountainscholar.org/digital/api/singleitem/collection/p17393coll166/id/24404/thumbnail,https://archives.mountainscholar.org/digital/download/collection/p17393coll166/id/24404/size/full,https://archives.mountainscholar.org/iiif/2/p17393coll166:24404/info.json,https://editor.allmaps.org/#/collection?url=https://archives.mountainscholar.org/iiif/2/p17393coll166:24404/info.json,https://annotations.allmaps.org/images/42ac8395f9e88cc2,annotations/42ac8395f9e88cc2.json,https://allmaps.xyz/maps/25ba8a4e49e3216d/{z}/{x}/{y}.png,,,County,Washington,,,,,,,,,,,,,,,,,,,,,,,,1936,,,,1936,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,https://archives.mountainscholar.org/digital/collection/p17393coll166/id/24404/rec/1,24404,,,,p17393coll166-24404,"{""type"": ""FeatureCollection"", ""features"": [{""type"": ""Feature"", ""properties"": {""@context"": ""https://schemas.allmaps.org/map/2/context.json"", ""id"": ""https://annotations.allmaps.org/maps/25ba8a4e49e3216d"", ""type"": ""GeoreferencedMap"", ""created"": ""2024-02-13T20:32:03.445Z"", ""modified"": ""2024-02-13T20:46:31.649Z"", ""resource"": {""id"": ""https://archives.mountainscholar.org/iiif/2/p17393coll166:24404"", ""width"": 12132, ""height"": 7423, ""type"": ""ImageService2""}, ""gcps"": [{""resource"": [7800, 5663], ""geo"": [-103.2171815, 39.610248]}, {""resource"": [5216, 1591], ""geo"": [-102.8388588, 39.8011389]}, {""resource"": [5985, 5647], ""geo"": [-103.2174878, 39.7411959]}, {""resource"": [2650, 3022], ""geo"": [-102.9733059, 39.9892809]}, {""resource"": [7002, 2617], ""geo"": [-102.9353338, 39.669958]}], ""resourceMask"": [[2466, 1191], [2483, 6087], [8397, 6138], [8420, 1157]], ""transformation"": {""type"": ""polynomial"", ""options"": {""order"": 1}}, ""_allmaps"": {""id"": ""https://annotations.allmaps.org/maps/25ba8a4e49e3216d"", ""version"": ""https://annotations.allmaps.org/maps/25ba8a4e49e3216d@f88b35d2ef88ff23"", ""image"": {""id"": ""https://annotations.allmaps.org/images/42ac8395f9e88cc2"", ""version"": ""https://annotations.allmaps.org/images/42ac8395f9e88cc2@9534e654861f4a9a"", ""canvases"": []}, ""scale"": 0.12411, ""area"": 1902515671.42}}, ""geometry"": {""type"": ""Polygon"", ""coordinates"": [[[-102.802896542, 40.003424695], [-103.258772481, 39.998770456], [-103.262021466, 39.565215007], [-102.798220796, 39.566996254], [-102.802896542, 40.003424695]]]}}]}",39.78297908,-103.0302188,3225.605466,
 Connor,,WGDC00205,y,https://archives.mountainscholar.org/digital/api/singleitem/collection/,p17393coll166,AllMaps,https://archives.mountainscholar.org/digital/api/singleitem/collection/p17393coll166/id/24405/thumbnail,https://archives.mountainscholar.org/digital/download/collection/p17393coll166/id/24405/size/full,https://archives.mountainscholar.org/iiif/2/p17393coll166:24405/info.json,https://editor.allmaps.org/#/collection?url=https://archives.mountainscholar.org/iiif/2/p17393coll166:24405/info.json,https://annotations.allmaps.org/images/1c4e1e7cb8372eaf,annotations/1c4e1e7cb8372eaf.json,https://allmaps.xyz/maps/20d40461db4ecaef/{z}/{x}/{y}.png,,,County,Washington,,,,,,,,,,,,,,,,,,,,,,,,1948,,,,1948,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,https://archives.mountainscholar.org/digital/collection/p17393coll166/id/24405/rec/1,24405,,,,p17393coll166-24405,"{""type"": ""FeatureCollection"", ""features"": [{""type"": ""Feature"", ""properties"": {""@context"": ""https://schemas.allmaps.org/map/2/context.json"", ""id"": ""https://annotations.allmaps.org/maps/20d40461db4ecaef"", ""type"": ""GeoreferencedMap"", ""created"": ""2024-02-20T16:34:26.085Z"", ""modified"": ""2024-02-20T17:31:48.861Z"", ""resource"": {""id"": ""https://archives.mountainscholar.org/iiif/2/p17393coll166:24405"", ""width"": 7449, ""height"": 12161, ""type"": ""ImageService2""}, ""gcps"": [{""resource"": [6122, 6089], ""geo"": [-103.262973, 39.7316672]}, {""resource"": [1260, 6005], ""geo"": [-103.7007148, 39.7250797]}, {""resource"": [2475, 8533], ""geo"": [-103.598447, 39.5661107]}, {""resource"": [2487, 6093], ""geo"": [-103.5934812, 39.7399964]}, {""resource"": [6107, 2517], ""geo"": [-103.2631517, 40.0018463]}, {""resource"": [2472, 2547], ""geo"": [-103.5916734, 40.0014024]}, {""resource"": [1299, 2508], ""geo"": [-103.7128342, 40.0076991]}, {""resource"": [5971, 2525], ""geo"": [-103.269572, 40.0018704]}, {""resource"": [6127, 8540], ""geo"": [-103.259248, 39.5687868]}, {""resource"": [1235, 8520], ""geo"": [-103.6970442, 39.5747635]}], ""resourceMask"": [[1233, 8527], [1237, 8048], [1240, 7923], [1238, 7786], [1284, 3829], [1288, 2909], [1300, 2509], [2207, 2514], [2507, 2514], [2781, 2520], [3817, 2524], [5082, 2520], [5099, 2532], [5115, 2540], [5132, 2535], [5144, 2524], [5160, 2518], [6112, 2518], [6119, 4084], [6117, 4519], [6125, 5143], [6122, 5489], [6122, 6089], [6128, 7047], [6127, 7553], [6128, 7979], [6130, 8540], [5160, 8541], [4343, 8541], [4317, 8548], [4309, 8569], [4283, 8570], [4272, 8548], [4248, 8544], [3970, 8548], [2770, 8538], [2746, 8541], [2721, 8536], [2700, 8530], [2681, 8535], [2047, 8529], [2013, 8539], [1976, 8543], [1944, 8535], [1915, 8530], [1781, 8530]], ""transformation"": {""type"": ""polynomial"", ""options"": {""order"": 1}}, ""_allmaps"": {""id"": ""https://annotations.allmaps.org/maps/20d40461db4ecaef"", ""version"": ""https://annotations.allmaps.org/maps/20d40461db4ecaef@f22a3c93d2d257cc"", ""image"": {""id"": ""https://annotations.allmaps.org/images/1c4e1e7cb8372eaf"", ""version"": ""https://annotations.allmaps.org/images/1c4e1e7cb8372eaf@9e3dd06047580585"", ""canvases"": []}, ""scale"": 0.125799, ""area"": 1848118014.28}}, ""geometry"": {""type"": ""Polygon"", ""coordinates"": [[[-103.705586705, 39.563683381], [-103.655445024, 39.563536591], [-103.643184529, 39.56355396], [-103.640528228, 39.56319468], [-103.637595692, 39.562617965], [-103.63421266, 39.562913193], [-103.631107608, 39.563643678], [-103.573095505, 39.563290212], [-103.571359987, 39.563655714], [-103.569435074, 39.563222789], [-103.567144758, 39.562862991], [-103.564950595, 39.563083925], [-103.455149296, 39.562513394], [-103.429715672, 39.56283986], [-103.427517434, 39.56255254], [-103.426498171, 39.560956593], [-103.424119851, 39.561032571], [-103.423400104, 39.562558373], [-103.421025276, 39.563069998], [-103.346272855, 39.5631759], [-103.257522093, 39.563374242], [-103.258031618, 39.604106986], [-103.258371069, 39.6350378], [-103.258574092, 39.671777501], [-103.259680677, 39.741335042], [-103.26002991, 39.784899752], [-103.259956812, 39.810022456], [-103.261051984, 39.855328717], [-103.261122185, 39.88691339], [-103.262674155, 40.000616374], [-103.349778568, 40.000492974], [-103.351239015, 40.000055253], [-103.352330567, 39.999255011], [-103.353883093, 39.998889768], [-103.355351689, 39.999468557], [-103.356914109, 40.000337647], [-103.472654514, 39.999883243], [-103.567446938, 40.000039385], [-103.592520398, 40.000439516], [-103.619969267, 40.000400629], [-103.702959259, 40.000646101], [-103.703824392, 39.971601406], [-103.703654888, 39.904801666], [-103.705560526, 39.617486445], [-103.705297792, 39.607539429], [-103.705499524, 39.598463059], [-103.705586705, 39.563683381]]]}}]}",39.78108801,-103.4822237,3133.16134,
-Kevin,,WGDC00206,y,https://archives.mountainscholar.org/digital/api/singleitem/collection/,p17393coll166,AllMaps,https://archives.mountainscholar.org/digital/api/singleitem/collection/p17393coll166/id/24470/thumbnail,https://archives.mountainscholar.org/digital/download/collection/p17393coll166/id/24470/size/full,https://archives.mountainscholar.org/iiif/2/p17393coll166:24470/info.json,https://editor.allmaps.org/#/collection?url=https://archives.mountainscholar.org/iiif/2/p17393coll166:24470/info.json,https://annotations.allmaps.org/maps/8899b2295068cab7,annotations/8899b2295068cab7.json,https://allmaps.xyz/maps/8899b2295068cab7/{z}/{x}/{y}.png,,,County,Weld,,,,,,,,,,,,,,,,,,,,,,,,1956,,,,1956,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,https://archives.mountainscholar.org/digital/collection/p17393coll166/id/24470/rec/1,24470,,,,p17393coll166-24470,"{""type"": ""Feature"", ""properties"": {""@context"": ""https://schemas.allmaps.org/map/2/context.json"", ""id"": ""https://annotations.allmaps.org/maps/8899b2295068cab7"", ""type"": ""GeoreferencedMap"", ""created"": ""2024-06-25T16:58:21.211Z"", ""modified"": ""2024-06-25T16:58:21.211Z"", ""resource"": {""id"": ""https://archives.mountainscholar.org/iiif/2/p17393coll166:24470"", ""width"": 4870, ""height"": 7968, ""type"": ""ImageService2""}, ""gcps"": [{""resource"": [3356, 5419], ""geo"": [-104.5966704, 40.5801137]}, {""resource"": [3862, 4870], ""geo"": [-104.5253084, 40.6386009]}, {""resource"": [2351, 5421], ""geo"": [-104.7315188, 40.5824186]}, {""resource"": [2189, 4872], ""geo"": [-104.7541831, 40.6401122]}], ""resourceMask"": [[802, 1436], [4235, 1420], [4228, 5945], [805, 5952]], ""transformation"": {""type"": ""polynomial"", ""options"": {""order"": 1}}, ""_allmaps"": {""id"": ""https://annotations.allmaps.org/maps/8899b2295068cab7"", ""version"": ""https://annotations.allmaps.org/maps/8899b2295068cab7@7f5c9c26fd3c70ae"", ""image"": {""id"": ""https://annotations.allmaps.org/images/1a60710d59d8a9b7"", ""version"": ""https://annotations.allmaps.org/images/1a60710d59d8a9b7@956654e1908c0517"", ""canvases"": []}, ""scale"": 0.08587, ""area"": 2101592848.53}}, ""geometry"": {""type"": ""Polygon"", ""coordinates"": [[[-104.936514094, 41.007502811], [-104.943815152, 40.527650342], [-104.477912486, 40.523529024], [-104.469235004, 41.004323576], [-104.936514094, 41.007502811]]]}}",,,,
+Kevin,,WGDC00206,y,https://archives.mountainscholar.org/digital/api/singleitem/collection/,p17393coll166,AllMaps,https://archives.mountainscholar.org/digital/api/singleitem/collection/p17393coll166/id/24470/thumbnail,https://archives.mountainscholar.org/digital/download/collection/p17393coll166/id/24470/size/full,https://archives.mountainscholar.org/iiif/2/p17393coll166:24470/info.json,https://editor.allmaps.org/#/collection?url=https://archives.mountainscholar.org/iiif/2/p17393coll166:24470/info.json,https://annotations.allmaps.org/maps/8899b2295068cab7,https://annotations.allmaps.org/images/1a60710d59d8a9b7,https://allmaps.xyz/maps/8899b2295068cab7/{z}/{x}/{y}.png,,,County,Weld,,,,,,,,,,,,,,,,,,,,,,,,1956,,,,1956,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,https://archives.mountainscholar.org/digital/collection/p17393coll166/id/24470/rec/1,24470,,,,p17393coll166-24470,"{
+  ""type"": ""FeatureCollection"",
+  ""features"": [
+    {
+      ""type"": ""Feature"",
+      ""properties"": {
+        ""@context"": ""https://schemas.allmaps.org/map/2/context.json"",
+        ""id"": ""https://annotations.allmaps.org/maps/8899b2295068cab7"",
+        ""type"": ""GeoreferencedMap"",
+        ""created"": ""2026-06-30T17:40:01.391Z"",
+        ""modified"": ""2026-06-30T17:40:01.391Z"",
+        ""resource"": {
+          ""id"": ""https://archives.mountainscholar.org/iiif/2/p17393coll166:24470"",
+          ""uri"": ""https://archives.mountainscholar.org/iiif/2/p17393coll166:24470"",
+          ""type"": ""ImageService2"",
+          ""width"": 4870,
+          ""height"": 7968,
+          ""provider"": [
+            {
+              ""label"": {
+                ""none"": [
+                  ""University of Colorado Boulder""
+                ]
+              },
+              ""homepage"": [
+                {
+                  ""id"": ""https://scholar.colorado.edu""
+                }
+              ]
+            }
+          ]
+        },
+        ""gcps"": [
+          {
+            ""id"": ""5adc6a96ae40bd28"",
+            ""index"": 0,
+            ""resource"": [
+              3356,
+              5419
+            ],
+            ""geo"": [
+              -104.5966704,
+              40.5801137
+            ]
+          },
+          {
+            ""id"": ""65030fa96f3e8308"",
+            ""index"": 1,
+            ""resource"": [
+              3862,
+              4870
+            ],
+            ""geo"": [
+              -104.5253084,
+              40.6386009
+            ]
+          },
+          {
+            ""id"": ""9501c47b84f121e0"",
+            ""index"": 2,
+            ""resource"": [
+              2189,
+              4872
+            ],
+            ""geo"": [
+              -104.7541831,
+              40.6401122
+            ]
+          },
+          {
+            ""id"": ""fa81937b9de00250"",
+            ""index"": 3,
+            ""resource"": [
+              2351,
+              5421
+            ],
+            ""geo"": [
+              -104.7315188,
+              40.5824186
+            ]
+          }
+        ],
+        ""resourceMask"": [
+          [
+            802,
+            1436
+          ],
+          [
+            4235,
+            1420
+          ],
+          [
+            4228,
+            5945
+          ],
+          [
+            805,
+            5952
+          ]
+        ],
+        ""transformation"": {
+          ""type"": ""polynomial"",
+          ""options"": {
+            ""order"": 1
+          }
+        },
+        ""_allmaps"": {
+          ""id"": ""https://annotations.allmaps.org/maps/8899b2295068cab7"",
+          ""version"": ""https://annotations.allmaps.org/maps/8899b2295068cab7@f9aa4a381d7302e6"",
+          ""image"": {
+            ""id"": ""https://annotations.allmaps.org/images/1a60710d59d8a9b7"",
+            ""version"": ""https://annotations.allmaps.org/images/1a60710d59d8a9b7@8ccf7380a9611ae7"",
+            ""canvases"": []
+          },
+          ""scale"": 0.085969,
+          ""area"": 2096719791.29
+        }
+      },
+      ""geometry"": {
+        ""type"": ""Polygon"",
+        ""coordinates"": [
+          [
+            [
+              -104.936514094,
+              41.006327933
+            ],
+            [
+              -104.943815152,
+              40.527605596
+            ],
+            [
+              -104.477912486,
+              40.52347897
+            ],
+            [
+              -104.469235004,
+              41.003167456
+            ],
+            [
+              -104.936514094,
+              41.006327933
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}",,,,
 Lucas,,WGDC00208,y,https://archives.mountainscholar.org/digital/api/singleitem/collection/,p17393coll166,AllMaps,https://archives.mountainscholar.org/digital/api/singleitem/collection/p17393coll166/id/24534/thumbnail,https://archives.mountainscholar.org/digital/download/collection/p17393coll166/id/24534/size/full,https://archives.mountainscholar.org/iiif/2/p17393coll166:24534/info.json,https://editor.allmaps.org/#/collection?url=https://archives.mountainscholar.org/iiif/2/p17393coll166:24534/info.json,https://annotations.allmaps.org/images/7234934c5d416b92,annotations/7234934c5d416b92.json,https://allmaps.xyz/maps/bb830c02b59f2f77/{z}/{x}/{y}.png,,,County,Weld,,,,,,,,,,,,,,,,,,,,,,,,1956,,,,1956,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,https://archives.mountainscholar.org/digital/collection/p17393coll166/id/24534/rec/1,24534,,,,p17393coll166-24534,"{""type"": ""FeatureCollection"", ""features"": [{""type"": ""Feature"", ""properties"": {""@context"": ""https://schemas.allmaps.org/map/2/context.json"", ""id"": ""https://annotations.allmaps.org/maps/bb830c02b59f2f77"", ""type"": ""GeoreferencedMap"", ""created"": ""2024-01-30T21:07:01.249Z"", ""modified"": ""2024-01-30T21:22:44.400Z"", ""resource"": {""id"": ""https://archives.mountainscholar.org/iiif/2/p17393coll166:24534"", ""width"": 4848, ""height"": 7940, ""type"": ""ImageService2""}, ""gcps"": [{""resource"": [3922, 5496], ""geo"": [-104.6405117, 40.0731974]}, {""resource"": [2495, 3207], ""geo"": [-104.8356381, 40.3166074]}, {""resource"": [3902, 2279], ""geo"": [-104.6400675, 40.4139394]}, {""resource"": [1532, 5920], ""geo"": [-104.9613978, 40.029429]}], ""resourceMask"": [[1695, 1249], [1704, 2634], [1719, 2903], [878, 2901], [851, 5363], [837, 6208], [4225, 6224], [4217, 5210], [4201, 1252]], ""transformation"": {""type"": ""polynomial"", ""options"": {""order"": 1}}, ""_allmaps"": {""id"": ""https://annotations.allmaps.org/maps/bb830c02b59f2f77"", ""version"": ""https://annotations.allmaps.org/maps/bb830c02b59f2f77@9f18ef46c1994a95"", ""image"": {""id"": ""https://annotations.allmaps.org/images/7234934c5d416b92"", ""version"": ""https://annotations.allmaps.org/images/7234934c5d416b92@872ac1c903bc5ccf"", ""canvases"": []}, ""scale"": 0.085889, ""area"": 2067874818.15}}, ""geometry"": {""type"": ""Polygon"", ""coordinates"": [[[-104.941239396, 40.524384065], [-104.939949443, 40.377617499], [-104.937904278, 40.349104768], [-105.051795267, 40.349771491], [-105.055325226, 40.088899953], [-105.057177745, 39.999366993], [-104.598363219, 39.995839403], [-104.599498691, 40.103292366], [-104.601868775, 40.522710985], [-104.941239396, 40.524384065]]]}}]}",40.24407267,-104.8116892,3553.899976,
 Lucas,,WGDC00211,y,https://archives.mountainscholar.org/digital/api/singleitem/collection/,p17393coll166,AllMaps,https://archives.mountainscholar.org/digital/api/singleitem/collection/p17393coll166/id/24582/thumbnail,https://archives.mountainscholar.org/digital/download/collection/p17393coll166/id/24582/size/full,https://archives.mountainscholar.org/iiif/2/p17393coll166:24582/info.json,https://editor.allmaps.org/#/collection?url=https://archives.mountainscholar.org/iiif/2/p17393coll166:24582/info.json,https://annotations.allmaps.org/images/dadbbf345ef6ca95,annotations/dadbbf345ef6ca95.json,https://allmaps.xyz/maps/e36627eb602c61c7/{z}/{x}/{y}.png,,,County,Yuma,,,,,,,,,,,,,,,,,,,,,,,,1948,,,,1948,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,https://archives.mountainscholar.org/digital/collection/p17393coll166/id/24582/rec/1,24582,,,,p17393coll166-24582,"{""type"": ""FeatureCollection"", ""features"": [{""type"": ""Feature"", ""properties"": {""@context"": ""https://schemas.allmaps.org/map/2/context.json"", ""id"": ""https://annotations.allmaps.org/maps/e36627eb602c61c7"", ""type"": ""GeoreferencedMap"", ""created"": ""2024-02-07T21:18:31.625Z"", ""modified"": ""2024-02-07T21:30:40.726Z"", ""resource"": {""id"": ""https://archives.mountainscholar.org/iiif/2/p17393coll166:24582"", ""width"": 12152, ""height"": 7472, ""type"": ""ImageService2""}, ""gcps"": [{""resource"": [2879, 5535], ""geo"": [-102.7071263, 39.6559102]}, {""resource"": [2851, 1484], ""geo"": [-102.7087105, 39.9458335]}, {""resource"": [7084, 1463], ""geo"": [-102.3169706, 39.9480603]}, {""resource"": [7724, 4275], ""geo"": [-102.2558459, 39.7460674]}, {""resource"": [7738, 6692], ""geo"": [-102.2491689, 39.571941]}], ""resourceMask"": [[1821, 723], [1844, 6769], [9838, 6662], [9869, 699]], ""transformation"": {""type"": ""polynomial"", ""options"": {""order"": 1}}, ""_allmaps"": {""id"": ""https://annotations.allmaps.org/maps/e36627eb602c61c7"", ""version"": ""https://annotations.allmaps.org/maps/e36627eb602c61c7@e4ab9141479d5377"", ""image"": {""id"": ""https://annotations.allmaps.org/images/dadbbf345ef6ca95"", ""version"": ""https://annotations.allmaps.org/images/dadbbf345ef6ca95@c97844037ed32ae9"", ""canvases"": []}, ""scale"": 0.125334, ""area"": 3065968200.29}}, ""geometry"": {""type"": ""Polygon"", ""coordinates"": [[[-102.807276922, 40.000944701], [-102.800871157, 39.566897772], [-102.055628469, 39.574505664], [-102.05694106, 40.002593465], [-102.807276922, 40.000944701]]]}}]}",39.78647213,-102.4310475,5198.580027,
 Connor,,WGDC00211,y,https://archives.mountainscholar.org/digital/api/singleitem/collection/,p17393coll166,AllMaps,https://archives.mountainscholar.org/digital/api/singleitem/collection/p17393coll166/id/24583/thumbnail,https://archives.mountainscholar.org/digital/download/collection/p17393coll166/id/24583/size/full,https://archives.mountainscholar.org/iiif/2/p17393coll166:24583/info.json,https://editor.allmaps.org/#/collection?url=https://archives.mountainscholar.org/iiif/2/p17393coll166:24583/info.json,https://annotations.allmaps.org/images/1414417d0e29ae64,annotations/1414417d0e29ae64.json,https://allmaps.xyz/maps/3babdaf24a01f410/{z}/{x}/{y}.png,,,County,Yuma,,,,,,,,,,,,,,,,,,,,,,,,1948,,,,1948,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,https://archives.mountainscholar.org/digital/collection/p17393coll166/id/24583/rec/1,24583,,,,p17393coll166-24583,"{""type"": ""FeatureCollection"", ""features"": [{""type"": ""Feature"", ""properties"": {""@context"": ""https://schemas.allmaps.org/map/2/context.json"", ""id"": ""https://annotations.allmaps.org/maps/3babdaf24a01f410"", ""type"": ""GeoreferencedMap"", ""created"": ""2024-02-20T17:36:42.372Z"", ""modified"": ""2024-02-20T17:49:49.128Z"", ""resource"": {""id"": ""https://archives.mountainscholar.org/iiif/2/p17393coll166:24583"", ""width"": 12174, ""height"": 7539, ""type"": ""ImageService2""}, ""gcps"": [{""resource"": [9610, 645], ""geo"": [-102.0516089, 40.4397248]}, {""resource"": [7361, 1783], ""geo"": [-102.2636809, 40.3573041]}, {""resource"": [1716, 6818], ""geo"": [-102.7931795, 40.0026388]}, {""resource"": [9665, 5934], ""geo"": [-102.02863, 40.0589332]}, {""resource"": [1834, 710], ""geo"": [-102.7799254, 40.438464]}, {""resource"": [7818, 5573], ""geo"": [-102.227525, 40.0925992]}, {""resource"": [7873, 5692], ""geo"": [-102.2221706, 40.0814898]}, {""resource"": [7814, 5731], ""geo"": [-102.2275713, 40.0790928]}, {""resource"": [7876, 5737], ""geo"": [-102.2220938, 40.0790193]}], ""resourceMask"": [[1709, 6822], [1686, 3507], [1695, 3483], [1703, 3464], [1703, 3442], [1697, 3425], [1686, 3416], [1678, 1936], [1842, 1933], [1830, 705], [2761, 698], [2771, 689], [2778, 673], [2794, 664], [2811, 663], [2820, 674], [2820, 688], [2823, 700], [3505, 691], [5727, 670], [6973, 660], [9615, 641], [9618, 1662], [9614, 2357], [9610, 2869], [9613, 3512], [9626, 4329], [9644, 6770], [9438, 6762], [9278, 6760], [9224, 6765], [9037, 6756], [8956, 6757], [8905, 6761], [8741, 6762], [8728, 6751], [8690, 6757], [8587, 6759], [8397, 6759], [8267, 6758], [8125, 6757], [8004, 6761], [7841, 6761], [7705, 6764], [7456, 6766], [7092, 6764], [6928, 6764], [6805, 6769], [6605, 6767], [6504, 6770], [6372, 6766], [6203, 6764], [5507, 6771], [5214, 6782], [5009, 6777], [4605, 6786], [4121, 6788], [3944, 6793], [3783, 6794], [3577, 6794], [3435, 6803], [3361, 6800], [3281, 6799], [3203, 6807], [3169, 6805], [2971, 6803], [2765, 6809], [2548, 6810], [1921, 6820]], ""transformation"": {""type"": ""polynomial"", ""options"": {""order"": 1}}, ""_allmaps"": {""id"": ""https://annotations.allmaps.org/maps/3babdaf24a01f410"", ""version"": ""https://annotations.allmaps.org/maps/3babdaf24a01f410@817f7253e8f2d311"", ""image"": {""id"": ""https://annotations.allmaps.org/images/1414417d0e29ae64"", ""version"": ""https://annotations.allmaps.org/images/1414417d0e29ae64@d3ecd18406dbb2ae"", ""canvases"": []}, ""scale"": 0.125734, ""area"": 3052731744.64}}, ""geometry"": {""type"": ""Polygon"", ""coordinates"": [[[-102.796725897, 40.003493914], [-102.776778326, 40.003534868], [-102.71778091, 40.003946533], [-102.697363272, 40.003913972], [-102.67797873, 40.004242296], [-102.659349907, 40.004005436], [-102.656151641, 40.003846939], [-102.648809709, 40.004378675], [-102.641282984, 40.004269324], [-102.634321543, 40.004020588], [-102.620957554, 40.00459287], [-102.601575269, 40.004494439], [-102.586426601, 40.004488636], [-102.56977101, 40.004759691], [-102.524231295, 40.004670678], [-102.48621605, 40.005117771], [-102.466929733, 40.004664189], [-102.439357588, 40.005306572], [-102.373869176, 40.00547189], [-102.357968926, 40.005248888], [-102.345550713, 40.004901312], [-102.33604662, 40.00506643], [-102.317229619, 40.004828615], [-102.305654821, 40.005125472], [-102.290224263, 40.00504711], [-102.255976705, 40.004730932], [-102.23254785, 40.004754207], [-102.21975065, 40.004902601], [-102.204414181, 40.004824716], [-102.193027936, 40.005051403], [-102.179667708, 40.004912427], [-102.167436544, 40.004779185], [-102.149559679, 40.004688399], [-102.139867784, 40.004781435], [-102.136290155, 40.005190033], [-102.135071137, 40.004401438], [-102.119640203, 40.004394201], [-102.114840172, 40.004654336], [-102.107218606, 40.004686758], [-102.089627391, 40.003957274], [-102.084544718, 40.004287101], [-102.069491267, 40.004068398], [-102.05011199, 40.003400961], [-102.050887713, 40.177027556], [-102.051803655, 40.235143519], [-102.051844138, 40.28087882], [-102.051275258, 40.3172933], [-102.050637566, 40.366723796], [-102.050535912, 40.439344637], [-102.299125574, 40.439255644], [-102.416363936, 40.439139749], [-102.62543707, 40.438707821], [-102.689608992, 40.438393562], [-102.689886746, 40.439248504], [-102.689881481, 40.440244265], [-102.690724144, 40.441030949], [-102.692324029, 40.440967946], [-102.693832834, 40.440335459], [-102.694497471, 40.439200792], [-102.695441743, 40.438565438], [-102.783041016, 40.438512407], [-102.782373708, 40.351164233], [-102.797805394, 40.351029218], [-102.7976092, 40.245759262], [-102.796577608, 40.245113874], [-102.796019467, 40.243901869], [-102.79602774, 40.242337102], [-102.796787595, 40.240989535], [-102.797643418, 40.239286817], [-102.796725897, 40.003493914]]]}}]}",40.22113108,-102.4226456,5241.698984,
@@ -921,766 +1068,85 @@ More about Copyright and other Restrictions.
 
 For guidance about compiling full citations consult Citing Primary Sources.",,,,,,,,,,,,,,,,,,,,,,,,,,http://hdl.loc.gov/loc.gmd/g4314fm.g009961906,2,,,,sanborn-maps-2,"{""type"":""FeatureCollection"",""features"":[{""type"":""Feature"",""properties"":{""@context"":""https://schemas.allmaps.org/map/2/context.json"",""id"":""https://annotations.allmaps.org/maps/c59e13460794c1bc"",""type"":""GeoreferencedMap"",""created"":""2023-10-23T17:48:26.331Z"",""modified"":""2023-10-23T20:21:08.972Z"",""resource"":{""id"":""https://tile.loc.gov/image-services/iiif/service:gmd:gmd431m:g4314m:g4314fm:g009961906:00996_1906-0016"",""uri"":""https://tile.loc.gov/image-services/iiif/service:gmd:gmd431m:g4314m:g4314fm:g009961906:00996_1906-0016"",""type"":""ImageService2"",""width"":6450,""height"":7650,""partOf"":[{""type"":""Canvas"",""id"":""https://tile.loc.gov/image-services/iiif/service:gmd:gmd431m:g4314m:g4314fm:g009961906:00996_1906-0016"",""label"":{""none"":[""Page 16""]},""partOf"":[{""type"":""Manifest"",""id"":""https://www.loc.gov/item/sanborn00996_005/manifest.json"",""label"":{""none"":[""Sanborn Fire Insurance Map from Fort Collins, Larimer County, Colorado.""]}}]}]},""gcps"":[{""id"":""68c79c65e6b7ebd3"",""resource"":[3448,486],""geo"":[-105.0788979,40.5780893],""index"":0},{""id"":""9a0a62a3f7fd5089"",""resource"":[5923,7230],""geo"":[-105.0771141,40.5737327],""index"":1},{""id"":""b6ec86c20de2f6a8"",""resource"":[5880,493],""geo"":[-105.0771208,40.5780785],""index"":2}],""resourceMask"":[[0,0],[0,7650],[6450,7650],[6450,0]],""transformation"":{""type"":""polynomial"",""options"":{""order"":1}},""_allmaps"":{""id"":""https://annotations.allmaps.org/maps/c59e13460794c1bc"",""version"":""https://annotations.allmaps.org/maps/c59e13460794c1bc@9919d3809411f1f7"",""image"":{""id"":""https://annotations.allmaps.org/images/f044228ea0ca8b38"",""version"":""https://annotations.allmaps.org/images/f044228ea0ca8b38@fd04dea5571ec209"",""canvases"":[{""id"":""https://annotations.allmaps.org/canvases/f044228ea0ca8b38"",""manifests"":[{""id"":""https://annotations.allmaps.org/manifests/eeea076468473593""}]}]},""scale"":15.021082,""area"":218684.87}},""geometry"":{""type"":""Polygon"",""coordinates"":[[[-105.08141566,40.578411704],[-105.081443731,40.573477086],[-105.076730549,40.573460418],[-105.076702477,40.578395036],[-105.08141566,40.578411704]]]}}]}",40.57593606,-105.0790731,0.379459732,
 ,Complete,,y,,,featurelayer,https://csurams.maps.arcgis.com/sharing/rest/content/items/991fa74775f24239aa691a62781971e8/info/thumbnail/ago_downloaded.png?f=json,,,,https://services1.arcgis.com/KNdRU5cN6ENqCTjk/arcgis/rest/services/CSU_Building_Footprints/FeatureServer/0,,,"historic,structure,economy",buildings,City,CSU Building Footprints,,,,,,,,,,,,,1975,,,,,,,,,,,1975,,,,1975,"The building footprints layer contains past and present outlines of Colorado State University buildings. For a more interaction view of these data, please visit https://geospatialcentroid.github.io/building_histories",,,,,,,,,,,,,,,,,,,ArcGIS Online,,,,,,,,,,,,,,,,,,,,,,,,,,,https://csurams.maps.arcgis.com/home/item.html?id=991fa74775f24239aa691a62781971e8&sublayer=0,1,,,,agol-1,"{
-  ""type"" : ""FeatureCollection"", 
-  ""features"" : [
+  ""type"": ""FeatureCollection"",
+  ""features"": [
     {
-      ""type"" : ""Feature"", 
-      ""geometry"" : 
-      {
-        ""type"" : ""Polygon"", 
-        ""coordinates"" : 
-        [
+      ""type"": ""Feature"",
+      ""properties"": {},
+      ""geometry"": {
+        ""type"": ""Polygon"",
+        ""coordinates"": [
           [
-            [-105.080470479183, 40.5779231618761], 
-            [-105.080346280415, 40.5779227119488], 
-            [-105.080346434084, 40.5778980083481], 
-            [-105.080313806285, 40.5778979654639], 
-            [-105.080314119795, 40.5778841667309], 
-            [-105.080206120929, 40.5778837753511], 
-            [-105.080206479609, 40.5778261336152], 
-            [-105.080136268818, 40.5778245832228], 
-            [-105.080138435825, 40.5777655750474], 
-            [-105.080206855367, 40.5777657470343], 
-            [-105.080207419004, 40.5776751671614], 
-            [-105.080221818808, 40.5776752193513], 
-            [-105.080221912744, 40.5776601227054], 
-            [-105.080236289634, 40.5776602488735], 
-            [-105.08058187721, 40.5776614972081], 
-            [-105.080598107545, 40.5776614855279], 
-            [-105.080598022226, 40.577675209751], 
-            [-105.08061242203, 40.5776752618922], 
-            [-105.080611116681, 40.5778852425051], 
-            [-105.08049951785, 40.5778848383644], 
-            [-105.080499404594, 40.5778986358833], 
-            [-105.080470632806, 40.5778984582753], 
-            [-105.080470479183, 40.5779231618761]
+            [-105.0959506, 40.5782471],
+            [-105.0771702, 40.5781031],
+            [-105.0771702, 40.5670524],
+            [-105.079002, 40.5670364],
+            [-105.0818007, 40.5671023],
+            [-105.0837732, 40.5671536],
+            [-105.0839488, 40.5651412],
+            [-105.0864076, 40.5647102],
+            [-105.0866103, 40.5672144],
+            [-105.0866913, 40.5687948],
+            [-105.0960267, 40.5688256],
+            [-105.0959506, 40.5782471]
           ]
         ]
-      }, 
-      ""properties"" : null
-    }, 
+      }
+    }
+  ]
+}",,,,"{ ""renderer"": { ""type"": ""simple"", ""symbol"": { ""type"": ""esriSFS"", ""style"": ""esriSFSSolid"", ""color"": [ 40, 167, 69, 150 ], ""outline"": { ""type"": ""esriSLS"", ""style"": ""esriSLSSolid"", ""color"": [ 40, 167, 69, 255 ], ""width"": 1.5 } } }, ""transparency"": 0, ""labelingInfo"": null }"
+,Complete,,y,,,featurelayer,https://csurams.maps.arcgis.com/sharing/rest/content/items/1ac86669060246e8a2d27abcf99e261c/info/thumbnail/thumbnail.png?f=json,,,,https://services1.arcgis.com/KNdRU5cN6ENqCTjk/arcgis/rest/services/CLP_FEMAfloodway/FeatureServer/0,,,"historic,structure,economy",buildings,City,FEMA floodway for CLP and Big Thompson rivers,,FEMA,,,,,,,,,,,2020,,,,,,,,,,,2020,,,,2020,"A ""Regulatory Floodway"" means the channel of a river or other watercourse and the adjacent land areas that must be reserved in order to discharge the base flood without cumulatively increasing the water surface elevation more than a designated height. Communities must regulate development in these floodways to ensure that there are no increases in upstream flood elevations. For streams and other watercourses where FEMA has provided Base Flood Elevations (BFEs), but no floodway has been designated, the community must review floodplain development on a case-by-case basis to ensure that increases in water surface elevations do not occur, or identify the need to adopt a floodway if adequate information is available. http://www.fema.gov/national-flood-insurance-program-2/floodway",,,,,,,,,,,,,,,,,,,ArcGIS Online,,,,,,,,,,,,,,,,,,,,,,,,,,,https://csurams.maps.arcgis.com/home/item.html?id=1ac86669060246e8a2d27abcf99e261c,2,,,,agol-2,"{
+  ""type"": ""FeatureCollection"",
+  ""features"": [
     {
-      ""type"" : ""Feature"", 
-      ""geometry"" : 
-      {
-        ""type"" : ""Polygon"", 
-        ""coordinates"" : 
-        [
+      ""type"": ""Feature"",
+      ""properties"": {},
+      ""geometry"": {
+        ""type"": ""Polygon"",
+        ""coordinates"": [
           [
-            [-105.079907104723, 40.5779156300901], 
-            [-105.079874705767, 40.5779155125751], 
-            [-105.079860319438, 40.5779154603913], 
-            [-105.07986037072, 40.5779072258578], 
-            [-105.079673172626, 40.5779065466669], 
-            [-105.079673121321, 40.5779147812003], 
-            [-105.079665031417, 40.5779147518418], 
-            [-105.079659179381, 40.5779147306042], 
-            [-105.079625932785, 40.5779146099434], 
-            [-105.079620079771, 40.5779145887003], 
-            [-105.079611921937, 40.5779145590915], 
-            [-105.07961197325, 40.5779063245577], 
-            [-105.079530848435, 40.5779059445845], 
-            [-105.079531624163, 40.5778017264474], 
-            [-105.07955142393, 40.5778017983236], 
-            [-105.079551748957, 40.5777496462764], 
-            [-105.079531949205, 40.5777495744], 
-            [-105.079532530859, 40.5776562496829], 
-            [-105.079635129431, 40.5776566220956], 
-            [-105.079635300464, 40.577629173649], 
-            [-105.079545301753, 40.5776288469762], 
-            [-105.079545960821, 40.577521878089], 
-            [-105.079769176238, 40.5775226188043], 
-            [-105.079769158473, 40.5775253204739], 
-            [-105.079769060644, 40.5775401980403], 
-            [-105.079768968746, 40.5775541737674], 
-            [-105.079768695182, 40.5775980912825], 
-            [-105.079801094703, 40.5775982088301], 
-            [-105.079822722966, 40.5775955527968], 
-            [-105.079822435509, 40.5776418083251], 
-            [-105.079806238179, 40.5776394010904], 
-            [-105.079806022697, 40.5776739973161], 
-            [-105.079805981735, 40.5776805737601], 
-            [-105.079935591901, 40.5776810438971], 
-            [-105.079935632771, 40.5776744655401], 
-            [-105.079935749588, 40.5776556632253], 
-            [-105.079939349513, 40.5776556762281], 
-            [-105.079938373205, 40.5778128196592], 
-            [-105.079954872898, 40.5778128792545], 
-            [-105.079956672865, 40.5778128857556], 
-            [-105.07997975909, 40.5778129595885], 
-            [-105.07998119458, 40.5775823926391], 
-            [-105.08003519377, 40.5775825884475], 
-            [-105.080033168963, 40.5779078525342], 
-            [-105.079921570098, 40.5779074478354], 
-            [-105.079921518823, 40.5779156823688], 
-            [-105.079907104723, 40.5779156300901]
+            [
+              -105.211145,
+              40.6278218
+            ],
+            [
+              -104.9582436,
+              40.629931
+            ],
+            [
+              -104.9174829,
+              40.4821256
+            ],
+            [
+              -104.90544,
+              40.3657641
+            ],
+            [
+              -105.5928131,
+              40.2979702
+            ],
+            [
+              -105.6724816,
+              40.4229122
+            ],
+            [
+              -105.4742366,
+              40.4948075
+            ],
+            [
+              -105.2268934,
+              40.524389
+            ],
+            [
+              -105.211145,
+              40.6278218
+            ]
           ]
         ]
-      }, 
-      ""properties"" : null
-    }, 
-    {
-      ""type"" : ""Feature"", 
-      ""geometry"" : 
-      {
-        ""type"" : ""Polygon"", 
-        ""coordinates"" : 
-        [
-          [
-            [-105.081705322326, 40.577918707058], 
-            [-105.081705960528, 40.5778157753855], 
-            [-105.081695160652, 40.5778157363821], 
-            [-105.081695279786, 40.5777965224699], 
-            [-105.081571081246, 40.5777960738587], 
-            [-105.081573153934, 40.5774618890156], 
-            [-105.081965547375, 40.5774633059103], 
-            [-105.081963476638, 40.5777974907544], 
-            [-105.081842878053, 40.5777970554284], 
-            [-105.081842758961, 40.5778162693407], 
-            [-105.081831959085, 40.5778162303502], 
-            [-105.081831321076, 40.5779191620225], 
-            [-105.081705322326, 40.577918707058]
-          ]
-        ]
-      }, 
-      ""properties"" : null
-    }, 
-    {
-      ""type"" : ""Feature"", 
-      ""geometry"" : 
-      {
-        ""type"" : ""Polygon"", 
-        ""coordinates"" : 
-        [
-          [
-            [-105.093943420046, 40.5779601969259], 
-            [-105.093943453084, 40.5779547072364], 
-            [-105.09364433694, 40.5779535944098], 
-            [-105.093641022727, 40.5779591364855], 
-            [-105.093633822791, 40.5779591112274], 
-            [-105.093633888917, 40.5779481318483], 
-            [-105.093612289112, 40.5779480560706], 
-            [-105.093612256047, 40.5779535457602], 
-            [-105.093601137901, 40.5779535067535], 
-            [-105.09357625637, 40.5779534194558], 
-            [-105.093576289438, 40.5779479297662], 
-            [-105.093543889731, 40.5779478160825], 
-            [-105.09354385666, 40.5779533057718], 
-            [-105.093504257016, 40.5779531668128], 
-            [-105.093504290089, 40.5779476771232], 
-            [-105.093471890383, 40.5779475634193], 
-            [-105.093471857306, 40.5779530531089], 
-            [-105.093431943546, 40.5779528513456], 
-            [-105.093432290741, 40.5779474244356], 
-            [-105.093413977167, 40.5779472986177], 
-            [-105.093414952522, 40.5778375674645], 
-            [-105.093432952329, 40.5778376306436], 
-            [-105.093432985409, 40.5778321409539], 
-            [-105.093472584982, 40.5778322799376], 
-            [-105.093472551906, 40.5778377696272], 
-            [-105.09350495156, 40.5778378833311], 
-            [-105.093504984633, 40.5778323936415], 
-            [-105.093544584207, 40.5778325326007], 
-            [-105.093544551136, 40.5778380222904], 
-            [-105.09357695079, 40.577838135974], 
-            [-105.093576983858, 40.5778326462844], 
-            [-105.093612983471, 40.577832772589], 
-            [-105.093612950406, 40.5778382622785], 
-            [-105.093634550175, 40.5778383380561], 
-            [-105.093634616301, 40.5778273586767], 
-            [-105.093641816223, 40.5778273839348], 
-            [-105.093641783161, 40.5778328736245], 
-            [-105.093696959248, 40.5778330671742], 
-            [-105.093697110571, 40.5778275227995], 
-            [-105.09369764008, 40.577808121904], 
-            [-105.093735466648, 40.5777793840208], 
-            [-105.093755484468, 40.5777947878434], 
-            [-105.09376587308, 40.5778027819335], 
-            [-105.093739913922, 40.5778223938157], 
-            [-105.09373984875, 40.5778332176061], 
-            [-105.093875455891, 40.5778336931337], 
-            [-105.093944179912, 40.5778339340648], 
-            [-105.093944212949, 40.5778284443751], 
-            [-105.093951412872, 40.5778284696139], 
-            [-105.093951346798, 40.5778394489933], 
-            [-105.093972946568, 40.5778395247074], 
-            [-105.093972979603, 40.5778340350177], 
-            [-105.094008979217, 40.5778341611989], 
-            [-105.094008946184, 40.5778396508886], 
-            [-105.09404134584, 40.5778397644421], 
-            [-105.094041378869, 40.5778342747524], 
-            [-105.094080978445, 40.5778344135278], 
-            [-105.094080945418, 40.5778399032175], 
-            [-105.094113345074, 40.5778400167507], 
-            [-105.094113378098, 40.577834527061], 
-            [-105.094152977673, 40.5778346658115], 
-            [-105.094152944653, 40.5778401555011], 
-            [-105.094170944461, 40.5778402185652], 
-            [-105.094170901584, 40.5778449666343], 
-            [-105.094170573649, 40.5778812808698], 
-            [-105.094169953608, 40.5779499417624], 
-            [-105.094152284241, 40.5779499492936], 
-            [-105.094151921168, 40.5779553686258], 
-            [-105.094112651574, 40.5779553002327], 
-            [-105.094112684597, 40.5779498105431], 
-            [-105.094080284889, 40.5779496970098], 
-            [-105.094080251863, 40.5779551866994], 
-            [-105.094040652216, 40.577955047924], 
-            [-105.094040685246, 40.5779495582344], 
-            [-105.094008285537, 40.577949444681], 
-            [-105.094008252505, 40.5779549343705], 
-            [-105.093972252827, 40.5779548081893], 
-            [-105.093972285862, 40.5779493184997], 
-            [-105.093950686057, 40.5779492427856], 
-            [-105.093950619982, 40.5779602221648], 
-            [-105.093943420046, 40.5779601969259]
-          ]
-        ]
-      }, 
-      ""properties"" : null
-    }, 
-    {
-      ""type"" : ""Feature"", 
-      ""geometry"" : 
-      {
-        ""type"" : ""Polygon"", 
-        ""coordinates"" : 
-        [
-          [
-            [-105.079280783115, 40.5779040221638], 
-            [-105.079255618383, 40.5779036941098], 
-            [-105.079115198197, 40.5779018634556], 
-            [-105.079115221752, 40.5779004911709], 
-            [-105.079116941404, 40.5778003073301], 
-            [-105.079118095686, 40.5777330607055], 
-            [-105.079118472595, 40.577711102624], 
-            [-105.079119885998, 40.577628759817], 
-            [-105.079120357131, 40.5776013122144], 
-            [-105.079121310385, 40.5775457769151], 
-            [-105.079121935426, 40.5775093627449], 
-            [-105.079123867065, 40.5773968275709], 
-            [-105.079126136925, 40.5772554670151], 
-            [-105.079126225271, 40.5772499651131], 
-            [-105.079126247354, 40.5772485898295], 
-            [-105.079126297141, 40.5772454892452], 
-            [-105.079418075982, 40.5772469220143], 
-            [-105.079406771646, 40.5779056645013], 
-            [-105.079280783115, 40.5779040221638]
-          ]
-        ]
-      }, 
-      ""properties"" : null
-    }, 
-    {
-      ""type"" : ""Feature"", 
-      ""geometry"" : 
-      {
-        ""type"" : ""Polygon"", 
-        ""coordinates"" : 
-        [
-          [
-            [-105.077882285493, 40.5778849366581], 
-            [-105.077882620403, 40.5778314121905], 
-            [-105.077873650499, 40.5778314798301], 
-            [-105.077874148295, 40.5777518786338], 
-            [-105.078050516372, 40.5777524216617], 
-            [-105.07805032691, 40.5777827130006], 
-            [-105.078050121507, 40.5778155530863], 
-            [-105.078066346991, 40.5778157103682], 
-            [-105.078096920964, 40.5778157235702], 
-            [-105.078096620557, 40.5778637583494], 
-            [-105.078049821066, 40.5778635878654], 
-            [-105.078049683722, 40.5778855466214], 
-            [-105.077882285493, 40.5778849366581]
-          ]
-        ]
-      }, 
-      ""properties"" : null
-    }, 
-    {
-      ""type"" : ""Feature"", 
-      ""geometry"" : 
-      {
-        ""type"" : ""Polygon"", 
-        ""coordinates"" : 
-        [
-          [
-            [-105.085517980108, 40.5778862462515], 
-            [-105.08551438017, 40.5778862334213], 
-            [-105.085456181167, 40.5778860259844], 
-            [-105.085456239915, 40.5778764443043], 
-            [-105.08538484115, 40.5778761897801], 
-            [-105.085384625134, 40.577911415536], 
-            [-105.085297626594, 40.5779111053421], 
-            [-105.085297863855, 40.5778724232533], 
-            [-105.085146066491, 40.5778718818629], 
-            [-105.085145871404, 40.5779036765384], 
-            [-105.085060072854, 40.5779033704473], 
-            [-105.085060193581, 40.5778836988301], 
-            [-105.084966595192, 40.5778833648405], 
-            [-105.084966648548, 40.5778746727711], 
-            [-105.084871250203, 40.5778743322811], 
-            [-105.084871783999, 40.5777873932863], 
-            [-105.084871913095, 40.5777663676273], 
-            [-105.084875513026, 40.5777663804774], 
-            [-105.084876277028, 40.5776419466351], 
-            [-105.085540463244, 40.5776443155636], 
-            [-105.085540687589, 40.5776077175017], 
-            [-105.085688884439, 40.5776082455522], 
-            [-105.085688679791, 40.5776416423167], 
-            [-105.085688655262, 40.577645645243], 
-            [-105.085688267714, 40.5777088895334], 
-            [-105.085688242484, 40.5777130068298], 
-            [-105.085688105115, 40.5777354241363], 
-            [-105.085623906358, 40.5777351954084], 
-            [-105.085623710094, 40.5777672188241], 
-            [-105.085653109539, 40.5777673235731], 
-            [-105.085652913994, 40.5777992317714], 
-            [-105.08565274998, 40.577825995046], 
-            [-105.085652724748, 40.5778301123422], 
-            [-105.08565243668, 40.5778771181411], 
-            [-105.085545038536, 40.5778767354499], 
-            [-105.085544979645, 40.5778863424744], 
-            [-105.085541379707, 40.577886329645], 
-            [-105.085517980108, 40.5778862462515]
-          ]
-        ]
-      }, 
-      ""properties"" : null
-    }, 
-    {
-      ""type"" : ""Feature"", 
-      ""geometry"" : 
-      {
-        ""type"" : ""Polygon"", 
-        ""coordinates"" : 
-        [
-          [
-            [-105.088606323664, 40.5778790080207], 
-            [-105.088570419914, 40.577878881008], 
-            [-105.088570653135, 40.5778405549967], 
-            [-105.088606557719, 40.5778405416186], 
-            [-105.088606323664, 40.5778790080207]
-          ]
-        ]
-      }, 
-      ""properties"" : null
-    }, 
-    {
-      ""type"" : ""Feature"", 
-      ""geometry"" : 
-      {
-        ""type"" : ""Polygon"", 
-        ""coordinates"" : 
-        [
-          [
-            [-105.087344013179, 40.5778625885319], 
-            [-105.087343999988, 40.5778647497529], 
-            [-105.087343972765, 40.5778692101575], 
-            [-105.087329573014, 40.5778691590622], 
-            [-105.087329538503, 40.5778625253737], 
-            [-105.087264814629, 40.5778622956888], 
-            [-105.087264774135, 40.5778689291111], 
-            [-105.087250374385, 40.5778688780059], 
-            [-105.087250339881, 40.5778622443175], 
-            [-105.087185616008, 40.5778620145884], 
-            [-105.087185575506, 40.5778686480107], 
-            [-105.087171175756, 40.5778685968957], 
-            [-105.087171216258, 40.5778619634734], 
-            [-105.087106492386, 40.5778617337003], 
-            [-105.087106376878, 40.5778683668563], 
-            [-105.087091977127, 40.5778683157316], 
-            [-105.087091942639, 40.577861682043], 
-            [-105.087027218767, 40.5778614522258], 
-            [-105.08702717825, 40.5778680856481], 
-            [-105.0870127785, 40.5778680345135], 
-            [-105.087012744019, 40.577861400825], 
-            [-105.086948020148, 40.5778611709637], 
-            [-105.086947979623, 40.5778678043859], 
-            [-105.086933579873, 40.5778677532415], 
-            [-105.0869335454, 40.5778611195529], 
-            [-105.086868821529, 40.5778608896475], 
-            [-105.086868780996, 40.5778675230697], 
-            [-105.086854381246, 40.5778674719155], 
-            [-105.086854346782, 40.5778608382269], 
-            [-105.086789622911, 40.5778606082775], 
-            [-105.086789582371, 40.5778672416996], 
-            [-105.086775182621, 40.5778671905356], 
-            [-105.086775209881, 40.5778627301311], 
-            [-105.086775225041, 40.5778602497822], 
-            [-105.086775267518, 40.5778532995848], 
-            [-105.086775587339, 40.5778009706833], 
-            [-105.086710788527, 40.5778007404235], 
-            [-105.086710729803, 40.5778103474488], 
-            [-105.086696330065, 40.577810296275], 
-            [-105.086696347614, 40.5778074253342], 
-            [-105.086697192917, 40.577669143385], 
-            [-105.086697241398, 40.577661212465], 
-            [-105.086697356571, 40.5776423713714], 
-            [-105.086697391618, 40.5776366381269], 
-            [-105.086697403924, 40.5776346249524], 
-            [-105.086711803624, 40.577634676126], 
-            [-105.086711780554, 40.5776384503147], 
-            [-105.086733380106, 40.5776385270717], 
-            [-105.086733386826, 40.5776374276659], 
-            [-105.086785511364, 40.5776375114068], 
-            [-105.086785648659, 40.5776150466985], 
-            [-105.086785690827, 40.5776081470751], 
-            [-105.086785824496, 40.5775862755464], 
-            [-105.086785833936, 40.5775847309596], 
-            [-105.086785860385, 40.5775804031221], 
-            [-105.086572677451, 40.5775450599073], 
-            [-105.086575108294, 40.5775359608296], 
-            [-105.086579592381, 40.5775367685685], 
-            [-105.086583835865, 40.5775374878927], 
-            [-105.086586203798, 40.5775294533769], 
-            [-105.08658892869, 40.5775198979609], 
-            [-105.08657322701, 40.5775172947921], 
-            [-105.086591573613, 40.5774529584917], 
-            [-105.086606034067, 40.5774017114238], 
-            [-105.086592109614, 40.5773994028981], 
-            [-105.086593550829, 40.5773943489578], 
-            [-105.086594385964, 40.5773912969885], 
-            [-105.086601867828, 40.5773925936127], 
-            [-105.08660847528, 40.5773936890573], 
-            [-105.086662097275, 40.5774025789946], 
-            [-105.086663844562, 40.5774028686752], 
-            [-105.086832037384, 40.5774307530174], 
-            [-105.08683229695, 40.5774373696496], 
-            [-105.086843671494, 40.5774374100595], 
-            [-105.086854145534, 40.5774374472693], 
-            [-105.086862898558, 40.5774374783642], 
-            [-105.086872833489, 40.5774375136571], 
-            [-105.086883108595, 40.5774374929716], 
-            [-105.086883633582, 40.5774374948365], 
-            [-105.086892633369, 40.5774375268058], 
-            [-105.086902908125, 40.5774375633033], 
-            [-105.086903432764, 40.5774376223528], 
-            [-105.086907506396, 40.5774376368227], 
-            [-105.086908722718, 40.5774376411431], 
-            [-105.086910586996, 40.5774376477651], 
-            [-105.0869124329, 40.5774375971359], 
-            [-105.086922707656, 40.5774376336316], 
-            [-105.086923232294, 40.577437692681], 
-            [-105.086923982621, 40.5774376389656], 
-            [-105.086932607072, 40.5774377259791], 
-            [-105.086932614845, 40.57743645362], 
-            [-105.086932642367, 40.5774319488317], 
-            [-105.086932649377, 40.5774308014465], 
-            [-105.086932654561, 40.5774299528551], 
-            [-105.086932661763, 40.5774287740406], 
-            [-105.086932751796, 40.5774140372252], 
-            [-105.086937314511, 40.5774140634626], 
-            [-105.086939367829, 40.5774140695466], 
-            [-105.086954351276, 40.5774141139412], 
-            [-105.08695436433, 40.5774365308688], 
-            [-105.087015412882, 40.5774367476765], 
-            [-105.087015533039, 40.5774170761463], 
-            [-105.087029932693, 40.5774171272805], 
-            [-105.08702981254, 40.5774367988108], 
-            [-105.087094611004, 40.5774370288929], 
-            [-105.087094731138, 40.5774173573626], 
-            [-105.087109130792, 40.577417408487], 
-            [-105.087109010663, 40.5774370800173], 
-            [-105.087173809128, 40.5774373100553], 
-            [-105.087173929238, 40.5774176385248], 
-            [-105.087188328893, 40.5774176896395], 
-            [-105.087188208786, 40.5774373611699], 
-            [-105.087253007251, 40.5774375911637], 
-            [-105.087253127339, 40.5774179196332], 
-            [-105.087267526994, 40.577417970738], 
-            [-105.08726740691, 40.5774376422685], 
-            [-105.087332205376, 40.5774378722182], 
-            [-105.08733232544, 40.5774182006877], 
-            [-105.087346725095, 40.5774182517827], 
-            [-105.087346605035, 40.5774379233132], 
-            [-105.087494801527, 40.5774384490626], 
-            [-105.087494921544, 40.5774187775319], 
-            [-105.087499553123, 40.5774187939601], 
-            [-105.08750149895, 40.5774188008618], 
-            [-105.087505721286, 40.5774188158382], 
-            [-105.087505501297, 40.5774548742224], 
-            [-105.087504966333, 40.5775425601005], 
-            [-105.08750483025, 40.5775648655144], 
-            [-105.087379187575, 40.5775677647372], 
-            [-105.087379153546, 40.5775733406845], 
-            [-105.087377803575, 40.5775733358948], 
-            [-105.087377745294, 40.5775828857363], 
-            [-105.087399044836, 40.5775829613054], 
-            [-105.087399055101, 40.5775935693295], 
-            [-105.087398928804, 40.5776019752113], 
-            [-105.087398856218, 40.5776138696246], 
-            [-105.087398876428, 40.5776228478853], 
-            [-105.087398750131, 40.577631253767], 
-            [-105.087398697611, 40.5776398600612], 
-            [-105.087410235477, 40.577639900995], 
-            [-105.087410229196, 40.5776409303192], 
-            [-105.087431828749, 40.5776410069466], 
-            [-105.087431390502, 40.577636971385], 
-            [-105.087445748004, 40.5776361275655], 
-            [-105.087446424413, 40.5776423562105], 
-            [-105.087464958534, 40.5778130253326], 
-            [-105.087450607751, 40.5778139313693], 
-            [-105.087449460072, 40.577803363121], 
-            [-105.087412218967, 40.5778032310065], 
-            [-105.087392321214, 40.5778031604135], 
-            [-105.087344376926, 40.5778029903033], 
-            [-105.087344013179, 40.5778625885319]
-          ]
-        ]
-      }, 
-      ""properties"" : null
-    }, 
-    {
-      ""type"" : ""Feature"", 
-      ""geometry"" : 
-      {
-        ""type"" : ""Polygon"", 
-        ""coordinates"" : 
-        [
-          [
-            [-105.091841692181, 40.5776837612855], 
-            [-105.091841653166, 40.5776902240706], 
-            [-105.091882452397, 40.5776903672533], 
-            [-105.091882493885, 40.5776834940192], 
-            [-105.09197051519, 40.5776838028765], 
-            [-105.091970818991, 40.5776334620484], 
-            [-105.092243613831, 40.5776344188332], 
-            [-105.092244151659, 40.5775452392572], 
-            [-105.092282337825, 40.5775453731381], 
-            [-105.09228243191, 40.577529770994], 
-            [-105.092275232069, 40.5775297457523], 
-            [-105.092275258277, 40.5775253997246], 
-            [-105.09237681887, 40.5775257557418], 
-            [-105.092376851967, 40.5775202660111], 
-            [-105.092382551721, 40.5775202859887], 
-            [-105.092382051655, 40.5776032323886], 
-            [-105.092406351505, 40.5776033175566], 
-            [-105.092405523452, 40.5777406751987], 
-            [-105.092394186547, 40.5777406354649], 
-            [-105.092394073815, 40.5777593348592], 
-            [-105.092399398836, 40.5777593535225], 
-            [-105.092399042029, 40.577818539678], 
-            [-105.092332143339, 40.5778183051908], 
-            [-105.092332159889, 40.5778155603256], 
-            [-105.092316335183, 40.5778155048527], 
-            [-105.092316137779, 40.5778482430787], 
-            [-105.092187252816, 40.5778477911967], 
-            [-105.092187269372, 40.5778450463316], 
-            [-105.092156632405, 40.5778449388947], 
-            [-105.092156615847, 40.5778476837598], 
-            [-105.092055930096, 40.5778473306207], 
-            [-105.092055946658, 40.5778445857556], 
-            [-105.092024735201, 40.5778444762688], 
-            [-105.092024718639, 40.5778472211339], 
-            [-105.09196711964, 40.57784701906], 
-            [-105.091967371222, 40.5778053314214], 
-            [-105.091881760264, 40.5778050310208], 
-            [-105.091881815665, 40.5777958528781], 
-            [-105.091841016417, 40.5777957096953], 
-            [-105.091840942709, 40.5778079194501], 
-            [-105.091821405562, 40.5778078508804], 
-            [-105.091821035648, 40.5778691242746], 
-            [-105.091722187347, 40.5778687772958], 
-            [-105.091722270222, 40.5778550529706], 
-            [-105.091640559134, 40.5778547660837], 
-            [-105.091640476242, 40.5778684904088], 
-            [-105.091376593194, 40.5778675635255], 
-            [-105.091377279912, 40.577753937642], 
-            [-105.091386842233, 40.5777539712399], 
-            [-105.091387038186, 40.5777215475212], 
-            [-105.091448349505, 40.5777217629242], 
-            [-105.091448527806, 40.5776922556243], 
-            [-105.091387216514, 40.5776920402214], 
-            [-105.091387852355, 40.5775868295401], 
-            [-105.091369852738, 40.5775867662965], 
-            [-105.091370455309, 40.5774870648314], 
-            [-105.091409154429, 40.5774872008015], 
-            [-105.091409632879, 40.577408028593], 
-            [-105.091415332623, 40.577408048618], 
-            [-105.091415299448, 40.5774135383487], 
-            [-105.091475935504, 40.5774137513658], 
-            [-105.091475822346, 40.5774324793623], 
-            [-105.091540958313, 40.5774327081525], 
-            [-105.091540626321, 40.5774876626342], 
-            [-105.091555475983, 40.5774877147886], 
-            [-105.091554873685, 40.5775874162546], 
-            [-105.091536911507, 40.5775873531684], 
-            [-105.091536537536, 40.5776492556426], 
-            [-105.091563049557, 40.5776493487564], 
-            [-105.091563023308, 40.5776536938779], 
-            [-105.091555823454, 40.5776536685917], 
-            [-105.091555380002, 40.5777270753435], 
-            [-105.091766313519, 40.577727815968], 
-            [-105.091766554868, 40.5776878435947], 
-            [-105.091835967258, 40.5776880872302], 
-            [-105.091835993494, 40.5776837412851], 
-            [-105.091841692181, 40.5776837612855]
-          ]
-        ]
-      }, 
-      ""properties"" : null
-    }, 
-    {
-      ""type"" : ""Feature"", 
-      ""geometry"" : 
-      {
-        ""type"" : ""Polygon"", 
-        ""coordinates"" : 
-        [
-          [
-            [-105.078284135951, 40.5778136604718], 
-            [-105.078229783002, 40.5778134625577], 
-            [-105.078201336915, 40.5778133589676], 
-            [-105.078201740218, 40.5777488551206], 
-            [-105.078284539175, 40.5777491566247], 
-            [-105.078284135951, 40.5778136604718]
-          ]
-        ]
-      }, 
-      ""properties"" : null
-    }, 
-    {
-      ""type"" : ""Feature"", 
-      ""geometry"" : 
-      {
-        ""type"" : ""Polygon"", 
-        ""coordinates"" : 
-        [
-          [
-            [-105.081191121001, 40.5778212346881], 
-            [-105.081129879556, 40.5778210793388], 
-            [-105.081130602467, 40.5777101410166], 
-            [-105.081130763868, 40.5776853723105], 
-            [-105.081168519895, 40.5776855733594], 
-            [-105.081204562877, 40.5776856391745], 
-            [-105.081203769865, 40.5778063901622], 
-            [-105.081202010735, 40.577806258646], 
-            [-105.08119121898, 40.5778054518316], 
-            [-105.081191121001, 40.5778212346881]
-          ]
-        ]
-      }, 
-      ""properties"" : null
-    }, 
-    {
-      ""type"" : ""Feature"", 
-      ""geometry"" : 
-      {
-        ""type"" : ""Polygon"", 
-        ""coordinates"" : 
-        [
-          [
-            [-105.089638089306, 40.5776246884441], 
-            [-105.089634250722, 40.5776238878344], 
-            [-105.089589699052, 40.5776145957245], 
-            [-105.089570512193, 40.577667531504], 
-            [-105.089153765873, 40.5775808056633], 
-            [-105.089169632346, 40.5775371181129], 
-            [-105.089056243362, 40.5775367158852], 
-            [-105.089071356149, 40.5775805334323], 
-            [-105.089053472604, 40.5775841191804], 
-            [-105.08865356257, 40.5776643024987], 
-            [-105.088635251156, 40.5776112099894], 
-            [-105.08858650854, 40.5776209829413], 
-            [-105.08857826843, 40.5775970913072], 
-            [-105.088615696869, 40.5775895868635], 
-            [-105.08862701103, 40.5775873183591], 
-            [-105.088614572049, 40.5775512524306], 
-            [-105.088611446363, 40.5775421897221], 
-            [-105.089029239236, 40.5774584208083], 
-            [-105.089042972995, 40.5774982401445], 
-            [-105.089096972137, 40.5774984317173], 
-            [-105.089097558011, 40.5774022325292], 
-            [-105.089097775224, 40.5773665666149], 
-            [-105.089097958422, 40.5773364858644], 
-            [-105.088896362115, 40.5773357705304], 
-            [-105.088897124071, 40.5772107201696], 
-            [-105.088897164909, 40.5772040179689], 
-            [-105.088960163631, 40.5772042415484], 
-            [-105.088960297409, 40.5771822827881], 
-            [-105.088927681059, 40.5771821458055], 
-            [-105.088928132207, 40.5771437399773], 
-            [-105.088960531521, 40.5771438549568], 
-            [-105.088960815799, 40.57709719259], 
-            [-105.088897600532, 40.5770969465763], 
-            [-105.088898033587, 40.5770609920104], 
-            [-105.088898511255, 40.576983057937], 
-            [-105.089002972162, 40.5769834286461], 
-            [-105.08901494492, 40.5769834711288], 
-            [-105.089100106504, 40.5769837732706], 
-            [-105.089100290231, 40.576953605408], 
-            [-105.089100508188, 40.5769178168695], 
-            [-105.089101142926, 40.5768135928675], 
-            [-105.089047144335, 40.5768134012949], 
-            [-105.089032926228, 40.5768531214618], 
-            [-105.088616176722, 40.5767663900131], 
-            [-105.088624709678, 40.5767425524855], 
-            [-105.088625080982, 40.5767415152175], 
-            [-105.088633238722, 40.5767187258723], 
-            [-105.088577781738, 40.5767074069459], 
-            [-105.088584131134, 40.5766808559406], 
-            [-105.088642553792, 40.5766938080793], 
-            [-105.088658379543, 40.5766437960668], 
-            [-105.089056448014, 40.5767271527006], 
-            [-105.089076528369, 40.5767313129438], 
-            [-105.089060882675, 40.5767750213732], 
-            [-105.089174270374, 40.5767754236004], 
-            [-105.089159157701, 40.57673160606], 
-            [-105.089175237673, 40.5767283056498], 
-            [-105.089574456798, 40.576646365207], 
-            [-105.089592405458, 40.5766979188745], 
-            [-105.089641246863, 40.5766869387659], 
-            [-105.089652416807, 40.5767118781188], 
-            [-105.089623350103, 40.5767180001101], 
-            [-105.089602581509, 40.5767221644852], 
-            [-105.089620046576, 40.5767732752325], 
-            [-105.089620280771, 40.5767739605932], 
-            [-105.089202647766, 40.5768577005853], 
-            [-105.089187540672, 40.5768138993312], 
-            [-105.089133542081, 40.576813707799], 
-            [-105.089132731516, 40.5769468131446], 
-            [-105.089132422165, 40.5769976124281], 
-            [-105.089330417543, 40.5769983145899], 
-            [-105.089330542846, 40.5769777282511], 
-            [-105.089391750047, 40.5769779495728], 
-            [-105.089391323784, 40.5770465663432], 
-            [-105.089537120488, 40.5770470830955], 
-            [-105.089535759542, 40.5772707879864], 
-            [-105.089391762318, 40.5772702775991], 
-            [-105.089391361406, 40.5773361538798], 
-            [-105.089331962494, 40.5773359432991], 
-            [-105.089332062736, 40.577319474229], 
-            [-105.089290964073, 40.5773193285081], 
-            [-105.089130466479, 40.5773187593033], 
-            [-105.089129371622, 40.5774985466489], 
-            [-105.089183370763, 40.5774987381813], 
-            [-105.089197588917, 40.5774590180002], 
-            [-105.089614343467, 40.5775457473252], 
-            [-105.089598229817, 40.577590763587], 
-            [-105.089646851282, 40.5776008819163], 
-            [-105.089638089306, 40.5776246884441]
-          ]
-        ]
-      }, 
-      ""properties"" : null
-    }, 
-    {
-      ""type"" : ""Feature"", 
-      ""geometry"" : 
-      {
-        ""type"" : ""Polygon"", 
-        ""coordinates"" : 
-        [
-          [
-            [-105.093459127838, 40.577675773242], 
-            [-105.093459243608, 40.5776565593277], 
-            [-105.093466443512, 40.5776565845968], 
-            [-105.093466327744, 40.5776757985114], 
-            [-105.093459127838, 40.577675773242]
-          ]
-       ",,,,"{ ""renderer"": { ""type"": ""simple"", ""symbol"": { ""type"": ""esriSFS"", ""style"": ""esriSFSSolid"", ""color"": [ 40, 167, 69, 150 ], ""outline"": { ""type"": ""esriSLS"", ""style"": ""esriSLSSolid"", ""color"": [ 40, 167, 69, 255 ], ""width"": 1.5 } } }, ""transparency"": 0, ""labelingInfo"": null }"
-,Complete,,y,,,featurelayer,https://csurams.maps.arcgis.com/sharing/rest/content/items/1ac86669060246e8a2d27abcf99e261c/info/thumbnail/thumbnail.png?f=json,,,,https://services1.arcgis.com/KNdRU5cN6ENqCTjk/arcgis/rest/services/CLP_FEMAfloodway/FeatureServer/0,,,"historic,structure,economy",buildings,City,FEMA floodway for CLP and Big Thompson rivers,,FEMA,,,,,,,,,,,2020,,,,,,,,,,,2020,,,,2020,"A ""Regulatory Floodway"" means the channel of a river or other watercourse and the adjacent land areas that must be reserved in order to discharge the base flood without cumulatively increasing the water surface elevation more than a designated height. Communities must regulate development in these floodways to ensure that there are no increases in upstream flood elevations. For streams and other watercourses where FEMA has provided Base Flood Elevations (BFEs), but no floodway has been designated, the community must review floodplain development on a case-by-case basis to ensure that increases in water surface elevations do not occur, or identify the need to adopt a floodway if adequate information is available. http://www.fema.gov/national-flood-insurance-program-2/floodway",,,,,,,,,,,,,,,,,,,ArcGIS Online,,,,,,,,,,,,,,,,,,,,,,,,,,,https://csurams.maps.arcgis.com/home/item.html?id=1ac86669060246e8a2d27abcf99e261c,2,,,,agol-2,"{""type"":""FeatureCollection"",""features"":[{""type"":""Feature"",""properties"":{""@context"":""https://schemas.allmaps.org/map/2/context.json"",""id"":""https://annotations.allmaps.org/maps/c59e13460794c1bc"",""type"":""GeoreferencedMap"",""created"":""2023-10-23T17:48:26.331Z"",""modified"":""2023-10-23T20:21:08.972Z"",""resource"":{""id"":""https://tile.loc.gov/image-services/iiif/service:gmd:gmd431m:g4314m:g4314fm:g009961906:00996_1906-0016"",""uri"":""https://tile.loc.gov/image-services/iiif/service:gmd:gmd431m:g4314m:g4314fm:g009961906:00996_1906-0016"",""type"":""ImageService2"",""width"":6450,""height"":7650,""partOf"":[{""type"":""Canvas"",""id"":""https://tile.loc.gov/image-services/iiif/service:gmd:gmd431m:g4314m:g4314fm:g009961906:00996_1906-0016"",""label"":{""none"":[""Page 16""]},""partOf"":[{""type"":""Manifest"",""id"":""https://www.loc.gov/item/sanborn00996_005/manifest.json"",""label"":{""none"":[""Sanborn Fire Insurance Map from Fort Collins, Larimer County, Colorado.""]}}]}]},""gcps"":[{""id"":""68c79c65e6b7ebd3"",""resource"":[3448,486],""geo"":[-105.0788979,40.5780893],""index"":0},{""id"":""9a0a62a3f7fd5089"",""resource"":[5923,7230],""geo"":[-105.0771141,40.5737327],""index"":1},{""id"":""b6ec86c20de2f6a8"",""resource"":[5880,493],""geo"":[-105.0771208,40.5780785],""index"":2}],""resourceMask"":[[0,0],[0,7650],[6450,7650],[6450,0]],""transformation"":{""type"":""polynomial"",""options"":{""order"":1}},""_allmaps"":{""id"":""https://annotations.allmaps.org/maps/c59e13460794c1bc"",""version"":""https://annotations.allmaps.org/maps/c59e13460794c1bc@9919d3809411f1f7"",""image"":{""id"":""https://annotations.allmaps.org/images/f044228ea0ca8b38"",""version"":""https://annotations.allmaps.org/images/f044228ea0ca8b38@fd04dea5571ec209"",""canvases"":[{""id"":""https://annotations.allmaps.org/canvases/f044228ea0ca8b38"",""manifests"":[{""id"":""https://annotations.allmaps.org/manifests/eeea076468473593""}]}]},""scale"":15.021082,""area"":218684.87}},""geometry"":{""type"":""Polygon"",""coordinates"":[[[-105.08141566,40.578411704],[-105.081443731,40.573477086],[-105.076730549,40.573460418],[-105.076702477,40.578395036],[-105.08141566,40.578411704]]]}}]}",,,,"{ ""renderer"": { ""type"": ""simple"", ""symbol"": { ""type"": ""esriSFS"", ""style"": ""esriSFSSolid"", ""color"": [ 40, 167, 69, 150 ], ""outline"": { ""type"": ""esriSLS"", ""style"": ""esriSLSSolid"", ""color"": [ 40, 167, 69, 255 ], ""width"": 1.5 } } }, ""transparency"": 0, ""labelingInfo"": null }"
+      }
+    }
+  ]
+}",,,,"{ ""renderer"": { ""type"": ""simple"", ""symbol"": { ""type"": ""esriSFS"", ""style"": ""esriSFSSolid"", ""color"": [ 40, 167, 69, 150 ], ""outline"": { ""type"": ""esriSLS"", ""style"": ""esriSLSSolid"", ""color"": [ 40, 167, 69, 255 ], ""width"": 1.5 } } }, ""transparency"": 0, ""labelingInfo"": null }"
 ,,,y,,,featurelayer,https://services5.arcgis.com/rqsYvPKZmvSrSWbw/ArcGIS/rest/services/PLSS_2020_VIEW/FeatureServer/info/thumbnail,,,,https://services5.arcgis.com/rqsYvPKZmvSrSWbw/arcgis/rest/services/PLSS_2020_VIEW/FeatureServer/2,,,,,State,BLM Colorado Public Land Survey System (PLSS) Sections,,Bureau of Land Management,,,,,,,,,,,,,,,,,,,,,,,,,,,"The Public Land Survey System (PLSS) was the historic surveying method developed and used in the United States to divide, identify, and sell public domain lands. It forms the basis for most land ownership boundaries and real estate records in the western U.S., including Colorado.
 In the PLSS, land is divided into a descending hierarchy of grids. Townships are the primary unit of the PLSS, measuring nominally 6 miles by 6 miles. Sections subdivide each Township into 36 sections. A single section is roughly 1 square mile (640 acres).",,,,,,,,,,,,,,,Bureau of Land Management,,,,,,,,,,,,,,,,,,,,,,,,,,,,,6/12/26,,,,,,,agol-3,"{
   ""type"": ""FeatureCollection"",
