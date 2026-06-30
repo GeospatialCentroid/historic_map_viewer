@@ -323,9 +323,7 @@ class Layer_Manager {
               html +=download_link;
          }
         html +="<button type='button' class='btn btn-primary' onclick='filter_manager.select_item(\""+section_id+"\",\""+item_id+"\")'>"+LANG.RESULT.DETAILS+"</button>"
-       if(DEBUGMODE){
-        html += '<i class="bi bi-arrow-repeat iiif_reload_btn" style="cursor: pointer; font-size: 1.2rem; margin-left: 8px; color: #17a2b8;" onclick="layer_manager.reload_iiif(\'' + section_id + '\',\'' + item_id + '\')" title="Reload IIIF Data"></i>';       
-       }
+       
         html+='</div>'
         html+='</div>'
 
@@ -1532,23 +1530,5 @@ class Layer_Manager {
         }
 
     }
- reload_iiif(section_id, item_id) {
-        var layer_id = "item_" + section_id + "_" + item_id;
-        
-        // Only attempt to reload if the layer is currently on the map
-        if (this.is_on_map(section_id + "_" + item_id)) {
-            
-            // Trigger the existing remove flow
-            this.remove_feature_layer(layer_id);
-            
-            // Re-add it after a brief timeout to let Leaflet and the DOM settle
-            setTimeout(() => {
-                this.add_layer_toggle(section_id, item_id);
-            }, 250);
-            
-        } else {
-            console.warn("Layer is not on the map, skipping reload.");
-        }
-  }  
 
 }
