@@ -39,11 +39,11 @@ class Image_Manager {
     // Run the negative regex check for static image extensions
     if (!/\.(png|jpe?g)$/i.test(imgUrl)) {
         // Intercept the default click behavior or Leaflet viewer initialization
-        window.open("https://editor.allmaps.org/images?url="+imgUrl, '_blank');
+        window.open(imgUrl, '_blank');//"https://editor.allmaps.org/images?url="+
         return;
     }
 
-    // --- NEW: REMOVE PREVIOUS LAYER ---
+    // REMOVE PREVIOUS LAYER ---
     if (map_manager.layers && map_manager.layers.length > 0) {
         map_manager.layers = map_manager.layers.filter(function(layerItem) {
             if (layerItem.type === "distortableImageOverlay") {
@@ -193,8 +193,12 @@ class Image_Manager {
         map_manager.map.invalidateSize(true)
         this.image_map.invalidateSize(true)
     }
-     show_image(img, attribution, info_page,layer_id) {
-        console_log("Loading image asset:", img);
+     show_image(img, attribution, info_page,layer_id,georeference_link) {
+        console.log("Loading image asset:", img,georeference_link);
+        if (georeference_link==''){
+            georeference_link = img
+        }
+
         var $this = this;
         // 1. Reveal the viewer container and show the loading spinner IMMEDIATELY
         $("#image_map").width("75%");
@@ -223,9 +227,11 @@ class Image_Manager {
         // Helper to handle standard attribution setup once metadata/assets are pulled
         const finalizeAttribution = function() {
             $this.image_map.attributionControl._attributions = {};
+
+
             $this.image_map.attributionControl.addAttribution(
                 "<a href=\"" + info_page + "\" target=\"_new\">" + attribution + "</a> | " +
-                "<a class=\"georeference_link\" href=\"javascript:void(0);\" data-img=\"" + img + "\" data-id=\"" + layer_id + "\">"+LANG.IMAGE.GEOREFERENCE+"</a>");    };
+                "<a class=\"georeference_link\" href=\"javascript:void(0);\" data-img=\"" + georeference_link + "\" data-id=\"" + layer_id + "\">"+LANG.IMAGE.GEOREFERENCE+"</a>");    };
 
         // 4. Branch off depending on file type, handling the loading states gracefully
         if (/\.(png|jpe?g)$/i.test(img)) {

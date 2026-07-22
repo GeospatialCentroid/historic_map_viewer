@@ -495,3 +495,48 @@ function extractGeoJSON(input) {
   // If we reach this point, we didn't find any GeoJSON
   throw new Error("Unable to locate valid GeoJSON within the provided data structure.");
 }
+
+async function download_item(URl, prefix = "") {
+    analytics_manager.track_event("search_tab", "download", "url", URl);
+
+    // Extract the base filename from the URL, or default to a generic name
+    const baseFilename = URl.substring(URl.lastIndexOf('/') + 1) || 'map_download';
+    
+    // Apply the optional prefix. If a prefix is provided, it prepends it to the filename.
+    const filename = prefix ? `${prefix}${baseFilename}` : baseFilename;
+
+    try {
+        // Fetch the file as a Blob to bypass default browser navigation behavior
+        const response = await fetch(URl);
+        if (!response.ok) throw new Error('Network response was not ok');
+        const blob = await response.blob();
+
+        // Create a local object URL from the Blob
+        const blobUrl = window.URL.createObjectURL(blob);
+
+        // Create the temporary link
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.download = filename;
+
+        // Append, click, and remove
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        // Clean up the object URL to free memory after the download starts
+        setTimeout(() => window.URL.revokeObjectURL(blobUrl), 100);
+        
+    } catch (error) {
+        console.error("Blob download failed, falling back to standard link:", error);
+        
+        // Fallback in case strict CORS policies block the fetch request
+        const fallbackLink = document.createElement('a');
+        fallbackLink.href = URl;
+        fallbackLink.download = filename;
+        
+        document.body.appendChild(fallbackLink);
+        fallbackLink.click();
+        document.body.removeChild(fallbackLink);
+    }
+}

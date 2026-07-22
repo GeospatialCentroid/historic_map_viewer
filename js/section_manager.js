@@ -207,12 +207,28 @@ class Section_Manager {
             }
             
             let all_data = $this.json_data[section_index].all_data;
+            
+            // --- LOOP 1: SANITIZE EVERYTHING FIRST ---
+            // We must clean all IDs and children BEFORE building the parent_lookup map
             for (var j = 0; j < all_data.length; j++) {
                 var obj = all_data[j];
                 
-                // CRUCIAL: Assign the actual section index so the record knows where it came from
-                obj.section_id = section_index; 
+                if (obj[section.unique_id_col]) {
+                    obj[section.unique_id_col] = String(obj[section.unique_id_col]).replace(/[^a-zA-Z0-9]+/g, '-');
+                }
                 
+                if (obj.children) {
+                    obj.children = String(obj.children)
+                        .split(',')
+                        .map(childId => childId.trim().replace(/[^a-zA-Z0-9]+/g, '-'))
+                        .filter(Boolean)
+                        .join(',');
+                }
+                
+                if (obj._id) {
+                     obj._id = String(obj._id).replace(/[^a-zA-Z0-9]+/g, '-');
+                }
+
                 if (obj?.["geojson"]) {
                     try {
                         obj.geojson = JSON.parse(obj["geojson"]);
@@ -220,24 +236,28 @@ class Section_Manager {
                         console.log("error parsing geojson for record " + obj[section.unique_id_col], e);
                     }
                 }
+            }
+
+            // --- LOOP 2: BUILD RELATIONSHIPS ---
+            // Now that all data is clean, the add_parent_id map will build perfectly
+            for (var j = 0; j < all_data.length; j++) {
+                var obj = all_data[j];
                 
+                obj.section_id = section_index; 
                 obj.record_section_id = false;
-                all_data[j] = section_manager.add_parent_id(obj, all_data, section.unique_id_col,section?.parent_id);
+                
+                all_data[j] = section_manager.add_parent_id(obj, all_data, section.unique_id_col, section?.parent_id);
             }
 
             section.parents = {};
             const remaining = [];
            for (const obj of all_data) {
-                // Safely check if the record is a parent
                 const isParent = obj.children && String(obj.children).trim() !== "";
                 
                 if (isParent) {
-                    // Store in the lookup dictionary for your join logic
                     section.parents[obj[section.unique_id_col]] = obj;
                 }
                 
-                // Push EVERYTHING (both parents and standalone/child items) 
-                // to 'remaining' so they are retained in the application
                 remaining.push(obj); 
             }
 
@@ -396,28 +416,35 @@ class Section_Manager {
         }
     }
 
-    convert_csv_to_geojson(section,_data,title_col){
+   convert_csv_to_geojson(section,_data,title_col){
         // inject easily accessible values
         console_log(section)
         var temp_data=[]
         field_data_post_url = section.post_url
          for (var i=0;i<_data.length;i++){
             let obj=  _data[i]
-            obj["_id"]=obj[section.unique_id_col]//IMPORTANT for controlling visibility
+            
+            // --- AGGRESSIVE DATA SANITIZATION ---
+            // Strips out URL characters and underscores before properties are built
+            if (obj[section.unique_id_col]) {
+                obj[section.unique_id_col] = String(obj[section.unique_id_col]).replace(/[^a-zA-Z0-9]+/g, '-');
+            }
+            // -----------------------------
+
+             obj["_id"]=obj[section.unique_id_col]//IMPORTANT for controlling visibility
              obj._sort_col= obj[title_col]
-             //todo make these more dynamic
+             
              var obj_props={
                 "id":obj[section.unique_id_col],
                 [section.title_col]:obj[section.title_col],
                  [section.date_col]:obj[section.date_col],
                 "info_page":obj[section.ref_url],
                 "thumb_url":obj[section.image_col],
-                "section_id":section.id,//needed to later access the date column
-                //section.base_url+_data[i][section.collection_col]+"/id/"+_data[i][section.id_col]+"/thumbnail",
-
+                "section_id":section.id,
                 "iiif":obj[section.iiif_base_url],
                 "attribution":obj[section.title_col],
              }
+             
             // only ada feature value if the coordinates are set
             if( Number(obj.longitude) !=0 && Number(obj.latitude) !=0){
                  obj["feature"]={}

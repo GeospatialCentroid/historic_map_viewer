@@ -117,7 +117,6 @@ The following describes the column names available in the app.csv file. The exam
 It should be noted that a unique **id** column is required for each row. 
 Since CONTENTdm IDs are only unique within their collection, a composite key is required when working with mulitple collections from the same CONTENTdm instance. This has been achieved by combining the collection column with a dash ("-"), followed by the CONTENTdm item reference number (e.g p17393coll70-3, where p17393coll70 is the collection id and 3 is the item reference number). 
 
-Note: Do not use underscores ("_") as these are used internally when combining a 'section' id to the beginning of the record id. To find out more about 'sections' see 
 
 #### Children Column
 To support parent child relationships, commonly referred to as composite records in CONTENTdm, a comma separated self-referencing column is needed.

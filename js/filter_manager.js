@@ -1075,7 +1075,7 @@ list_results(section_id = null) {
          var func ="image_manager.show_image"
          var title = item[section.title_col]
          var ref_url = item["Reference URL"]
-         button_text = `<button type="button" class="btn ${_class} view_but" onclick="${func}(\`${iiif_url}\`, \`${title}\`, \`${ref_url}\`, \`${item_id}\`)">${text}</button>`
+         button_text = `<button type="button" class="btn ${_class} view_but" onclick="${func}(\`${iiif_url}\`, \`${title}\`, \`${ref_url}\`, \`${item_id}\`, \`${item.georeference || ''}\`)">${text}</button>`
         }
 
         if(item?.child_ids && item.child_ids.length>0){
@@ -1170,8 +1170,8 @@ list_results(section_id = null) {
                         item_html +="<button type='button' class='btn btn-primary table_but' onclick='layer_manager.show_table_data(\""+section_id+"_"+item._id+"\")'><i class='bi bi-table'></i></button>"
                     }
                  // if the record has no children
-                 if(item.child_ids.length==0){
-                    item_html+='<button type="button" class="btn btn-primary" onclick="filter_manager.download_item(\''+item[section.download_col]+'\')">'+LANG.RESULT.DOWNLOAD+'</button>'
+                 if(item.child_ids.length==0 && item[section.download_col]!=''){
+                    item_html+='<button type="button" class="btn btn-primary" onclick="download_item(\''+item[section.download_col]+'\')">'+LANG.RESULT.DOWNLOAD+'</button>'
 
                  }
                  item_html+='<button type="button" class="btn btn-success" onclick="filter_manager.select_item('+section_id+',\''+item._id+'\')">'+LANG.RESULT.DETAILS+'</button>'
@@ -1250,12 +1250,14 @@ list_results(section_id = null) {
 
 
             html+='<div class="details-buttons">'+this.get_add_button(section_id,item.child_ids[i])
-            html+='<button type="button" class="btn btn-primary" onclick="filter_manager.download_item(\''+child[section.download_col]+'\')">'+LANG.RESULT.DOWNLOAD+'</button>'
+            if(child[section.download_col]!=''){
+            html+='<button type="button" class="btn btn-primary" onclick="download_item(\''+child[section.download_col]+'\')">'+LANG.RESULT.DOWNLOAD+'</button>'
+            }
             html+='<button type="button" class="btn btn-success" onclick="filter_manager.select_item('+section_id+',\''+item.child_ids[i]+'\',true);" >Details</button>'
             html+="</div>";
             html+='<div class="item_thumb_container"><img class="item_thumb" src="'+thumb_url+'"></div>'
             if (child.type=="AllMaps" || (child.type=="image" &&  child.geojson!="")){
-                           html+='<a href="javascript:void(0);" onclick="image_manager.show_image(\''+iiif_url+'\',\''+child[section.title_col]+'\',\''+child["Reference URL"]+'\',\''+child["id"]+'\');">'+LANG.DETAILS.IMAGE_VIEW+'</a>'+"<br/>";
+                           html+='<a href="javascript:void(0);" onclick="image_manager.show_image(\''+iiif_url+'\',\''+child[section.title_col]+'\',\''+child["Reference URL"]+'\',\''+child["id"]+'\',\''+child["georeference"]+'\');">'+LANG.DETAILS.IMAGE_VIEW+'</a>'+"<br/>";
  
             }
 
@@ -1351,14 +1353,14 @@ list_results(section_id = null) {
         var iiif_url = item["IIIF"];
         html+='<div class="item_title">'+item[section.title_col]+"</div>";// add the title column
         html+="<div class='details-buttons' >"+this.get_add_button(section_id,item_id)
-        if(item.child_ids.length==0){
-            html+='<button type="button" class="btn btn-primary" onclick="filter_manager.download_item(\''+item[section.download_col]+'\')">'+LANG.RESULT.DOWNLOAD+'</button>'
+        if(item.child_ids.length==0 && item[section.download_col] !=''){
+            html+='<button type="button" class="btn btn-primary" onclick="download_item(\''+item[section.download_col]+'\')">'+LANG.RESULT.DOWNLOAD+'</button>'
           }
         html+="</div>"
         html+='<div class="item_thumb_container"><img class="item_thumb" src="'+thumb_url+'"></div>';
 
         if(item?.child_ids && item.child_ids.length==0 && item.type=="AllMaps"){
-            html+='<a href="javascript:void(0);" onclick="image_manager.show_image(\''+iiif_url+'\',\''+item[section.title_col]+'\',\''+item["Reference URL"]+'\',\''+item_id+'\');">'+LANG.DETAILS.IMAGE_VIEW+'</a>'+"<br/>";
+            html+='<a href="javascript:void(0);" onclick="image_manager.show_image(\''+iiif_url+'\',\''+item[section.title_col]+'\',\''+item["Reference URL"]+'\',\''+item_id+'\',\''+item["georeference"]+'\');">'+LANG.DETAILS.IMAGE_VIEW+'</a>'+"<br/>";
         }
         for (var i in item){
             if ($.inArray(i,section.show_cols)!=-1 || DEBUGMODE){
@@ -1406,15 +1408,5 @@ list_results(section_id = null) {
         .trim();
 }
 
-    download_item(URl){
 
-         analytics_manager.track_event("search_tab", "download", "url", URl);
-
-        var link = document.createElement('a');
-        link.href = URl;
-        link.download = URl;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
 }
